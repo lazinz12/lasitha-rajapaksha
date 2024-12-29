@@ -35,15 +35,15 @@ const projects = [
 
 export const Portfolio = () => {
   return (
-    <section id="portfolio" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
+    <section id="portfolio" className="py-20 bg-gray-50 relative overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="container mx-auto px-4"
+      >
+        <motion.div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-primary mb-4">Featured Projects</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Showcasing my expertise in trading automation, web development, and analytics
@@ -57,24 +57,41 @@ export const Portfolio = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
+              whileHover={{ scale: 1.02 }}
+              className="group"
             >
-              <Card className="hover:shadow-lg transition-shadow overflow-hidden">
+              <Card className="hover:shadow-xl transition-all duration-300 overflow-hidden bg-white/80 backdrop-blur-sm">
                 <div className="relative h-64 overflow-hidden">
-                  <img 
+                  <motion.img 
                     src={project.image} 
                     alt={project.title}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
                   />
                   <div className="absolute top-2 right-2">
-                    <span className="bg-primary text-white px-3 py-1 rounded-full text-sm">
+                    <motion.span 
+                      className="bg-primary text-white px-3 py-1 rounded-full text-sm"
+                      whileHover={{ backgroundColor: "#6E59A5" }}
+                    >
                       {project.category}
-                    </span>
+                    </motion.span>
                   </div>
                 </div>
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
-                    <span>{project.title}</span>
-                    <ExternalLink className="h-5 w-5 text-gray-400 hover:text-primary transition-colors" />
+                    <motion.span
+                      whileHover={{ color: "#9b87f5" }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {project.title}
+                    </motion.span>
+                    <motion.div
+                      whileHover={{ scale: 1.2, rotate: 45 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                    </motion.div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -84,7 +101,7 @@ export const Portfolio = () => {
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
