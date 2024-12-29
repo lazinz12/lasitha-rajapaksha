@@ -8,7 +8,7 @@ const projects = [
     description: "A comprehensive trading dashboard featuring real-time market data analysis, technical indicators, and automated trading signals for forex markets.",
     link: "#",
     category: "Trading",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80"
+    image: "/placeholder.svg" // Using placeholder until you upload the image
   },
   {
     title: "SEO Performance Tracker",
