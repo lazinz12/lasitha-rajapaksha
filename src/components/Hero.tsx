@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Hero = () => {
   return (
@@ -8,8 +9,19 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="space-y-4"
+        className="space-y-6"
       >
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto"
+        >
+          <Avatar className="w-32 h-32 mx-auto mb-6">
+            <AvatarImage src="/lovable-uploads/a2b6e303-1967-404d-96fd-88120fe20bc3.png" alt="Lasitha Rajapaksha" />
+            <AvatarFallback>LR</AvatarFallback>
+          </Avatar>
+        </motion.div>
         <h1 className="text-4xl md:text-6xl font-bold text-primary">
           Lasitha Rajapaksha
         </h1>
