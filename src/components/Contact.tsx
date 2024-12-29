@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Youtube, Linkedin, Instagram, Github, Facebook, Mail } from "lucide-react";
+import { Youtube, Linkedin, Instagram, Github, Facebook } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 export const Contact = () => {
@@ -34,17 +34,10 @@ export const Contact = () => {
     },
     {
       platform: "Facebook",
-      url: "https://facebook.com/LasinsRaj",
+      url: "https://web.facebook.com/lasinsrajj",
       icon: Facebook,
       username: "Lasins Raj",
       color: "hover:text-blue-800 hover:bg-blue-50"
-    },
-    {
-      platform: "Email",
-      url: "mailto:lasinsraj@gmail.com",
-      icon: Mail,
-      username: "lasinsraj@gmail.com",
-      color: "hover:text-green-600 hover:bg-green-50"
     }
   ];
 
@@ -59,7 +52,7 @@ export const Contact = () => {
           className="text-center"
         >
           <h2 className="text-3xl font-bold text-primary mb-8">Get in Touch</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {socialLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -74,11 +67,11 @@ export const Contact = () => {
                     rel="noopener noreferrer"
                     className="block"
                   >
-                    <Card className={`p-6 transition-all duration-300 ${link.color}`}>
-                      <div className="flex flex-col items-center space-y-3">
-                        <Icon className="w-8 h-8" />
-                        <h3 className="font-semibold text-lg">{link.platform}</h3>
-                        <p className="text-sm text-gray-600">{link.username}</p>
+                    <Card className={`p-8 transition-all duration-300 ${link.color}`}>
+                      <div className="flex flex-col items-center space-y-4">
+                        <Icon className="w-12 h-12" />
+                        <h3 className="font-semibold text-xl">{link.platform}</h3>
+                        <p className="text-base text-gray-600">{link.username}</p>
                       </div>
                     </Card>
                   </a>

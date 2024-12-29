@@ -15,21 +15,21 @@ const projects = [
     description: "Advanced trading bots utilizing Telegram API signals and Azure OpenAI for predictive trading strategies. Features risk-reward optimization and automated entry/exit management.",
     link: "#",
     category: "Trading",
-    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80"
   },
   {
     title: "Ad Publisher Network",
     description: "Custom ad publisher network built with Supabase backend, providing automated ad management and monetization opportunities for publishers.",
     link: "#",
     category: "Web Development",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
   },
   {
     title: "E-Commerce Analytics Dashboard",
     description: "Django and React-based analytics dashboard for e-commerce platforms, featuring real-time tracking of sales, user behavior, and inventory management.",
     link: "#",
     category: "Analytics",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80"
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
   }
 ];
 
@@ -59,7 +59,7 @@ export const Portfolio = () => {
               viewport={{ once: true }}
             >
               <Card className="hover:shadow-lg transition-shadow overflow-hidden">
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-64 overflow-hidden">
                   <img 
                     src={project.image} 
                     alt={project.title}
