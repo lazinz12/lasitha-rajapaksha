@@ -13,15 +13,12 @@ export const About = () => {
         >
           <h2 className="text-3xl font-bold text-primary mb-8">About Me</h2>
           <p className="text-lg text-gray-600 leading-relaxed mb-6">
-            I am a passionate Developer and Forex Trader with expertise in building
-            innovative solutions and analyzing financial markets. At Market Minds,
-            I combine my technical skills with market knowledge to create impactful
-            results.
+            A passionate professional with extensive expertise in programming, trading automation, and web development. 
+            Proven track record in building robust solutions, automated systems, trading bots, and web applications.
           </p>
           <p className="text-lg text-gray-600 leading-relaxed">
-            My approach integrates modern development practices with deep market
-            understanding, allowing me to deliver both technical excellence and
-            trading insights.
+            My approach integrates modern development practices with deep market understanding, 
+            allowing me to deliver both technical excellence and trading insights.
           </p>
         </motion.div>
       </div>
