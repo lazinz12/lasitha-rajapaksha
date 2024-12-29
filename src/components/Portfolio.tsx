@@ -8,7 +8,7 @@ const projects = [
     description: "A comprehensive trading dashboard featuring real-time market data analysis, technical indicators, and automated trading signals for forex markets.",
     link: "#",
     category: "Trading",
-    image: "/placeholder.svg" // Using placeholder until you upload the image
+    image: "/lovable-uploads/a2b6e303-1967-404d-96fd-88120fe20bc3.png"
   },
   {
     title: "SEO Performance Tracker",
@@ -37,9 +37,18 @@ export const Portfolio = () => {
   return (
     <section id="portfolio" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-primary mb-12 text-center">
-          Portfolio
-        </h2>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl font-bold text-primary mb-4">Portfolio</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Explore my projects in trading analysis and SEO optimization
+          </p>
+        </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <motion.div
