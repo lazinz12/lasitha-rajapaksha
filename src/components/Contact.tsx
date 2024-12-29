@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Youtube, Linkedin, Instagram } from "lucide-react";
+import { Youtube, Linkedin, Instagram, Github, Facebook, Mail } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 export const Contact = () => {
@@ -9,21 +9,42 @@ export const Contact = () => {
       url: "https://www.youtube.com/@lasinsrajj",
       icon: Youtube,
       username: "@lasinsrajj",
-      color: "hover:text-red-600"
+      color: "hover:text-red-600 hover:bg-red-50"
     },
     {
       platform: "LinkedIn",
       url: "https://www.linkedin.com/in/lasitharajapaksha/",
       icon: Linkedin,
-      username: "lasitharajapaksha",
-      color: "hover:text-blue-600"
+      username: "Lasitha Rajapaksha",
+      color: "hover:text-blue-600 hover:bg-blue-50"
     },
     {
       platform: "Instagram",
       url: "https://www.instagram.com/lasinsraj/",
       icon: Instagram,
       username: "@lasinsraj",
-      color: "hover:text-pink-600"
+      color: "hover:text-pink-600 hover:bg-pink-50"
+    },
+    {
+      platform: "GitHub",
+      url: "https://github.com/lasinsraj",
+      icon: Github,
+      username: "@lasinsraj",
+      color: "hover:text-gray-900 hover:bg-gray-50"
+    },
+    {
+      platform: "Facebook",
+      url: "https://facebook.com/LasinsRaj",
+      icon: Facebook,
+      username: "Lasins Raj",
+      color: "hover:text-blue-800 hover:bg-blue-50"
+    },
+    {
+      platform: "Email",
+      url: "mailto:lasinsraj@gmail.com",
+      icon: Mail,
+      username: "lasinsraj@gmail.com",
+      color: "hover:text-green-600 hover:bg-green-50"
     }
   ];
 
@@ -38,7 +59,7 @@ export const Contact = () => {
           className="text-center"
         >
           <h2 className="text-3xl font-bold text-primary mb-8">Get in Touch</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {socialLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -53,9 +74,9 @@ export const Contact = () => {
                     rel="noopener noreferrer"
                     className="block"
                   >
-                    <Card className="p-6 hover:shadow-lg transition-all">
+                    <Card className={`p-6 transition-all duration-300 ${link.color}`}>
                       <div className="flex flex-col items-center space-y-3">
-                        <Icon className={`w-8 h-8 ${link.color}`} />
+                        <Icon className="w-8 h-8" />
                         <h3 className="font-semibold text-lg">{link.platform}</h3>
                         <p className="text-sm text-gray-600">{link.username}</p>
                       </div>

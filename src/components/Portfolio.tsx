@@ -4,32 +4,32 @@ import { ExternalLink } from "lucide-react";
 
 const projects = [
   {
-    title: "Market Analysis Dashboard",
-    description: "A comprehensive trading dashboard featuring real-time market data analysis, technical indicators, and automated trading signals for forex markets.",
+    title: "Backlink Bazarl",
+    description: "A web platform connecting backlink providers with buyers, featuring AI-powered personalized itineraries, tag-based filtering, and real-time notifications for enhanced user engagement.",
     link: "#",
-    category: "Trading",
+    category: "Web Development",
     image: "/lovable-uploads/a2b6e303-1967-404d-96fd-88120fe20bc3.png"
   },
   {
-    title: "SEO Performance Tracker",
-    description: "An advanced SEO analytics tool that monitors website rankings, backlinks, and provides actionable insights for improving search engine visibility.",
+    title: "Auto-Trading Bots for MT5",
+    description: "Advanced trading bots utilizing Telegram API signals and Azure OpenAI for predictive trading strategies. Features risk-reward optimization and automated entry/exit management.",
     link: "#",
-    category: "SEO",
+    category: "Trading",
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    title: "Ad Publisher Network",
+    description: "Custom ad publisher network built with Supabase backend, providing automated ad management and monetization opportunities for publishers.",
+    link: "#",
+    category: "Web Development",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
   },
   {
-    title: "Forex Trading Bot",
-    description: "An automated trading system that executes trades based on predefined strategies and market conditions, with risk management features.",
+    title: "E-Commerce Analytics Dashboard",
+    description: "Django and React-based analytics dashboard for e-commerce platforms, featuring real-time tracking of sales, user behavior, and inventory management.",
     link: "#",
-    category: "Trading",
-    image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "Content Optimization Platform",
-    description: "A platform that analyzes and optimizes website content for better search engine rankings using AI and natural language processing.",
-    link: "#",
-    category: "SEO",
-    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80"
+    category: "Analytics",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
@@ -44,9 +44,9 @@ export const Portfolio = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl font-bold text-primary mb-4">Portfolio</h2>
+          <h2 className="text-3xl font-bold text-primary mb-4">Featured Projects</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Explore my projects in trading analysis and SEO optimization
+            Showcasing my expertise in trading automation, web development, and analytics
           </p>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
