@@ -101,8 +101,59 @@ const BlogManager = () => {
     fetchPosts();
   };
 
+  const addSamplePosts = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error("You must be logged in to perform this action");
+      return;
+    }
+
+    const samplePosts = [
+      {
+        title: "Top 5 Laptops for Productivity",
+        content: "In this comprehensive guide, we'll explore the best laptops for maximizing your productivity. From powerful processors to long-lasting batteries, we'll cover everything you need to know to make an informed decision.",
+        published: true,
+        author_id: user.id
+      },
+      {
+        title: "The Ultimate Guide to Drone Photography",
+        content: "Discover the art of aerial photography with our complete guide to drone photography. Learn about camera settings, composition techniques, and safety guidelines to capture stunning aerial shots.",
+        published: true,
+        author_id: user.id
+      },
+      {
+        title: "Choosing the Right Smartwatch for Your Lifestyle",
+        content: "With so many smartwatch options available, finding the perfect one can be overwhelming. We break down the key features, health tracking capabilities, and design considerations to help you make the right choice.",
+        published: true,
+        author_id: user.id
+      }
+    ];
+
+    for (const post of samplePosts) {
+      const { error } = await supabase
+        .from("blog_posts")
+        .insert([post]);
+
+      if (error) {
+        toast.error(`Error adding sample post: ${post.title}`);
+        return;
+      }
+    }
+
+    toast.success("Sample posts added successfully");
+    fetchPosts();
+  };
+
   return (
     <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Blog Management</h2>
+        <Button onClick={addSamplePosts} variant="outline">
+          Add Sample Posts
+        </Button>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           placeholder="Post Title"

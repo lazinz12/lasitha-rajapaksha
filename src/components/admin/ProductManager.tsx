@@ -104,8 +104,52 @@ const ProductManager = () => {
     fetchProducts();
   };
 
+  const addSampleProducts = async () => {
+    const sampleProducts = [
+      {
+        name: "MacBook Pro",
+        description: "Powerful laptop for professionals",
+        price: 1299.99,
+        image_url: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+      },
+      {
+        name: "Apple Watch",
+        description: "Smart watch with health tracking features",
+        price: 399.99,
+        image_url: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9",
+      },
+      {
+        name: "DJI Drone",
+        description: "Professional aerial photography drone",
+        price: 799.99,
+        image_url: "https://images.unsplash.com/photo-1487887235947-a955ef187fcc",
+      },
+    ];
+
+    for (const product of sampleProducts) {
+      const { error } = await supabase
+        .from("products")
+        .insert([product]);
+
+      if (error) {
+        toast.error(`Error adding sample product: ${product.name}`);
+        return;
+      }
+    }
+
+    toast.success("Sample products added successfully");
+    fetchProducts();
+  };
+
   return (
     <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Product Management</h2>
+        <Button onClick={addSampleProducts} variant="outline">
+          Add Sample Products
+        </Button>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           placeholder="Product Name"
