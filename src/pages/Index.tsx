@@ -6,10 +6,12 @@ import { Portfolio } from "@/components/Portfolio";
 import { Certifications } from "@/components/Certifications";
 import { Contact } from "@/components/Contact";
 import { CursorEffect } from "@/components/CursorEffect";
+import Header from "@/components/Header";
 
 const Index = () => {
   return (
     <div className="min-h-screen relative">
+      <Header />
       <CursorEffect />
       <Hero />
       <About />
