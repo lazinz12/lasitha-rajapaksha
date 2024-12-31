@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Product } from "@/integrations/supabase/types";
+import { Product } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -24,7 +24,11 @@ const ProductDetail = () => {
 
   const handleBuyNow = async () => {
     if (!product?.stripe_price_id) {
-      toast.error("This product is not available for purchase");
+      toast({
+        title: "Error",
+        description: "This product is not available for purchase",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -32,14 +36,15 @@ const ProductDetail = () => {
       body: {
         productId: product.stripe_price_id,
       },
-      headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-      }
     });
 
     if (error) {
       console.error('Checkout error:', error);
-      toast.error("Failed to create checkout session");
+      toast({
+        title: "Error",
+        description: "Failed to create checkout session",
+        variant: "destructive",
+      });
       return;
     }
 
