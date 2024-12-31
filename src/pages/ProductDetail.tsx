@@ -6,20 +6,24 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { toast } = useToast();
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
     queryFn: async () => {
+      if (!id) throw new Error("Product ID is required");
+      
       const { data, error } = await supabase
         .from("products")
         .select("*")
         .eq("id", id)
         .single();
+
       if (error) throw error;
       return data as Product;
     },
+    enabled: !!id, // Only run query if we have an ID
   });
 
   const handleBuyNow = async () => {
