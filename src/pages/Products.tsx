@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Products = () => {
   const { data: products, isLoading } = useQuery({
@@ -44,8 +45,11 @@ const Products = () => {
               <CardContent>
                 <p className="line-clamp-3">{product.description}</p>
               </CardContent>
-              <CardFooter className="mt-auto">
-                <Button className="w-full">Buy Now</Button>
+              <CardFooter className="mt-auto space-x-2">
+                <Link to={`/products/${product.id}`} className="flex-1">
+                  <Button variant="outline" className="w-full">View Details</Button>
+                </Link>
+                <Button className="flex-1">Buy Now</Button>
               </CardFooter>
             </Card>
           ))}

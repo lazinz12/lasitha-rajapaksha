@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/Header";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Blog = () => {
   const { data: posts, isLoading } = useQuery({
@@ -37,8 +39,11 @@ const Blog = () => {
                   By {post.profiles?.email} on {format(new Date(post.created_at), "MMM dd, yyyy")}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <p className="line-clamp-3">{post.content}</p>
+                <Link to={`/blog/${post.id}`}>
+                  <Button variant="outline" className="w-full">Read More</Button>
+                </Link>
               </CardContent>
             </Card>
           ))}
