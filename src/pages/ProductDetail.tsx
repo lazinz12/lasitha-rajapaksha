@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -21,6 +22,31 @@ const ProductDetail = () => {
       return data;
     },
   });
+
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch('/functions/v1/create-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId: product.stripe_price_id,
+        }),
+      });
+
+      const { url, error } = await response.json();
+      
+      if (error) {
+        toast.error("Failed to create checkout session");
+        return;
+      }
+
+      window.location.href = url;
+    } catch (error) {
+      toast.error("Failed to initiate checkout");
+    }
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -54,7 +80,9 @@ const ProductDetail = () => {
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
-            <Button size="lg" className="w-full">Buy Now</Button>
+            <Button size="lg" className="w-full" onClick={handleCheckout}>
+              Buy Now
+            </Button>
           </CardContent>
         </Card>
       </div>

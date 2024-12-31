@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const Products = () => {
   const { data: products, isLoading } = useQuery({
@@ -18,6 +19,31 @@ const Products = () => {
       return data;
     },
   });
+
+  const handleCheckout = async (product) => {
+    try {
+      const response = await fetch('/functions/v1/create-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId: product.stripe_price_id,
+        }),
+      });
+
+      const { url, error } = await response.json();
+      
+      if (error) {
+        toast.error("Failed to create checkout session");
+        return;
+      }
+
+      window.location.href = url;
+    } catch (error) {
+      toast.error("Failed to initiate checkout");
+    }
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -49,7 +75,9 @@ const Products = () => {
                 <Link to={`/products/${product.id}`} className="flex-1">
                   <Button variant="outline" className="w-full">View Details</Button>
                 </Link>
-                <Button className="flex-1">Buy Now</Button>
+                <Button className="flex-1" onClick={() => handleCheckout(product)}>
+                  Buy Now
+                </Button>
               </CardFooter>
             </Card>
           ))}
