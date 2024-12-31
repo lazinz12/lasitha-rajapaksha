@@ -24,26 +24,30 @@ const ProductDetail = () => {
   });
 
   const handleCheckout = async () => {
+    if (!product?.stripe_price_id) {
+      toast.error("This product is not available for purchase yet");
+      return;
+    }
+
     try {
-      const response = await fetch('/functions/v1/create-checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: {
           productId: product.stripe_price_id,
-        }),
+        },
       });
 
-      const { url, error } = await response.json();
-      
       if (error) {
         toast.error("Failed to create checkout session");
         return;
       }
 
-      window.location.href = url;
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error("Invalid checkout response");
+      }
     } catch (error) {
+      console.error('Checkout error:', error);
       toast.error("Failed to initiate checkout");
     }
   };
@@ -76,7 +80,7 @@ const ProductDetail = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="prose max-w-none">
-              {product.description.split('\n').map((paragraph, index) => (
+              {product.description?.split('\n').map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
