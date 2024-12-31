@@ -31,9 +31,13 @@ const Products = () => {
         body: {
           productId: product.stripe_price_id,
         },
+        headers: {
+          Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+        }
       });
 
       if (error) {
+        console.error('Checkout error:', error);
         toast.error("Failed to create checkout session");
         return;
       }
