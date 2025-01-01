@@ -8,6 +8,7 @@ import Blog from "./pages/Blog";
 import Products from "./pages/Products";
 import BlogPost from "./pages/BlogPost";
 import ProductDetail from "./pages/ProductDetail";
+import { SeasonalEffects } from "./components/SeasonalEffects";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <BrowserRouter>
+          <SeasonalEffects />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
