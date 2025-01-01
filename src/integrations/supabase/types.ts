@@ -55,6 +55,7 @@ export type Database = {
           image_url: string | null
           name: string
           price: number
+          slug: string
           stripe_price_id: string | null
           updated_at: string
         }
@@ -65,6 +66,7 @@ export type Database = {
           image_url?: string | null
           name: string
           price: number
+          slug: string
           stripe_price_id?: string | null
           updated_at?: string
         }
@@ -75,6 +77,7 @@ export type Database = {
           image_url?: string | null
           name?: string
           price?: number
+          slug?: string
           stripe_price_id?: string | null
           updated_at?: string
         }
