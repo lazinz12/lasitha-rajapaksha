@@ -1,24 +1,15 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { BlogPostForm } from "./BlogPostForm";
+import { BlogPostCard } from "./BlogPostCard";
+import { generateSlug } from "@/utils/slugUtils";
 
 const BlogManager = () => {
   const [posts, setPosts] = useState<any[]>([]);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [published, setPublished] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingPost, setEditingPost] = useState<any>(null);
 
   useEffect(() => {
     fetchPosts();
@@ -38,8 +29,7 @@ const BlogManager = () => {
     setPosts(data || []);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (data: { title: string; content: string; published: boolean }) => {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
@@ -47,10 +37,12 @@ const BlogManager = () => {
       return;
     }
 
+    const slug = generateSlug(data.title);
+
     if (editingId) {
       const { error } = await supabase
         .from("blog_posts")
-        .update({ title, content, published })
+        .update({ ...data, slug })
         .eq("id", editingId);
 
       if (error) {
@@ -62,7 +54,7 @@ const BlogManager = () => {
     } else {
       const { error } = await supabase
         .from("blog_posts")
-        .insert([{ title, content, published, author_id: user.id }]);
+        .insert([{ ...data, author_id: user.id, slug }]);
 
       if (error) {
         toast.error("Error creating post");
@@ -72,18 +64,14 @@ const BlogManager = () => {
       toast.success("Post created successfully");
     }
 
-    setTitle("");
-    setContent("");
-    setPublished(false);
     setEditingId(null);
+    setEditingPost(null);
     fetchPosts();
   };
 
   const handleEdit = (post: any) => {
-    setTitle(post.title);
-    setContent(post.content);
-    setPublished(post.published);
     setEditingId(post.id);
+    setEditingPost(post);
   };
 
   const handleDelete = async (id: string) => {
@@ -112,21 +100,24 @@ const BlogManager = () => {
     const samplePosts = [
       {
         title: "Top 5 Laptops for Productivity",
-        content: "In this comprehensive guide, we'll explore the best laptops for maximizing your productivity. From powerful processors to long-lasting batteries, we'll cover everything you need to know to make an informed decision.",
+        content: "In this comprehensive guide, we'll explore the best laptops for maximizing your productivity...",
         published: true,
-        author_id: user.id
+        author_id: user.id,
+        slug: generateSlug("Top 5 Laptops for Productivity")
       },
       {
         title: "The Ultimate Guide to Drone Photography",
-        content: "Discover the art of aerial photography with our complete guide to drone photography. Learn about camera settings, composition techniques, and safety guidelines to capture stunning aerial shots.",
+        content: "Discover the art of aerial photography with our complete guide to drone photography...",
         published: true,
-        author_id: user.id
+        author_id: user.id,
+        slug: generateSlug("The Ultimate Guide to Drone Photography")
       },
       {
         title: "Choosing the Right Smartwatch for Your Lifestyle",
-        content: "With so many smartwatch options available, finding the perfect one can be overwhelming. We break down the key features, health tracking capabilities, and design considerations to help you make the right choice.",
+        content: "With so many smartwatch options available, finding the perfect one can be overwhelming...",
         published: true,
-        author_id: user.id
+        author_id: user.id,
+        slug: generateSlug("Choosing the Right Smartwatch for Your Lifestyle")
       }
     ];
 
@@ -154,61 +145,22 @@ const BlogManager = () => {
         </Button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          placeholder="Post Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <Textarea
-          placeholder="Post Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-          className="min-h-[200px]"
-        />
-        <div className="flex items-center space-x-2">
-          <Switch
-            checked={published}
-            onCheckedChange={setPublished}
-          />
-          <span>Published</span>
-        </div>
-        <Button type="submit">
-          {editingId ? "Update Post" : "Create Post"}
-        </Button>
-      </form>
+      <BlogPostForm
+        initialTitle={editingPost?.title}
+        initialContent={editingPost?.content}
+        initialPublished={editingPost?.published}
+        onSubmit={handleSubmit}
+        isEditing={!!editingId}
+      />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
-          <Card key={post.id}>
-            <CardHeader>
-              <CardTitle>{post.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="line-clamp-3">{post.content}</p>
-              <div className="mt-2 text-sm text-gray-500">
-                Status: {post.published ? "Published" : "Draft"}
-              </div>
-            </CardContent>
-            <CardFooter className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleEdit(post)}
-              >
-                Edit
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => handleDelete(post.id)}
-              >
-                Delete
-              </Button>
-            </CardFooter>
-          </Card>
+          <BlogPostCard
+            key={post.id}
+            post={post}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         ))}
       </div>
     </div>
