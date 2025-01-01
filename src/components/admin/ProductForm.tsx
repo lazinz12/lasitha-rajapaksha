@@ -26,7 +26,7 @@ export const ProductForm = ({ initialProduct, onSubmit, buttonText }: ProductFor
       description,
       price: parseFloat(price),
       image_url: imageUrl,
-      slug: initialProduct?.slug ?? generateSlug(name, timestamp),
+      slug: initialProduct?.slug ?? generateSlug(name),
       stripe_price_id: initialProduct?.stripe_price_id
     });
 

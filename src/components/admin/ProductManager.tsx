@@ -75,28 +75,27 @@ const ProductManager = () => {
   };
 
   const addSampleProducts = async () => {
-    const timestamp = Date.now();
     const sampleProducts = [
       {
         name: "MacBook Pro",
         description: "Powerful laptop for professionals",
         price: 1299.99,
         image_url: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
-        slug: generateSlug("MacBook Pro", timestamp)
+        slug: generateSlug("MacBook Pro")
       },
       {
         name: "Apple Watch",
         description: "Smart watch with health tracking features",
         price: 399.99,
         image_url: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9",
-        slug: generateSlug("Apple Watch", timestamp + 1)
+        slug: generateSlug("Apple Watch")
       },
       {
         name: "DJI Drone",
         description: "Professional aerial photography drone",
         price: 799.99,
         image_url: "https://images.unsplash.com/photo-1487887235947-a955ef187fcc",
-        slug: generateSlug("DJI Drone", timestamp + 2)
+        slug: generateSlug("DJI Drone")
       },
     ];
 
