@@ -6,15 +6,15 @@ import Header from "@/components/Header";
 import { format } from "date-fns";
 
 const BlogPost = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
 
   const { data: post, isLoading } = useQuery({
-    queryKey: ["blog-post", id],
+    queryKey: ["blog-post", slug],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("blog_posts")
         .select("*, profiles(email)")
-        .eq("id", id)
+        .eq("slug", slug)
         .eq("published", true)
         .maybeSingle();
 

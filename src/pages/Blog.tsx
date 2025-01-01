@@ -41,7 +41,7 @@ const Blog = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="line-clamp-3">{post.content}</p>
-                <Link to={`/blog/${post.id}`}>
+                <Link to={`/blog/${post.slug}`}>
                   <Button variant="outline" className="w-full">Read More</Button>
                 </Link>
               </CardContent>
