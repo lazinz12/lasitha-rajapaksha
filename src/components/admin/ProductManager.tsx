@@ -38,7 +38,8 @@ const ProductManager = () => {
           description: productData.description,
           price: productData.price,
           image_url: productData.image_url,
-          slug: generateSlug(productData.name)
+          slug: generateSlug(productData.name),
+          updated_at: new Date().toISOString()
         })
         .eq("id", editingProduct.id);
 

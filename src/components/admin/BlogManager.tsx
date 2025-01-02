@@ -41,7 +41,13 @@ const BlogManager = () => {
     if (editingPost) {
       const { error } = await supabase
         .from("blog_posts")
-        .update({ ...data, slug })
+        .update({ 
+          title: data.title,
+          content: data.content,
+          published: data.published,
+          slug: slug,
+          updated_at: new Date().toISOString()
+        })
         .eq("id", editingPost.id);
 
       if (error) {
@@ -54,7 +60,11 @@ const BlogManager = () => {
     } else {
       const { error } = await supabase
         .from("blog_posts")
-        .insert([{ ...data, author_id: user.id, slug }]);
+        .insert([{ 
+          ...data, 
+          author_id: user.id, 
+          slug 
+        }]);
 
       if (error) {
         toast.error("Error creating post");
