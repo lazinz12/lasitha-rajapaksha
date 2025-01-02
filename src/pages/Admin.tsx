@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { use
+
+Navigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BlogManager from "@/components/admin/BlogManager";
 import ProductManager from "@/components/admin/ProductManager";
 import HomePageManager from "@/components/admin/HomePageManager";
+import SkillsManager from "@/components/admin/SkillsManager";
+import ExperienceManager from "@/components/admin/ExperienceManager";
+import ProjectManager from "@/components/admin/ProjectManager";
+import CertificationManager from "@/components/admin/CertificationManager";
+import SocialLinksManager from "@/components/admin/SocialLinksManager";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
@@ -58,13 +65,33 @@ const Admin = () => {
       </div>
       
       <Tabs defaultValue="home" className="space-y-4">
-        <TabsList>
+        <TabsList className="flex flex-wrap gap-2">
           <TabsTrigger value="home">Home Page</TabsTrigger>
+          <TabsTrigger value="skills">Skills</TabsTrigger>
+          <TabsTrigger value="experience">Experience</TabsTrigger>
+          <TabsTrigger value="projects">Projects</TabsTrigger>
+          <TabsTrigger value="certifications">Certifications</TabsTrigger>
+          <TabsTrigger value="social">Social Links</TabsTrigger>
           <TabsTrigger value="blog">Blog Posts</TabsTrigger>
           <TabsTrigger value="products">Products</TabsTrigger>
         </TabsList>
         <TabsContent value="home">
           <HomePageManager />
+        </TabsContent>
+        <TabsContent value="skills">
+          <SkillsManager />
+        </TabsContent>
+        <TabsContent value="experience">
+          <ExperienceManager />
+        </TabsContent>
+        <TabsContent value="projects">
+          <ProjectManager />
+        </TabsContent>
+        <TabsContent value="certifications">
+          <CertificationManager />
+        </TabsContent>
+        <TabsContent value="social">
+          <SocialLinksManager />
         </TabsContent>
         <TabsContent value="blog">
           <BlogManager />
