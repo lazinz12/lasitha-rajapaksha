@@ -50,6 +50,69 @@ export type Database = {
           },
         ]
       }
+      certifications: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          issuer: string
+          skills: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          issuer: string
+          skills?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          issuer?: string
+          skills?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      experience: {
+        Row: {
+          company: string | null
+          created_at: string
+          duration: string
+          id: string
+          responsibilities: string[]
+          role: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          duration: string
+          id?: string
+          responsibilities: string[]
+          role: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          duration?: string
+          id?: string
+          responsibilities?: string[]
+          role?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       home_content: {
         Row: {
           about_text_1: string
@@ -137,6 +200,99 @@ export type Database = {
           email?: string | null
           id?: string
           is_admin?: boolean | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          id: string
+          image_url: string | null
+          link: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          image_url?: string | null
+          link?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          link?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string
+          created_at: string
+          icon: string
+          id: string
+          skills: string[]
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          icon: string
+          id?: string
+          skills: string[]
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          icon?: string
+          id?: string
+          skills?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      social_links: {
+        Row: {
+          color: string
+          created_at: string
+          icon: string
+          id: string
+          platform: string
+          updated_at: string
+          url: string
+          username: string
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          icon: string
+          id?: string
+          platform: string
+          updated_at?: string
+          url: string
+          username: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          icon?: string
+          id?: string
+          platform?: string
+          updated_at?: string
+          url?: string
+          username?: string
         }
         Relationships: []
       }
