@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BlogManager from "@/components/admin/BlogManager";
 import ProductManager from "@/components/admin/ProductManager";
+import HomePageManager from "@/components/admin/HomePageManager";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
@@ -56,11 +57,15 @@ const Admin = () => {
         </Button>
       </div>
       
-      <Tabs defaultValue="blog" className="space-y-4">
+      <Tabs defaultValue="home" className="space-y-4">
         <TabsList>
+          <TabsTrigger value="home">Home Page</TabsTrigger>
           <TabsTrigger value="blog">Blog Posts</TabsTrigger>
           <TabsTrigger value="products">Products</TabsTrigger>
         </TabsList>
+        <TabsContent value="home">
+          <HomePageManager />
+        </TabsContent>
         <TabsContent value="blog">
           <BlogManager />
         </TabsContent>
