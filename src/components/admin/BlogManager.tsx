@@ -8,7 +8,6 @@ import { generateSlug } from "@/utils/slugUtils";
 
 const BlogManager = () => {
   const [posts, setPosts] = useState<any[]>([]);
-  const [editingId, setEditingId] = useState<string | null>(null);
   const [editingPost, setEditingPost] = useState<any>(null);
 
   useEffect(() => {
@@ -39,11 +38,11 @@ const BlogManager = () => {
 
     const slug = generateSlug(data.title);
 
-    if (editingId) {
+    if (editingPost) {
       const { error } = await supabase
         .from("blog_posts")
         .update({ ...data, slug })
-        .eq("id", editingId);
+        .eq("id", editingPost.id);
 
       if (error) {
         toast.error("Error updating post");
@@ -51,6 +50,7 @@ const BlogManager = () => {
       }
 
       toast.success("Post updated successfully");
+      setEditingPost(null);
     } else {
       const { error } = await supabase
         .from("blog_posts")
@@ -64,13 +64,10 @@ const BlogManager = () => {
       toast.success("Post created successfully");
     }
 
-    setEditingId(null);
-    setEditingPost(null);
     fetchPosts();
   };
 
   const handleEdit = (post: any) => {
-    setEditingId(post.id);
     setEditingPost(post);
   };
 
@@ -146,11 +143,11 @@ const BlogManager = () => {
       </div>
 
       <BlogPostForm
-        initialTitle={editingPost?.title}
-        initialContent={editingPost?.content}
-        initialPublished={editingPost?.published}
+        initialTitle={editingPost?.title || ""}
+        initialContent={editingPost?.content || ""}
+        initialPublished={editingPost?.published || false}
         onSubmit={handleSubmit}
-        isEditing={!!editingId}
+        isEditing={!!editingPost}
       />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

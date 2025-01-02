@@ -33,7 +33,13 @@ const ProductManager = () => {
     if (editingProduct) {
       const { error } = await supabase
         .from("products")
-        .update(productData)
+        .update({
+          name: productData.name,
+          description: productData.description,
+          price: productData.price,
+          image_url: productData.image_url,
+          slug: generateSlug(productData.name)
+        })
         .eq("id", editingProduct.id);
 
       if (error) {
@@ -42,10 +48,14 @@ const ProductManager = () => {
       }
 
       toast.success("Product updated successfully");
+      setEditingProduct(null);
     } else {
       const { error } = await supabase
         .from("products")
-        .insert([productData]);
+        .insert([{
+          ...productData,
+          slug: generateSlug(productData.name)
+        }]);
 
       if (error) {
         toast.error("Error creating product");
@@ -55,7 +65,6 @@ const ProductManager = () => {
       toast.success("Product created successfully");
     }
 
-    setEditingProduct(null);
     fetchProducts();
   };
 
@@ -122,7 +131,7 @@ const ProductManager = () => {
       </div>
 
       <ProductForm
-        initialProduct={editingProduct ?? undefined}
+        initialProduct={editingProduct}
         onSubmit={handleSubmit}
         buttonText={editingProduct ? "Update Product" : "Create Product"}
       />
