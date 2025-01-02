@@ -50,6 +50,39 @@ export type Database = {
           },
         ]
       }
+      home_content: {
+        Row: {
+          about_text_1: string
+          about_text_2: string
+          created_at: string
+          hero_company: string
+          hero_subtitle: string
+          hero_title: string
+          id: number
+          updated_at: string
+        }
+        Insert: {
+          about_text_1?: string
+          about_text_2?: string
+          created_at?: string
+          hero_company?: string
+          hero_subtitle?: string
+          hero_title?: string
+          id: number
+          updated_at?: string
+        }
+        Update: {
+          about_text_1?: string
+          about_text_2?: string
+          created_at?: string
+          hero_company?: string
+          hero_subtitle?: string
+          hero_title?: string
+          id?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           created_at: string

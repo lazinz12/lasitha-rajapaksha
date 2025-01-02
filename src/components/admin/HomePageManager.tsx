@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,30 @@ export const HomePageManager = () => {
   const [aboutText2, setAboutText2] = useState(
     "My approach integrates modern development practices with deep market understanding, allowing me to deliver both technical excellence and trading insights."
   );
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      const { data, error } = await supabase
+        .from('home_content')
+        .select('*')
+        .single();
+
+      if (error) {
+        console.error('Error fetching home content:', error);
+        return;
+      }
+
+      if (data) {
+        setHeroTitle(data.hero_title);
+        setHeroSubtitle(data.hero_subtitle);
+        setHeroCompany(data.hero_company);
+        setAboutText1(data.about_text_1);
+        setAboutText2(data.about_text_2);
+      }
+    };
+
+    fetchContent();
+  }, []);
 
   const handleSave = async () => {
     try {
