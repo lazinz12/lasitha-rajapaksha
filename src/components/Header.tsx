@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { BookOpen, ShoppingCart } from "lucide-react"
+import { ShoppingCart } from "lucide-react"
 
 const Header = () => {
   return (
@@ -10,12 +10,6 @@ const Header = () => {
           <span className="font-bold">Lasitha Rajapaksha</span>
         </Link>
         <div className="flex space-x-4">
-          <Link to="/blog">
-            <Button variant="ghost" className="flex items-center">
-              <BookOpen className="mr-2 h-4 w-4" />
-              Blog
-            </Button>
-          </Link>
           <Link to="/products">
             <Button variant="ghost" className="flex items-center">
               <ShoppingCart className="mr-2 h-4 w-4" />
