@@ -27,24 +27,25 @@ const Products = () => {
       return;
     }
 
-    const { data, error } = await supabase.functions.invoke("create-checkout", {
-      body: {
-        productId: product.stripe_price_id,
-      },
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          productId: product.stripe_price_id,
+        },
+      });
 
-    if (error) {
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
       console.error('Checkout error:', error);
       toast({
         title: "Error",
         description: "Failed to create checkout session",
         variant: "destructive",
       });
-      return;
-    }
-
-    if (data?.url) {
-      window.location.href = data.url;
     }
   };
 
