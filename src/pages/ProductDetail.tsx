@@ -23,37 +23,40 @@ const ProductDetail = () => {
       if (error) throw error;
       return data as Product;
     },
-    enabled: !!id, // Only run query if we have an ID
+    enabled: !!id,
   });
 
   const handleBuyNow = async () => {
     if (!product?.stripe_price_id) {
       toast({
         title: "Error",
-        description: "This product is not available for purchase",
+        description: "This product is not available for purchase yet",
         variant: "destructive",
       });
       return;
     }
 
-    const { data, error } = await supabase.functions.invoke("create-checkout", {
-      body: {
-        productId: product.stripe_price_id,
-      },
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          productId: product.stripe_price_id,
+        },
+      });
 
-    if (error) {
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL received");
+      }
+    } catch (error) {
       console.error('Checkout error:', error);
       toast({
         title: "Error",
         description: "Failed to create checkout session",
         variant: "destructive",
       });
-      return;
-    }
-
-    if (data?.url) {
-      window.location.href = data.url;
     }
   };
 
