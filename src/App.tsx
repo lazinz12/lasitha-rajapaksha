@@ -8,6 +8,7 @@ import Blog from "./pages/Blog";
 import Products from "./pages/Products";
 import BlogPost from "./pages/BlogPost";
 import ProductDetail from "./pages/ProductDetail";
+import CaseConverter from "./pages/CaseConverter";
 import { SeasonalEffects } from "./components/SeasonalEffects";
 
 // Create a client
@@ -34,6 +35,7 @@ function App() {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/tools/case-converter" element={<CaseConverter />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

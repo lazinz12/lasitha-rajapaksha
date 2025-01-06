@@ -7,12 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useState } from "react"
-import { CaseConverterDialog } from "./tools/CaseConverterDialog"
 
 const Header = () => {
-  const [caseConverterOpen, setCaseConverterOpen] = useState(false);
-
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
@@ -40,17 +36,13 @@ const Header = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => setCaseConverterOpen(true)}>
-                Case Converter
+              <DropdownMenuItem asChild>
+                <Link to="/tools/case-converter">Case Converter</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
-      <CaseConverterDialog 
-        open={caseConverterOpen} 
-        onOpenChange={setCaseConverterOpen}
-      />
     </header>
   )
 }
