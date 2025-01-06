@@ -39,6 +39,9 @@ const Header = () => {
               <DropdownMenuItem asChild>
                 <Link to="/tools/case-converter">Case Converter</Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/tools/backlink-checker">Backlink Checker</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

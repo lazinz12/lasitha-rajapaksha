@@ -9,6 +9,7 @@ import Products from "./pages/Products";
 import BlogPost from "./pages/BlogPost";
 import ProductDetail from "./pages/ProductDetail";
 import CaseConverter from "./pages/CaseConverter";
+import BacklinkChecker from "./pages/BacklinkChecker";
 import { SeasonalEffects } from "./components/SeasonalEffects";
 
 // Create a client
@@ -36,6 +37,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/tools/case-converter" element={<CaseConverter />} />
+            <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
