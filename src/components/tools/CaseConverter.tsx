@@ -66,16 +66,49 @@ export const CaseConverter = () => {
   };
 
   const copyToClipboard = async () => {
+    if (!text) {
+      toast({
+        title: "Nothing to copy",
+        description: "Please enter some text first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      await navigator.clipboard.writeText(text);
+      if (navigator.clipboard && window.isSecureContext) {
+        // For modern browsers
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          document.execCommand('copy');
+          textArea.remove();
+        } catch (err) {
+          console.error('Fallback: Oops, unable to copy', err);
+          textArea.remove();
+          throw new Error('Copy failed');
+        }
+      }
+      
       toast({
         title: "Copied!",
         description: "Text copied to clipboard successfully.",
       });
     } catch (err) {
+      console.error('Copy failed:', err);
       toast({
         title: "Error",
-        description: "Failed to copy text to clipboard.",
+        description: "Failed to copy text to clipboard. Please try selecting and copying manually.",
         variant: "destructive",
       });
     }
