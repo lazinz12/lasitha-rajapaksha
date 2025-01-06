@@ -9,8 +9,6 @@ import Products from "./pages/Products";
 import BlogPost from "./pages/BlogPost";
 import ProductDetail from "./pages/ProductDetail";
 import { SeasonalEffects } from "./components/SeasonalEffects";
-import Header from "./components/Header";
-import { MainNav } from "./components/MainNav";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -27,22 +25,16 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <BrowserRouter>
-          <div className="min-h-screen">
-            <Header />
-            <MainNav />
-            <SeasonalEffects />
-            <main>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
-              </Routes>
-            </main>
-          </div>
+          <SeasonalEffects />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
