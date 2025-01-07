@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Loader2, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, AlertCircle, Download } from "lucide-react";
 
 export const SeoChecker = () => {
   const [url, setUrl] = useState("");
@@ -30,6 +30,16 @@ export const SeoChecker = () => {
       wordCount: number;
       score: number;
     };
+    loadingSpeed: {
+      time: number;
+      score: number;
+      reasons: string[];
+    };
+    robotsTxt: {
+      exists: boolean;
+      isValid: boolean;
+      message: string;
+    };
     overallScore: number;
   }>(null);
   const { toast } = useToast();
@@ -49,7 +59,7 @@ export const SeoChecker = () => {
       // For demo purposes, we'll simulate an API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
       
-      // Simulated analysis results
+      // Simulated analysis results with new sections
       const mockResults = {
         title: {
           text: `Your page Title is: "${keyword} - Developer and Forex Trader"`,
@@ -64,6 +74,19 @@ export const SeoChecker = () => {
         content: {
           wordCount: 0,
           score: -2.7,
+        },
+        loadingSpeed: {
+          time: 1.39,
+          score: 95,
+          reasons: [
+            "Google and all the search engines love the pages that are loading fast because slow loading pages will reduce their scanning speed, this is the main reason why google will temporarily affect rankings of low speed websites.",
+            "If your website/page loads slowly your visitors will not visit many pages and in most cases will press the back button in the browser before the page will fully load, which will cause lower traffic and high bounce rate which will affect rankings."
+          ]
+        },
+        robotsTxt: {
+          exists: true,
+          isValid: true,
+          message: "Your robots.txt file was found in your website and it is valid, this is good, google will index your site correctly."
         },
         overallScore: 65,
       };
@@ -133,6 +156,41 @@ export const SeoChecker = () => {
                     </div>
                   </div>
 
+                  {/* Loading Speed Section */}
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle2 className="text-green-500 h-5 w-5" />
+                      <h3 className="text-lg font-semibold">Page Loading Speed</h3>
+                      <span className="text-green-500 text-sm ml-auto">
+                        +{results.loadingSpeed.score}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 mb-2">
+                      This page took around {results.loadingSpeed.time} seconds to load (fast).
+                    </p>
+                    <p className="text-gray-700 mb-2">
+                      The page loading speed is important for several reasons:
+                    </p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      {results.loadingSpeed.reasons.map((reason, index) => (
+                        <li key={index} className="text-sm text-gray-600">
+                          {reason}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Robots.txt Section */}
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle2 className="text-green-500 h-5 w-5" />
+                      <h3 className="text-lg font-semibold">File robots.txt</h3>
+                    </div>
+                    <p className="text-gray-700 mb-2">
+                      {results.robotsTxt.message}
+                    </p>
+                  </div>
+
                   {/* Headings Section */}
                   <div className="border rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
@@ -175,6 +233,12 @@ export const SeoChecker = () => {
                       </p>
                     </div>
                   </div>
+
+                  {/* Download Report Button */}
+                  <Button className="w-full" variant="outline">
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Report as PDF
+                  </Button>
                 </div>
               </CardContent>
             </Card>
