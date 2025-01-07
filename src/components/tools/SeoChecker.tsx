@@ -9,19 +9,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 export const SeoChecker = () => {
   const [url, setUrl] = useState("");
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<null | {
-    titleScore: number;
-    descriptionScore: number;
-    keywordDensity: number;
-    headingsScore: number;
+    title: {
+      text: string;
+      hasKeyword: boolean;
+      score: number;
+    };
+    headings: {
+      count: number;
+      hasKeyword: boolean;
+      score: number;
+    };
+    content: {
+      wordCount: number;
+      score: number;
+    };
     overallScore: number;
-    suggestions: string[];
   }>(null);
   const { toast } = useToast();
 
@@ -40,19 +49,23 @@ export const SeoChecker = () => {
       // For demo purposes, we'll simulate an API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
       
+      // Simulated analysis results
       const mockResults = {
-        titleScore: Math.floor(Math.random() * 100),
-        descriptionScore: Math.floor(Math.random() * 100),
-        keywordDensity: Number((Math.random() * 5).toFixed(2)),
-        headingsScore: Math.floor(Math.random() * 100),
-        overallScore: Math.floor(Math.random() * 100),
-        suggestions: [
-          `Add the keyword "${keyword}" to at least one of your H1, H2, or H3 headers for better rankings.`,
-          `To rank well for "${keyword}", add the keyword naturally within your page content.`,
-          "Create a robots.txt file in your website root with content:\nUser-agent: *\nAllow:",
-          "Ensure your meta description includes your target keyword.",
-          "Add alt text to images that includes your target keyword where relevant."
-        ]
+        title: {
+          text: `Your page Title is: "${keyword} - Developer and Forex Trader"`,
+          hasKeyword: true,
+          score: 100,
+        },
+        headings: {
+          count: 0,
+          hasKeyword: false,
+          score: -0.5,
+        },
+        content: {
+          wordCount: 0,
+          score: -2.7,
+        },
+        overallScore: 65,
       };
       setResults(mockResults);
     } catch (error) {
@@ -103,41 +116,64 @@ export const SeoChecker = () => {
           {results && (
             <Card className="mt-6">
               <CardContent className="pt-6">
-                <div className="space-y-4">
-                  <div className="text-center mb-6">
-                    <p className="text-3xl font-bold text-primary">
-                      {results.overallScore}%
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Overall SEO Score
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-4 bg-secondary/20 rounded-lg">
-                      <p className="font-semibold">Title Optimization</p>
-                      <p className="text-lg">{results.titleScore}%</p>
+                <div className="space-y-6">
+                  {/* Title Section */}
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle2 className="text-green-500 h-5 w-5" />
+                      <h3 className="text-lg font-semibold">Page Title</h3>
                     </div>
-                    <div className="p-4 bg-secondary/20 rounded-lg">
-                      <p className="font-semibold">Meta Description</p>
-                      <p className="text-lg">{results.descriptionScore}%</p>
-                    </div>
-                    <div className="p-4 bg-secondary/20 rounded-lg">
-                      <p className="font-semibold">Keyword Density</p>
-                      <p className="text-lg">{results.keywordDensity}%</p>
-                    </div>
-                    <div className="p-4 bg-secondary/20 rounded-lg">
-                      <p className="font-semibold">Headings Structure</p>
-                      <p className="text-lg">{results.headingsScore}%</p>
+                    <p className="text-gray-700 mb-2">{results.title.text}</p>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="text-green-500 h-4 w-4" />
+                      <p className="text-sm">
+                        The title contains your keyword{" "}
+                        <span className="font-semibold">"{keyword}"</span>
+                      </p>
                     </div>
                   </div>
-                  
-                  <div className="mt-6">
-                    <h3 className="text-lg font-semibold mb-3">Optimization Suggestions</h3>
-                    <ul className="space-y-2 list-disc pl-4">
-                      {results.suggestions.map((suggestion, index) => (
-                        <li key={index} className="text-gray-600">{suggestion}</li>
-                      ))}
-                    </ul>
+
+                  {/* Headings Section */}
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="text-orange-500 h-5 w-5" />
+                      <h3 className="text-lg font-semibold">Heading</h3>
+                      <span className="text-red-500 text-sm ml-auto">
+                        {results.headings.score}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 mb-2">Your page headers</p>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="text-green-500 h-4 w-4" />
+                      <p className="text-sm">
+                        Your page have no page headers
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <XCircle className="text-red-500 h-4 w-4" />
+                      <p className="text-sm">
+                        Your headers don't contain your keyword{" "}
+                        <span className="font-semibold">{keyword}</span>, you can add the keyword to at least one of the h1,h2 or h3 headers, this will results in better rankings.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="text-orange-500 h-5 w-5" />
+                      <h3 className="text-lg font-semibold">Content</h3>
+                      <span className="text-red-500 text-sm ml-auto">
+                        {results.content.score}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 mb-2">Your page content analyze</p>
+                    <div className="flex items-center gap-2">
+                      <XCircle className="text-red-500 h-4 w-4" />
+                      <p className="text-sm">
+                        Your page content size is too low, you have only {results.content.wordCount} words per page, try to add more text content per page, the more content per page the better rankings will be.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
