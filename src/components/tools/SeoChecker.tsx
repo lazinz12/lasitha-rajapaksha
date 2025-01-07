@@ -21,6 +21,7 @@ export const SeoChecker = () => {
     keywordDensity: number;
     headingsScore: number;
     overallScore: number;
+    suggestions: string[];
   }>(null);
   const { toast } = useToast();
 
@@ -38,13 +39,20 @@ export const SeoChecker = () => {
       setLoading(true);
       // For demo purposes, we'll simulate an API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      // In a real implementation, you would make an API call to analyze the webpage
+      
       const mockResults = {
         titleScore: Math.floor(Math.random() * 100),
         descriptionScore: Math.floor(Math.random() * 100),
         keywordDensity: Number((Math.random() * 5).toFixed(2)),
         headingsScore: Math.floor(Math.random() * 100),
         overallScore: Math.floor(Math.random() * 100),
+        suggestions: [
+          `Add the keyword "${keyword}" to at least one of your H1, H2, or H3 headers for better rankings.`,
+          `To rank well for "${keyword}", add the keyword naturally within your page content.`,
+          "Create a robots.txt file in your website root with content:\nUser-agent: *\nAllow:",
+          "Ensure your meta description includes your target keyword.",
+          "Add alt text to images that includes your target keyword where relevant."
+        ]
       };
       setResults(mockResults);
     } catch (error) {
@@ -121,6 +129,15 @@ export const SeoChecker = () => {
                       <p className="font-semibold">Headings Structure</p>
                       <p className="text-lg">{results.headingsScore}%</p>
                     </div>
+                  </div>
+                  
+                  <div className="mt-6">
+                    <h3 className="text-lg font-semibold mb-3">Optimization Suggestions</h3>
+                    <ul className="space-y-2 list-disc pl-4">
+                      {results.suggestions.map((suggestion, index) => (
+                        <li key={index} className="text-gray-600">{suggestion}</li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </CardContent>
