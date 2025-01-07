@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { BookOpen, ShoppingCart, Wrench } from "lucide-react"
+import { BookOpen, Wrench } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,12 +22,6 @@ const Header = () => {
               Blog
             </Button>
           </Link>
-          <Link to="/products">
-            <Button variant="ghost" className="flex items-center">
-              <ShoppingCart className="mr-2 h-4 w-4" />
-              Products
-            </Button>
-          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center">
@@ -41,6 +35,9 @@ const Header = () => {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/tools/backlink-checker">Backlink Checker</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/tools/seo-checker">SEO Checker</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
