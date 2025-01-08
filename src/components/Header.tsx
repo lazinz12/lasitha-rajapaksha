@@ -39,6 +39,9 @@ const Header = () => {
               <DropdownMenuItem asChild>
                 <Link to="/tools/seo-checker">SEO Checker</Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/tools/image-converter">Image Converter</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

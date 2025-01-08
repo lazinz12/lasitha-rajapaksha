@@ -9,6 +9,7 @@ import BlogPost from "./pages/BlogPost";
 import CaseConverter from "./pages/CaseConverter";
 import BacklinkChecker from "./pages/BacklinkChecker";
 import SeoChecker from "./pages/SeoChecker";
+import ImageConverter from "./pages/ImageConverter";
 import { SeasonalEffects } from "./components/SeasonalEffects";
 
 // Create a client
@@ -36,6 +37,7 @@ function App() {
             <Route path="/tools/case-converter" element={<CaseConverter />} />
             <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
             <Route path="/tools/seo-checker" element={<SeoChecker />} />
+            <Route path="/tools/image-converter" element={<ImageConverter />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
