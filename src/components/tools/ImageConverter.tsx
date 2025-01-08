@@ -31,12 +31,22 @@ export const ImageConverter = () => {
         });
         return;
       }
-      setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result as string);
+
+      // Check image dimensions before proceeding
+      const img = new Image();
+      img.onload = () => {
+        if (img.width > 14000 || img.height > 14000) {
+          toast({
+            title: "Image too large",
+            description: "Maximum image dimensions are 14000 x 14000 pixels.",
+            variant: "destructive",
+          });
+          return;
+        }
+        setSelectedFile(file);
+        setPreviewUrl(URL.createObjectURL(file));
       };
-      reader.readAsDataURL(file);
+      img.src = URL.createObjectURL(file);
     }
   };
 
@@ -53,7 +63,6 @@ export const ImageConverter = () => {
     setIsConverting(true);
 
     try {
-      // Create a canvas element to perform the conversion
       const img = new Image();
       img.src = previewUrl;
       await new Promise((resolve) => (img.onload = resolve));
@@ -68,7 +77,9 @@ export const ImageConverter = () => {
       ctx.drawImage(img, 0, 0);
 
       // Convert to the selected format
-      const convertedDataUrl = canvas.toDataURL(`image/${outputFormat}`);
+      const mimeType = `image/${outputFormat}`;
+      const quality = outputFormat === "jpeg" ? 0.92 : undefined;
+      const convertedDataUrl = canvas.toDataURL(mimeType, quality);
 
       // Create and trigger download
       const link = document.createElement("a");
@@ -105,8 +116,10 @@ export const ImageConverter = () => {
 
       <div className="grid gap-6">
         <div className="space-y-4">
-          <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 cursor-pointer hover:border-primary/50 transition-colors"
-               onClick={() => fileInputRef.current?.click()}>
+          <div 
+            className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 cursor-pointer hover:border-primary/50 transition-colors"
+            onClick={() => fileInputRef.current?.click()}
+          >
             <Input
               ref={fileInputRef}
               type="file"
@@ -117,7 +130,7 @@ export const ImageConverter = () => {
             <ImageIcon className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-sm text-muted-foreground text-center">
               Click to upload or drag and drop<br />
-              SVG, PNG, JPG or GIF (max. 800x400px)
+              Supports all image formats (max. 14000x14000px)
             </p>
           </div>
 
@@ -147,6 +160,8 @@ export const ImageConverter = () => {
                 <SelectItem value="png">PNG</SelectItem>
                 <SelectItem value="jpeg">JPEG</SelectItem>
                 <SelectItem value="webp">WebP</SelectItem>
+                <SelectItem value="gif">GIF</SelectItem>
+                <SelectItem value="bmp">BMP</SelectItem>
               </SelectContent>
             </Select>
           </div>
