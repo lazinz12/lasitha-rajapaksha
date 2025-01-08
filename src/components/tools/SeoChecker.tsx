@@ -9,39 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Loader2, CheckCircle2, XCircle, AlertCircle, Download } from "lucide-react";
+import { Loader2, Download } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { SeoResultSection } from "./seo/SeoResultSection";
+import { AiRecommendations } from "./seo/AiRecommendations";
 
 export const SeoChecker = () => {
   const [url, setUrl] = useState("");
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<null | {
-    title: {
-      text: string;
-      hasKeyword: boolean;
-      score: number;
-    };
-    headings: {
-      count: number;
-      hasKeyword: boolean;
-      score: number;
-    };
-    content: {
-      wordCount: number;
-      score: number;
-    };
-    loadingSpeed: {
-      time: number;
-      score: number;
-      reasons: string[];
-    };
-    robotsTxt: {
-      exists: boolean;
-      isValid: boolean;
-      message: string;
-    };
-    overallScore: number;
-  }>(null);
+  const [results, setResults] = useState<any>(null);
+  const [aiRecommendations, setAiRecommendations] = useState<any>(null);
   const { toast } = useToast();
 
   const handleCheck = async () => {
@@ -59,7 +37,6 @@ export const SeoChecker = () => {
       // For demo purposes, we'll simulate an API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
       
-      // Simulated analysis results with new sections
       const mockResults = {
         title: {
           text: `Your page Title is: "${keyword} - Developer and Forex Trader"`,
@@ -79,18 +56,28 @@ export const SeoChecker = () => {
           time: 1.39,
           score: 95,
           reasons: [
-            "Google and all the search engines love the pages that are loading fast because slow loading pages will reduce their scanning speed, this is the main reason why google will temporarily affect rankings of low speed websites.",
-            "If your website/page loads slowly your visitors will not visit many pages and in most cases will press the back button in the browser before the page will fully load, which will cause lower traffic and high bounce rate which will affect rankings."
+            "Google and all the search engines love the pages that are loading fast because slow loading pages will reduce their scanning speed.",
+            "If your website/page loads slowly your visitors will not visit many pages and in most cases will press the back button."
           ]
         },
         robotsTxt: {
           exists: true,
           isValid: true,
-          message: "Your robots.txt file was found in your website and it is valid, this is good, google will index your site correctly."
+          message: "Your robots.txt file was found in your website and it is valid."
         },
         overallScore: 65,
       };
+      
       setResults(mockResults);
+
+      // Get AI recommendations
+      const { data: aiData, error: aiError } = await supabase.functions.invoke('analyze-seo', {
+        body: { url, keyword, results: mockResults }
+      });
+
+      if (aiError) throw aiError;
+      setAiRecommendations(aiData.recommendations);
+
     } catch (error) {
       toast({
         title: "Error",
@@ -140,12 +127,7 @@ export const SeoChecker = () => {
             <Card className="mt-6">
               <CardContent className="pt-6">
                 <div className="space-y-6">
-                  {/* Title Section */}
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle2 className="text-green-500 h-5 w-5" />
-                      <h3 className="text-lg font-semibold">Page Title</h3>
-                    </div>
+                  <SeoResultSection icon="success" title="Page Title" score={results.title.score}>
                     <p className="text-gray-700 mb-2">{results.title.text}</p>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="text-green-500 h-4 w-4" />
@@ -154,87 +136,35 @@ export const SeoChecker = () => {
                         <span className="font-semibold">"{keyword}"</span>
                       </p>
                     </div>
-                  </div>
+                  </SeoResultSection>
 
-                  {/* Loading Speed Section */}
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle2 className="text-green-500 h-5 w-5" />
-                      <h3 className="text-lg font-semibold">Page Loading Speed</h3>
-                      <span className="text-green-500 text-sm ml-auto">
-                        +{results.loadingSpeed.score}
-                      </span>
-                    </div>
+                  <SeoResultSection 
+                    icon="success" 
+                    title="Page Loading Speed" 
+                    score={results.loadingSpeed.score}
+                  >
                     <p className="text-gray-700 mb-2">
                       This page took around {results.loadingSpeed.time} seconds to load (fast).
                     </p>
-                    <p className="text-gray-700 mb-2">
-                      The page loading speed is important for several reasons:
-                    </p>
                     <ul className="list-disc pl-5 space-y-2">
-                      {results.loadingSpeed.reasons.map((reason, index) => (
+                      {results.loadingSpeed.reasons.map((reason: string, index: number) => (
                         <li key={index} className="text-sm text-gray-600">
                           {reason}
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </SeoResultSection>
 
-                  {/* Robots.txt Section */}
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle2 className="text-green-500 h-5 w-5" />
-                      <h3 className="text-lg font-semibold">File robots.txt</h3>
-                    </div>
+                  <SeoResultSection icon="success" title="File robots.txt">
                     <p className="text-gray-700 mb-2">
                       {results.robotsTxt.message}
                     </p>
-                  </div>
+                  </SeoResultSection>
 
-                  {/* Headings Section */}
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <AlertCircle className="text-orange-500 h-5 w-5" />
-                      <h3 className="text-lg font-semibold">Heading</h3>
-                      <span className="text-red-500 text-sm ml-auto">
-                        {results.headings.score}
-                      </span>
-                    </div>
-                    <p className="text-gray-700 mb-2">Your page headers</p>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="text-green-500 h-4 w-4" />
-                      <p className="text-sm">
-                        Your page have no page headers
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 mt-2">
-                      <XCircle className="text-red-500 h-4 w-4" />
-                      <p className="text-sm">
-                        Your headers don't contain your keyword{" "}
-                        <span className="font-semibold">{keyword}</span>, you can add the keyword to at least one of the h1,h2 or h3 headers, this will results in better rankings.
-                      </p>
-                    </div>
-                  </div>
+                  {aiRecommendations && (
+                    <AiRecommendations recommendations={aiRecommendations} />
+                  )}
 
-                  {/* Content Section */}
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <AlertCircle className="text-orange-500 h-5 w-5" />
-                      <h3 className="text-lg font-semibold">Content</h3>
-                      <span className="text-red-500 text-sm ml-auto">
-                        {results.content.score}
-                      </span>
-                    </div>
-                    <p className="text-gray-700 mb-2">Your page content analyze</p>
-                    <div className="flex items-center gap-2">
-                      <XCircle className="text-red-500 h-4 w-4" />
-                      <p className="text-sm">
-                        Your page content size is too low, you have only {results.content.wordCount} words per page, try to add more text content per page, the more content per page the better rankings will be.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Download Report Button */}
                   <Button className="w-full" variant="outline">
                     <Download className="mr-2 h-4 w-4" />
                     Download Report as PDF
