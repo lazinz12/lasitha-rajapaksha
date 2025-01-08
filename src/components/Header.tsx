@@ -29,17 +29,17 @@ const Header = () => {
                 Tools
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem asChild>
+            <DropdownMenuContent className="bg-popover/100 shadow-lg border-border">
+              <DropdownMenuItem asChild className="focus:bg-accent/100">
                 <Link to="/tools/case-converter">Case Converter</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild className="focus:bg-accent/100">
                 <Link to="/tools/backlink-checker">Backlink Checker</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild className="focus:bg-accent/100">
                 <Link to="/tools/seo-checker">SEO Checker</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem asChild className="focus:bg-accent/100">
                 <Link to="/tools/image-converter">Image Converter</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
