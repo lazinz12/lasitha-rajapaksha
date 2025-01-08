@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Loader2, Download } from "lucide-react";
+import { Loader2, Download, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SeoResultSection } from "./seo/SeoResultSection";
 import { AiRecommendations } from "./seo/AiRecommendations";
