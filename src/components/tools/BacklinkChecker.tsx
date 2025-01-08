@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const BacklinkChecker = () => {
   const [url, setUrl] = useState("");
@@ -29,14 +30,17 @@ export const BacklinkChecker = () => {
 
     try {
       setLoading(true);
-      // For demo purposes, we'll simulate an API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      // In a real implementation, you would make an API call to a backlink checking service
-      const mockResults = {
-        backlinks: Math.floor(Math.random() * 1000),
-      };
-      setResults(mockResults);
+      
+      // Call the Edge Function
+      const { data, error } = await supabase.functions.invoke('check-backlinks', {
+        body: { url }
+      });
+
+      if (error) throw error;
+
+      setResults(data);
     } catch (error) {
+      console.error('Backlink check error:', error);
       toast({
         title: "Error",
         description: "Failed to check backlinks. Please try again.",
