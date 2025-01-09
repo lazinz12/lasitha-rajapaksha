@@ -10,6 +10,9 @@ import CaseConverter from "./pages/CaseConverter";
 import BacklinkChecker from "./pages/BacklinkChecker";
 import SeoChecker from "./pages/SeoChecker";
 import ImageConverter from "./pages/ImageConverter";
+import ColorConverter from "./pages/ColorConverter";
+import QrGenerator from "./pages/QrGenerator";
+import PasswordGenerator from "./pages/PasswordGenerator";
 import { SeasonalEffects } from "./components/SeasonalEffects";
 
 // Create a client
@@ -38,6 +41,9 @@ function App() {
             <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
             <Route path="/tools/seo-checker" element={<SeoChecker />} />
             <Route path="/tools/image-converter" element={<ImageConverter />} />
+            <Route path="/tools/color-converter" element={<ColorConverter />} />
+            <Route path="/tools/qr-generator" element={<QrGenerator />} />
+            <Route path="/tools/password-generator" element={<PasswordGenerator />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

@@ -6,6 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 
 const Header = () => {
@@ -41,6 +42,16 @@ const Header = () => {
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="focus:bg-accent/100">
                 <Link to="/tools/image-converter">Image Converter</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild className="focus:bg-accent/100">
+                <Link to="/tools/color-converter">Color Converter</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="focus:bg-accent/100">
+                <Link to="/tools/qr-generator">QR Code Generator</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="focus:bg-accent/100">
+                <Link to="/tools/password-generator">Password Generator</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
