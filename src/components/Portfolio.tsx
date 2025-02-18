@@ -1,10 +1,11 @@
+
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink } from "lucide-react";
 
 const projects = [
   {
-    title: "Backlink Bazarl",
+    title: "Backlink Shop",
     description: "A web platform connecting backlink providers with buyers, featuring AI-powered personalized itineraries, tag-based filtering, and real-time notifications for enhanced user engagement.",
     link: "#",
     category: "Web Development",
