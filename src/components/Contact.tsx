@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Youtube, Linkedin, Instagram, Github, Facebook } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -20,9 +21,9 @@ export const Contact = () => {
     },
     {
       platform: "Instagram",
-      url: "https://www.instagram.com/lasinsraj/",
+      url: "https://www.instagram.com/lasins_raj/",
       icon: Instagram,
-      username: "@lasinsraj",
+      username: "@lasins_raj",
       color: "hover:text-pink-600 hover:bg-pink-50"
     },
     {

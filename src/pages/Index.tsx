@@ -20,9 +20,9 @@ const Index = () => {
       <Skills />
       <Experience />
       <Portfolio />
-      <PhotoGallery />
       <Certifications />
       <Contact />
+      <PhotoGallery />
     </div>
   );
 };
