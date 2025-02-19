@@ -1,26 +1,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
-
-// Declare the Instagram Embed script type
-declare global {
-  interface Window {
-    instgrm?: {
-      Embeds: {
-        process(): void;
-      };
-    };
-  }
-}
-
-// Instagram posts to embed (replace with your actual Instagram post URLs)
-const instagramPosts = [
-  'https://www.instagram.com/p/LATEST_POST_ID_1/',
-  'https://www.instagram.com/p/LATEST_POST_ID_2/',
-  'https://www.instagram.com/p/LATEST_POST_ID_3/'
-];
 
 const photos = [
   {
@@ -78,25 +60,6 @@ const photos = [
 export const PhotoGallery = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<null | typeof photos[0]>(null);
 
-  useEffect(() => {
-    // Load Instagram embed script
-    const script = document.createElement('script');
-    script.src = '//www.instagram.com/embed.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      if (window.instgrm) {
-        window.instgrm.Embeds.process();
-      }
-    };
-
-    return () => {
-      // Cleanup script when component unmounts
-      document.body.removeChild(script);
-    };
-  }, []);
-
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -107,35 +70,6 @@ export const PhotoGallery = () => {
         >
           <h2 className="text-3xl font-bold text-center mb-12 text-primary">Photo Gallery</h2>
           
-          {/* Instagram Feed Section */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-semibold text-center mb-8">Instagram Feed</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {instagramPosts.map((post, index) => (
-                <div key={index} className="instagram-embed-container">
-                  <blockquote 
-                    className="instagram-media" 
-                    data-instgrm-permalink={post}
-                    data-instgrm-version="14"
-                    style={{
-                      background: '#FFF',
-                      border: '0',
-                      borderRadius: '3px',
-                      boxShadow: '0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)',
-                      margin: '1px',
-                      maxWidth: '540px',
-                      minWidth: '326px',
-                      padding: '0',
-                      width: '99.375%'
-                    }}
-                  >
-                  </blockquote>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Regular Photo Gallery */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {photos.map((photo, index) => (
               <motion.div
