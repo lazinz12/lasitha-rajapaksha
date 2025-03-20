@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Trash2, Plus, Upload, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 type Photo = {
   id: string;
@@ -27,6 +29,7 @@ const PhotoGalleryManager = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [altText, setAltText] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
     fetchPhotos();
@@ -60,34 +63,45 @@ const PhotoGalleryManager = () => {
     return `/${url}`;
   };
 
-  const normalizeUrlForStorage = (url: string) => {
-    if (!url) return '';
-    
-    if (url.startsWith('/')) {
-      return url.substring(1);
-    }
-    
-    try {
-      const urlObj = new URL(url);
-      if (urlObj.origin === window.location.origin) {
-        return urlObj.pathname.startsWith('/') 
-          ? urlObj.pathname.substring(1) 
-          : urlObj.pathname;
-      }
-    } catch (e) {
-      return url;
-    }
-    
-    return url;
-  };
-
   const handleAddPhoto = async () => {
-    if (!title || !imageUrl || !altText) {
+    if (!title || (!imageUrl && !selectedFile) || !altText) {
       toast.error("Please fill in all required fields");
       return;
     }
 
     try {
+      setUploading(true);
+      
+      let finalImageUrl = imageUrl;
+      
+      // If there's a selected file, upload it to Supabase Storage
+      if (selectedFile) {
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `${uuidv4()}.${fileExt}`;
+        const filePath = `gallery/${fileName}`;
+        
+        // Create gallery bucket if it doesn't exist (this is handled by Supabase)
+        
+        // Upload the file to Supabase Storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('gallery')
+          .upload(filePath, selectedFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+          
+        if (uploadError) {
+          throw uploadError;
+        }
+        
+        // Get the public URL for the uploaded file
+        const { data: publicUrlData } = supabase.storage
+          .from('gallery')
+          .getPublicUrl(filePath);
+          
+        finalImageUrl = publicUrlData.publicUrl;
+      }
+
       const maxDisplayOrder = photos.length > 0
         ? Math.max(...photos.filter(p => p.display_order !== null).map(p => p.display_order || 0)) + 1
         : 1;
@@ -95,7 +109,7 @@ const PhotoGalleryManager = () => {
       const { error } = await supabase.from("photo_gallery").insert({
         title,
         description: description || null,
-        image_url: normalizeUrlForStorage(imageUrl),
+        image_url: finalImageUrl,
         alt_text: altText,
         display_order: maxDisplayOrder,
       });
@@ -109,20 +123,44 @@ const PhotoGalleryManager = () => {
       setDescription("");
       setImageUrl("");
       setAltText("");
+      setSelectedFile(null);
     } catch (error) {
       console.error("Error adding photo:", error);
       toast.error("Failed to add photo");
+    } finally {
+      setUploading(false);
     }
   };
 
-  const handleDeletePhoto = async (id: string) => {
+  const handleDeletePhoto = async (id: string, imageUrl: string) => {
     try {
+      // First, delete from the database
       const { error } = await supabase
         .from("photo_gallery")
         .delete()
         .eq("id", id);
 
       if (error) throw error;
+
+      // If the image is in Supabase Storage, delete it too
+      if (imageUrl && imageUrl.includes('supabase.co')) {
+        // Extract the path from the URL
+        const storageUrl = new URL(imageUrl);
+        const pathSegments = storageUrl.pathname.split('/');
+        const bucketIndex = pathSegments.findIndex(segment => segment === 'gallery');
+        
+        if (bucketIndex !== -1 && bucketIndex < pathSegments.length - 1) {
+          const filePath = pathSegments.slice(bucketIndex + 1).join('/');
+          
+          const { error: storageError } = await supabase.storage
+            .from('gallery')
+            .remove([filePath]);
+            
+          if (storageError) {
+            console.error("Error deleting file from storage:", storageError);
+          }
+        }
+      }
 
       toast.success("Photo deleted successfully");
       setPhotos(photos.filter(photo => photo.id !== id));
@@ -170,25 +208,13 @@ const PhotoGalleryManager = () => {
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-    const filePath = `public/lovable-uploads/${fileName}`;
-
-    setUploading(true);
-
-    try {
-      const previewUrl = URL.createObjectURL(file);
-      setImageUrl(previewUrl);
-      
-      setImageUrl(`/lovable-uploads/${fileName}`);
-      
-      toast.success("Image preview ready");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      toast.error("Failed to upload image");
-    } finally {
-      setUploading(false);
-    }
+    setSelectedFile(file);
+    
+    // Create a preview URL for the selected file
+    const previewUrl = URL.createObjectURL(file);
+    setImageUrl(previewUrl);
+    
+    toast.success("Image selected for upload");
   };
 
   return (
@@ -231,13 +257,13 @@ const PhotoGalleryManager = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="imageUrl">Image URL*</Label>
+            <Label htmlFor="imageUrl">Image*</Label>
             <div className="flex gap-2">
               <Input 
                 id="imageUrl" 
                 value={imageUrl} 
                 onChange={(e) => setImageUrl(e.target.value)} 
-                placeholder="/path/to/image.jpg"
+                placeholder="Upload an image or enter URL"
                 className="flex-1"
               />
               <div className="relative">
@@ -259,16 +285,16 @@ const PhotoGalleryManager = () => {
             <div className="mt-2">
               <p className="text-sm text-muted-foreground mb-1">Image Preview:</p>
               <img 
-                src={getImageUrl(imageUrl)} 
+                src={imageUrl} 
                 alt="Preview" 
                 className="h-40 w-auto object-cover rounded-md border"
               />
             </div>
           )}
           
-          <Button onClick={handleAddPhoto} className="w-full" disabled={!title || !imageUrl || !altText}>
+          <Button onClick={handleAddPhoto} className="w-full" disabled={(!imageUrl && !selectedFile) || !title || !altText || uploading}>
             <Plus className="h-4 w-4 mr-2" />
-            Add Photo
+            {uploading ? "Adding Photo..." : "Add Photo"}
           </Button>
         </CardContent>
       </Card>
@@ -288,7 +314,7 @@ const PhotoGalleryManager = () => {
                 <Card key={photo.id} className="overflow-hidden">
                   <div className="relative h-40">
                     <img 
-                      src={getImageUrl(photo.image_url)} 
+                      src={photo.image_url} 
                       alt={photo.alt_text} 
                       className="w-full h-full object-cover"
                     />
@@ -320,7 +346,7 @@ const PhotoGalleryManager = () => {
                       <Button 
                         size="icon" 
                         variant="destructive"
-                        onClick={() => handleDeletePhoto(photo.id)}
+                        onClick={() => handleDeletePhoto(photo.id, photo.image_url)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
