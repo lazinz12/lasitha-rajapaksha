@@ -21,6 +21,8 @@ type Photo = {
   updated_at: string;
 };
 
+const STORAGE_BUCKET = 'gallery';
+
 const PhotoGalleryManager = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,22 @@ const PhotoGalleryManager = () => {
 
   useEffect(() => {
     fetchPhotos();
+    ensureStorageBucket();
   }, []);
+
+  const ensureStorageBucket = async () => {
+    // Check if the gallery bucket exists, if not create it
+    const { data: buckets } = await supabase.storage.listBuckets();
+    const galleryBucketExists = buckets?.some(bucket => bucket.name === STORAGE_BUCKET);
+    
+    if (!galleryBucketExists) {
+      // Create the gallery bucket
+      await supabase.storage.createBucket(STORAGE_BUCKET, {
+        public: true,
+        fileSizeLimit: 5242880 // 5MB
+      });
+    }
+  };
 
   const fetchPhotos = async () => {
     try {
@@ -53,16 +70,6 @@ const PhotoGalleryManager = () => {
     }
   };
 
-  const getImageUrl = (url: string) => {
-    if (!url) return '';
-    
-    if (url.startsWith('http') || url.startsWith('/')) {
-      return url;
-    }
-    
-    return `/${url}`;
-  };
-
   const handleAddPhoto = async () => {
     if (!title || (!imageUrl && !selectedFile) || !altText) {
       toast.error("Please fill in all required fields");
@@ -78,13 +85,11 @@ const PhotoGalleryManager = () => {
       if (selectedFile) {
         const fileExt = selectedFile.name.split('.').pop();
         const fileName = `${uuidv4()}.${fileExt}`;
-        const filePath = `gallery/${fileName}`;
-        
-        // Create gallery bucket if it doesn't exist (this is handled by Supabase)
+        const filePath = `${fileName}`;
         
         // Upload the file to Supabase Storage
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('gallery')
+          .from(STORAGE_BUCKET)
           .upload(filePath, selectedFile, {
             cacheControl: '3600',
             upsert: false
@@ -96,7 +101,7 @@ const PhotoGalleryManager = () => {
         
         // Get the public URL for the uploaded file
         const { data: publicUrlData } = supabase.storage
-          .from('gallery')
+          .from(STORAGE_BUCKET)
           .getPublicUrl(filePath);
           
         finalImageUrl = publicUrlData.publicUrl;
@@ -147,14 +152,12 @@ const PhotoGalleryManager = () => {
         // Extract the path from the URL
         const storageUrl = new URL(imageUrl);
         const pathSegments = storageUrl.pathname.split('/');
-        const bucketIndex = pathSegments.findIndex(segment => segment === 'gallery');
+        const filename = pathSegments[pathSegments.length - 1];
         
-        if (bucketIndex !== -1 && bucketIndex < pathSegments.length - 1) {
-          const filePath = pathSegments.slice(bucketIndex + 1).join('/');
-          
+        if (filename) {
           const { error: storageError } = await supabase.storage
-            .from('gallery')
-            .remove([filePath]);
+            .from(STORAGE_BUCKET)
+            .remove([filename]);
             
           if (storageError) {
             console.error("Error deleting file from storage:", storageError);
