@@ -39,16 +39,35 @@ const PhotoGalleryManager = () => {
   }, []);
 
   const ensureStorageBucket = async () => {
-    // Check if the gallery bucket exists, if not create it
-    const { data: buckets } = await supabase.storage.listBuckets();
-    const galleryBucketExists = buckets?.some(bucket => bucket.name === STORAGE_BUCKET);
-    
-    if (!galleryBucketExists) {
-      // Create the gallery bucket
-      await supabase.storage.createBucket(STORAGE_BUCKET, {
-        public: true,
-        fileSizeLimit: 5242880 // 5MB
-      });
+    try {
+      // Check if the gallery bucket exists first
+      const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+      
+      if (listError) {
+        console.error("Error checking buckets:", listError);
+        return;
+      }
+      
+      const galleryBucketExists = buckets?.some(bucket => bucket.name === STORAGE_BUCKET);
+      
+      if (!galleryBucketExists) {
+        console.log("Gallery bucket does not exist, creating it...");
+        const { data, error } = await supabase.storage.createBucket(STORAGE_BUCKET, {
+          public: true,
+          fileSizeLimit: 5242880 // 5MB
+        });
+        
+        if (error) {
+          console.error("Error creating bucket:", error);
+          toast.error("Failed to create storage bucket. Please try again later.");
+        } else {
+          console.log("Gallery bucket created successfully");
+        }
+      } else {
+        console.log("Gallery bucket already exists");
+      }
+    } catch (error) {
+      console.error("Error in ensureStorageBucket:", error);
     }
   };
 
@@ -83,9 +102,14 @@ const PhotoGalleryManager = () => {
       
       // If there's a selected file, upload it to Supabase Storage
       if (selectedFile) {
+        console.log("Uploading file to Supabase Storage...");
+        
         const fileExt = selectedFile.name.split('.').pop();
         const fileName = `${uuidv4()}.${fileExt}`;
         const filePath = `${fileName}`;
+        
+        console.log("File path:", filePath);
+        console.log("Bucket:", STORAGE_BUCKET);
         
         // Upload the file to Supabase Storage
         const { data: uploadData, error: uploadError } = await supabase.storage
@@ -96,8 +120,11 @@ const PhotoGalleryManager = () => {
           });
           
         if (uploadError) {
+          console.error("Upload error:", uploadError);
           throw uploadError;
         }
+        
+        console.log("File uploaded successfully:", uploadData);
         
         // Get the public URL for the uploaded file
         const { data: publicUrlData } = supabase.storage
@@ -105,6 +132,7 @@ const PhotoGalleryManager = () => {
           .getPublicUrl(filePath);
           
         finalImageUrl = publicUrlData.publicUrl;
+        console.log("Public URL:", finalImageUrl);
       }
 
       const maxDisplayOrder = photos.length > 0
