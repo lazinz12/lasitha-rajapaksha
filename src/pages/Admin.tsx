@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +11,7 @@ import ExperienceManager from "@/components/admin/ExperienceManager";
 import ProjectManager from "@/components/admin/ProjectManager";
 import CertificationManager from "@/components/admin/CertificationManager";
 import SocialLinksManager from "@/components/admin/SocialLinksManager";
+import PhotoGalleryManager from "@/components/admin/PhotoGalleryManager";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
@@ -70,6 +72,7 @@ const Admin = () => {
           <TabsTrigger value="projects">Projects</TabsTrigger>
           <TabsTrigger value="certifications">Certifications</TabsTrigger>
           <TabsTrigger value="social">Social Links</TabsTrigger>
+          <TabsTrigger value="gallery">Photo Gallery</TabsTrigger>
           <TabsTrigger value="blog">Blog Posts</TabsTrigger>
           <TabsTrigger value="products">Products</TabsTrigger>
         </TabsList>
@@ -90,6 +93,9 @@ const Admin = () => {
         </TabsContent>
         <TabsContent value="social">
           <SocialLinksManager />
+        </TabsContent>
+        <TabsContent value="gallery">
+          <PhotoGalleryManager />
         </TabsContent>
         <TabsContent value="blog">
           <BlogManager />
