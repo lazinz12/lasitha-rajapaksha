@@ -1,4 +1,3 @@
-
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
@@ -46,11 +45,21 @@ export const PhotoGallery = () => {
     }
   };
 
+  const getImageUrl = (url: string) => {
+    if (!url) return '';
+    
+    if (url.startsWith('http') || url.startsWith('/')) {
+      return url;
+    }
+    
+    return `/${url}`;
+  };
+
   const getImageSchema = (photo: Photo, index: number) => {
     return {
       "@context": "https://schema.org",
       "@type": "ImageObject",
-      "contentUrl": `${window.location.origin}${photo.image_url}`,
+      "contentUrl": `${window.location.origin}${getImageUrl(photo.image_url)}`,
       "url": `${currentUrl}#photo-${index + 1}`,
       "name": photo.title,
       "description": photo.description,
@@ -103,7 +112,7 @@ export const PhotoGallery = () => {
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                     <CardContent className="p-0">
                       <img
-                        src={photo.image_url}
+                        src={getImageUrl(photo.image_url)}
                         alt={photo.alt_text}
                         title={photo.title}
                         loading="lazy"
@@ -144,7 +153,7 @@ export const PhotoGallery = () => {
                   <X size={24} />
                 </button>
                 <img
-                  src={selectedPhoto.image_url}
+                  src={getImageUrl(selectedPhoto.image_url)}
                   alt={selectedPhoto.alt_text}
                   title={selectedPhoto.title}
                   className="w-full h-auto max-h-[90vh] object-contain rounded-lg"

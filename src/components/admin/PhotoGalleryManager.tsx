@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,6 +50,37 @@ const PhotoGalleryManager = () => {
     }
   };
 
+  const getImageUrl = (url: string) => {
+    if (!url) return '';
+    
+    if (url.startsWith('http') || url.startsWith('/')) {
+      return url;
+    }
+    
+    return `/${url}`;
+  };
+
+  const normalizeUrlForStorage = (url: string) => {
+    if (!url) return '';
+    
+    if (url.startsWith('/')) {
+      return url.substring(1);
+    }
+    
+    try {
+      const urlObj = new URL(url);
+      if (urlObj.origin === window.location.origin) {
+        return urlObj.pathname.startsWith('/') 
+          ? urlObj.pathname.substring(1) 
+          : urlObj.pathname;
+      }
+    } catch (e) {
+      return url;
+    }
+    
+    return url;
+  };
+
   const handleAddPhoto = async () => {
     if (!title || !imageUrl || !altText) {
       toast.error("Please fill in all required fields");
@@ -58,7 +88,6 @@ const PhotoGalleryManager = () => {
     }
 
     try {
-      // Find the highest display order
       const maxDisplayOrder = photos.length > 0
         ? Math.max(...photos.filter(p => p.display_order !== null).map(p => p.display_order || 0)) + 1
         : 1;
@@ -66,7 +95,7 @@ const PhotoGalleryManager = () => {
       const { error } = await supabase.from("photo_gallery").insert({
         title,
         description: description || null,
-        image_url: imageUrl,
+        image_url: normalizeUrlForStorage(imageUrl),
         alt_text: altText,
         display_order: maxDisplayOrder,
       });
@@ -76,7 +105,6 @@ const PhotoGalleryManager = () => {
       toast.success("Photo added successfully");
       fetchPhotos();
       
-      // Reset form
       setTitle("");
       setDescription("");
       setImageUrl("");
@@ -116,17 +144,14 @@ const PhotoGalleryManager = () => {
     const currentPhoto = photos[photoIndex];
     const otherPhoto = photos[otherIndex];
     
-    // Swap display orders
     const tempOrder = currentPhoto.display_order;
     
     try {
-      // Update first photo
       await supabase
         .from("photo_gallery")
         .update({ display_order: otherPhoto.display_order })
         .eq("id", currentPhoto.id);
         
-      // Update second photo
       await supabase
         .from("photo_gallery")
         .update({ display_order: tempOrder })
@@ -147,16 +172,16 @@ const PhotoGalleryManager = () => {
     const file = files[0];
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-    const filePath = `${fileName}`;
+    const filePath = `public/lovable-uploads/${fileName}`;
 
     setUploading(true);
 
     try {
-      // For this demo we're just using the URL directly
-      // In a real application with Supabase Storage, you would upload the file
-      // For now, we'll create a mock URL using Object.URL
-      const url = URL.createObjectURL(file);
-      setImageUrl(url);
+      const previewUrl = URL.createObjectURL(file);
+      setImageUrl(previewUrl);
+      
+      setImageUrl(`/lovable-uploads/${fileName}`);
+      
       toast.success("Image preview ready");
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -234,7 +259,7 @@ const PhotoGalleryManager = () => {
             <div className="mt-2">
               <p className="text-sm text-muted-foreground mb-1">Image Preview:</p>
               <img 
-                src={imageUrl} 
+                src={getImageUrl(imageUrl)} 
                 alt="Preview" 
                 className="h-40 w-auto object-cover rounded-md border"
               />
@@ -263,7 +288,7 @@ const PhotoGalleryManager = () => {
                 <Card key={photo.id} className="overflow-hidden">
                   <div className="relative h-40">
                     <img 
-                      src={photo.image_url} 
+                      src={getImageUrl(photo.image_url)} 
                       alt={photo.alt_text} 
                       className="w-full h-full object-cover"
                     />
