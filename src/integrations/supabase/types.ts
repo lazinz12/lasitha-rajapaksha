@@ -80,6 +80,24 @@ export type Database = {
         }
         Relationships: []
       }
+      edited_photos: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+        }
+        Relationships: []
+      }
       experience: {
         Row: {
           company: string | null

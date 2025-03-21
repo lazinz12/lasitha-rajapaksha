@@ -14,14 +14,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { EditedPhoto } from "@/integrations/supabase/types";
 
 const STORAGE_BUCKET = 'edited_photos';
 
-type Photo = {
-  id: string;
-  image_url: string;
-  created_at: string;
-};
+type Photo = EditedPhoto;
 
 export const EditedPhotoGallery = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -70,13 +67,16 @@ export const EditedPhotoGallery = () => {
   const fetchPhotos = async () => {
     try {
       setLoading(true);
+      // Use the typed response from Supabase
       const { data, error } = await supabase
         .from("edited_photos")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setPhotos(data || []);
+      
+      // Explicitly cast the data to the Photo type
+      setPhotos(data as Photo[] || []);
     } catch (error) {
       console.error("Error fetching photos:", error);
       toast.error("Failed to load photos");
@@ -103,7 +103,7 @@ export const EditedPhotoGallery = () => {
       
       const totalFiles = selectedFiles.length;
       let filesUploaded = 0;
-      const newPhotos = [];
+      const newPhotos: Photo[] = [];
       
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
@@ -131,10 +131,11 @@ export const EditedPhotoGallery = () => {
           
         const imageUrl = publicUrlData.publicUrl;
         
-        // Save to database
-        const { data: photoData, error: dbError } = await supabase.from("edited_photos").insert({
-          image_url: imageUrl,
-        }).select();
+        // Save to database - using explicit type
+        const { data: photoData, error: dbError } = await supabase
+          .from("edited_photos")
+          .insert({ image_url: imageUrl })
+          .select();
         
         if (dbError) {
           console.error("Database error:", dbError);
@@ -143,7 +144,7 @@ export const EditedPhotoGallery = () => {
         }
         
         if (photoData && photoData.length > 0) {
-          newPhotos.push(photoData[0]);
+          newPhotos.push(photoData[0] as Photo);
         }
         
         // Update progress
