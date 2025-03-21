@@ -19,41 +19,8 @@ const EditedPhotosManager = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
-    ensureStorageBucket();
     fetchPhotos();
   }, []);
-
-  const ensureStorageBucket = async () => {
-    try {
-      const { data: buckets, error: listError } = await supabase.storage.listBuckets();
-      
-      if (listError) {
-        console.error("Error checking buckets:", listError);
-        return;
-      }
-      
-      const bucketExists = buckets?.some(bucket => bucket.name === STORAGE_BUCKET);
-      
-      if (!bucketExists) {
-        console.log(`${STORAGE_BUCKET} bucket does not exist, creating it...`);
-        const { data, error } = await supabase.storage.createBucket(STORAGE_BUCKET, {
-          public: true,
-          fileSizeLimit: 10485760 // 10MB
-        });
-        
-        if (error) {
-          console.error("Error creating bucket:", error);
-          toast.error(`Failed to create storage bucket: ${error.message}`);
-        } else {
-          console.log(`${STORAGE_BUCKET} bucket created successfully`);
-        }
-      } else {
-        console.log(`${STORAGE_BUCKET} bucket already exists`);
-      }
-    } catch (error) {
-      console.error("Error in ensureStorageBucket:", error);
-    }
-  };
 
   const fetchPhotos = async () => {
     try {
