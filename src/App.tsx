@@ -6,6 +6,7 @@ import Login from "@/pages/Login";
 import Admin from "@/pages/Admin";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
+import EditedPhotos from "@/pages/EditedPhotos";
 import CaseConverter from "@/pages/CaseConverter";
 import BacklinkChecker from "@/pages/BacklinkChecker";
 import SeoChecker from "@/pages/SeoChecker";
@@ -55,6 +56,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/edited-photos" element={<EditedPhotos />} />
             
             {/* Text Tools */}
             <Route path="/tools/case-converter" element={<CaseConverter />} />
