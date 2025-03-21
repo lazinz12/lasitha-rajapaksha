@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Trash2, Plus, Upload, ArrowUp, ArrowDown } from "lucide-react";
+import { Trash2, Plus, Upload, ArrowUp, ArrowDown, Edit, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
@@ -32,6 +32,10 @@ const PhotoGalleryManager = () => {
   const [altText, setAltText] = useState("");
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [editingPhotoId, setEditingPhotoId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editAltText, setEditAltText] = useState("");
 
   useEffect(() => {
     fetchPhotos();
@@ -162,6 +166,47 @@ const PhotoGalleryManager = () => {
       toast.error("Failed to add photo");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleStartEditing = (photo: Photo) => {
+    setEditingPhotoId(photo.id);
+    setEditTitle(photo.title);
+    setEditDescription(photo.description || "");
+    setEditAltText(photo.alt_text);
+  };
+
+  const handleCancelEditing = () => {
+    setEditingPhotoId(null);
+    setEditTitle("");
+    setEditDescription("");
+    setEditAltText("");
+  };
+
+  const handleSaveEdit = async (id: string) => {
+    if (!editTitle || !editAltText) {
+      toast.error("Title and Alt Text are required");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("photo_gallery")
+        .update({
+          title: editTitle,
+          description: editDescription || null,
+          alt_text: editAltText
+        })
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Photo details updated successfully");
+      fetchPhotos();
+      setEditingPhotoId(null);
+    } catch (error) {
+      console.error("Error updating photo:", error);
+      toast.error("Failed to update photo details");
     }
   };
 
@@ -351,37 +396,99 @@ const PhotoGalleryManager = () => {
                     />
                   </div>
                   <CardContent className="p-4">
-                    <h3 className="font-semibold truncate">{photo.title}</h3>
-                    {photo.description && (
-                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-                        {photo.description}
-                      </p>
-                    )}
-                    <div className="flex justify-between mt-3">
-                      <div className="flex gap-1">
-                        <Button 
-                          size="icon" 
-                          variant="outline" 
-                          onClick={() => handleMovePhoto(photo.id, 'up')}
-                        >
-                          <ArrowUp className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          size="icon" 
-                          variant="outline"
-                          onClick={() => handleMovePhoto(photo.id, 'down')}
-                        >
-                          <ArrowDown className="h-4 w-4" />
-                        </Button>
+                    {editingPhotoId === photo.id ? (
+                      <div className="space-y-3">
+                        <div>
+                          <Label htmlFor={`edit-title-${photo.id}`}>Title</Label>
+                          <Input 
+                            id={`edit-title-${photo.id}`}
+                            value={editTitle} 
+                            onChange={(e) => setEditTitle(e.target.value)}
+                            placeholder="Photo title"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={`edit-alt-${photo.id}`}>Alt Text</Label>
+                          <Input 
+                            id={`edit-alt-${photo.id}`}
+                            value={editAltText} 
+                            onChange={(e) => setEditAltText(e.target.value)}
+                            placeholder="Image alt text"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={`edit-desc-${photo.id}`}>Description</Label>
+                          <Textarea 
+                            id={`edit-desc-${photo.id}`}
+                            value={editDescription} 
+                            onChange={(e) => setEditDescription(e.target.value)}
+                            placeholder="Photo description"
+                          />
+                        </div>
+                        <div className="flex justify-end gap-2 mt-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={handleCancelEditing}
+                          >
+                            <X className="h-4 w-4 mr-1" />
+                            Cancel
+                          </Button>
+                          <Button 
+                            size="sm"
+                            onClick={() => handleSaveEdit(photo.id)}
+                          >
+                            <Check className="h-4 w-4 mr-1" />
+                            Save
+                          </Button>
+                        </div>
                       </div>
-                      <Button 
-                        size="icon" 
-                        variant="destructive"
-                        onClick={() => handleDeletePhoto(photo.id, photo.image_url)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    ) : (
+                      <>
+                        <h3 className="font-semibold truncate">{photo.title}</h3>
+                        {photo.description && (
+                          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                            {photo.description}
+                          </p>
+                        )}
+                        <div className="flex justify-between mt-3">
+                          <div className="flex gap-1">
+                            <Button 
+                              size="icon" 
+                              variant="outline" 
+                              onClick={() => handleMovePhoto(photo.id, 'up')}
+                              title="Move up"
+                            >
+                              <ArrowUp className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              size="icon" 
+                              variant="outline"
+                              onClick={() => handleMovePhoto(photo.id, 'down')}
+                              title="Move down"
+                            >
+                              <ArrowDown className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              size="icon" 
+                              variant="outline"
+                              onClick={() => handleStartEditing(photo)}
+                              title="Edit details"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <Button 
+                            size="icon" 
+                            variant="destructive"
+                            onClick={() => handleDeletePhoto(photo.id, photo.image_url)}
+                            title="Delete photo"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </CardContent>
                 </Card>
               ))}
