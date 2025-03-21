@@ -12,6 +12,7 @@ import ProjectManager from "@/components/admin/ProjectManager";
 import CertificationManager from "@/components/admin/CertificationManager";
 import SocialLinksManager from "@/components/admin/SocialLinksManager";
 import PhotoGalleryManager from "@/components/admin/PhotoGalleryManager";
+import EditedPhotosManager from "@/components/admin/EditedPhotosManager";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
@@ -73,6 +74,7 @@ const Admin = () => {
           <TabsTrigger value="certifications">Certifications</TabsTrigger>
           <TabsTrigger value="social">Social Links</TabsTrigger>
           <TabsTrigger value="gallery">Photo Gallery</TabsTrigger>
+          <TabsTrigger value="edited-photos">Edited Photos</TabsTrigger>
           <TabsTrigger value="blog">Blog Posts</TabsTrigger>
           <TabsTrigger value="products">Products</TabsTrigger>
         </TabsList>
@@ -96,6 +98,9 @@ const Admin = () => {
         </TabsContent>
         <TabsContent value="gallery">
           <PhotoGalleryManager />
+        </TabsContent>
+        <TabsContent value="edited-photos">
+          <EditedPhotosManager />
         </TabsContent>
         <TabsContent value="blog">
           <BlogManager />
