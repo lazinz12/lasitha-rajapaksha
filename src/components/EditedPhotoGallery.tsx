@@ -14,7 +14,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { EditedPhoto } from "@/integrations/supabase/types";
+import { EditedPhoto } from "@/integrations/supabase/types/index.d";
 
 const STORAGE_BUCKET = 'edited_photos';
 
