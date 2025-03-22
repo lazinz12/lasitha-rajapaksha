@@ -23,65 +23,6 @@ import {
   SheetClose,
 } from "@/components/ui/sheet"
 
-// Tool categories and items for reuse in both mobile and desktop views
-const toolCategories = [
-  {
-    name: "Text Tools",
-    items: [
-      { name: "Case Converter", path: "/tools/case-converter" },
-      { name: "Word Counter", path: "/tools/word-counter" },
-      { name: "Lorem Ipsum", path: "/tools/lorem-ipsum" },
-      { name: "String Encoder", path: "/tools/string-encoder" },
-      { name: "Markdown Preview", path: "/tools/markdown-preview" },
-    ],
-  },
-  {
-    name: "Developer Tools",
-    items: [
-      { name: "JSON Formatter", path: "/tools/json-formatter" },
-      { name: "Base64", path: "/tools/base64" },
-      { name: "URL Encoder", path: "/tools/url-encoder" },
-      { name: "HTML Entity", path: "/tools/html-entity" },
-      { name: "RegEx Tester", path: "/tools/regex-tester" },
-    ],
-  },
-  {
-    name: "Math & Numbers",
-    items: [
-      { name: "Unit Converter", path: "/tools/unit-converter" },
-      { name: "Calculator", path: "/tools/calculator" },
-      { name: "Number Base", path: "/tools/base-converter" },
-      { name: "Percentage Calc", path: "/tools/percentage-calc" },
-      { name: "Random Number", path: "/tools/random-number" },
-    ],
-  },
-  {
-    name: "Image Tools",
-    items: [
-      { name: "Image Converter", path: "/tools/image-converter" },
-      { name: "Image Compressor", path: "/tools/image-compressor" },
-      { name: "Image Cropper", path: "/tools/image-cropper" },
-    ],
-  },
-  {
-    name: "Color Tools",
-    items: [
-      { name: "Color Converter", path: "/tools/color-converter" },
-      { name: "Color Palette", path: "/tools/color-palette" },
-      { name: "Gradient Maker", path: "/tools/gradient-maker" },
-    ],
-  },
-  {
-    name: "Other Tools",
-    items: [
-      { name: "QR Generator", path: "/tools/qr-generator" },
-      { name: "Password Generator", path: "/tools/password-generator" },
-      { name: "Backlink Checker", path: "/tools/backlink-checker" },
-      { name: "SEO Checker", path: "/tools/seo-checker" },
-    ],
-  },
-];
-
 const Header = () => {
   const isMobile = useIsMobile()
 
@@ -118,19 +59,86 @@ const Header = () => {
                   </Link>
                 </SheetClose>
                 
-                {/* Mobile Tool Categories - Organized Menu */}
-                {toolCategories.map((category) => (
-                  <div key={category.name} className="pt-2 pb-4">
-                    <div className="text-sm font-medium mb-2">{category.name}</div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {category.items.map((item) => (
-                        <SheetClose key={item.path} asChild>
-                          <Link to={item.path} className="text-sm py-1">{item.name}</Link>
-                        </SheetClose>
-                      ))}
-                    </div>
+                <div className="pt-2 pb-4">
+                  <div className="text-sm font-medium mb-2">Text Tools</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <SheetClose asChild>
+                      <Link to="/tools/case-converter" className="text-sm py-1">Case Converter</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/word-counter" className="text-sm py-1">Word Counter</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/lorem-ipsum" className="text-sm py-1">Lorem Ipsum</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/string-encoder" className="text-sm py-1">String Encoder</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/markdown-preview" className="text-sm py-1">Markdown Preview</Link>
+                    </SheetClose>
                   </div>
-                ))}
+                </div>
+                
+                <div className="pt-2 pb-4">
+                  <div className="text-sm font-medium mb-2">Developer Tools</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <SheetClose asChild>
+                      <Link to="/tools/json-formatter" className="text-sm py-1">JSON Formatter</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/base64" className="text-sm py-1">Base64</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/url-encoder" className="text-sm py-1">URL Encoder</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/html-entity" className="text-sm py-1">HTML Entity</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/regex-tester" className="text-sm py-1">RegEx Tester</Link>
+                    </SheetClose>
+                  </div>
+                </div>
+                
+                <div className="pt-2 pb-4">
+                  <div className="text-sm font-medium mb-2">Math & Numbers</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <SheetClose asChild>
+                      <Link to="/tools/unit-converter" className="text-sm py-1">Unit Converter</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/calculator" className="text-sm py-1">Calculator</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/base-converter" className="text-sm py-1">Number Base</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/percentage-calc" className="text-sm py-1">Percentage Calc</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/random-number" className="text-sm py-1">Random Number</Link>
+                    </SheetClose>
+                  </div>
+                </div>
+                
+                <div className="pt-2 pb-4">
+                  <div className="text-sm font-medium mb-2">Other Tools</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <SheetClose asChild>
+                      <Link to="/tools/qr-generator" className="text-sm py-1">QR Generator</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/password-generator" className="text-sm py-1">Password Generator</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/backlink-checker" className="text-sm py-1">Backlink Checker</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/tools/seo-checker" className="text-sm py-1">SEO Checker</Link>
+                    </SheetClose>
+                  </div>
+                </div>
               </div>
             </SheetContent>
           </Sheet>
@@ -156,22 +164,121 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-popover/100 shadow-lg border-border">
-                {/* Desktop Tool Categories - Dropdown Menu */}
-                {toolCategories.map((category, index) => (
-                  <React.Fragment key={category.name}>
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>{category.name}</DropdownMenuSubTrigger>
-                      <DropdownMenuSubContent className="bg-popover/100">
-                        {category.items.map((item) => (
-                          <DropdownMenuItem key={item.path} asChild>
-                            <Link to={item.path}>{item.name}</Link>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuSubContent>
-                    </DropdownMenuSub>
-                    {index < toolCategories.length - 1 && <DropdownMenuSeparator />}
-                  </React.Fragment>
-                ))}
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Text Tools</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="bg-popover/100">
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/case-converter">Case Converter</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/word-counter">Word Counter</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/lorem-ipsum">Lorem Ipsum Generator</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/string-encoder">String Encoder/Decoder</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/markdown-preview">Markdown Preview</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Developer Tools</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="bg-popover/100">
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/json-formatter">JSON Formatter</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/base64">Base64 Encoder/Decoder</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/url-encoder">URL Encoder/Decoder</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/html-entity">HTML Entity Encoder</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/regex-tester">RegEx Tester</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Math & Numbers</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="bg-popover/100">
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/unit-converter">Unit Converter</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/calculator">Calculator</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/base-converter">Number Base Converter</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/percentage-calc">Percentage Calculator</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/random-number">Random Number Generator</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>SEO Tools</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="bg-popover/100">
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/backlink-checker">Backlink Checker</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/seo-checker">SEO Checker</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Image Tools</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="bg-popover/100">
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/image-converter">Image Converter</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/image-compressor">Image Compressor</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/image-cropper">Image Cropper</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Color Tools</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="bg-popover/100">
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/color-converter">Color Converter</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/color-palette">Color Palette Generator</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/gradient-maker">Gradient Maker</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/qr-generator">QR Code Generator</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/password-generator">Password Generator</Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
