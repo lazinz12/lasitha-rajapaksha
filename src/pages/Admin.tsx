@@ -14,18 +14,23 @@ import SocialLinksManager from "@/components/admin/SocialLinksManager";
 import PhotoGalleryManager from "@/components/admin/PhotoGalleryManager";
 import EditedPhotosManager from "@/components/admin/EditedPhotosManager";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -119,36 +124,20 @@ const Admin = () => {
       
       {isMobile ? (
         <>
-          <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="outline" className="w-full mb-4">
-                {tabItems.find(tab => tab.value === activeTab)?.label || "Select Section"}
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <DrawerHeader>
-                <DrawerTitle>Select Section</DrawerTitle>
-              </DrawerHeader>
-              <div className="grid grid-cols-2 gap-2 px-4">
+          <div className="mb-4">
+            <Select value={activeTab} onValueChange={setActiveTab}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={tabItems.find(tab => tab.value === activeTab)?.label || "Select Section"} />
+              </SelectTrigger>
+              <SelectContent>
                 {tabItems.map((tab) => (
-                  <DrawerClose key={tab.value} asChild>
-                    <Button 
-                      variant={activeTab === tab.value ? "default" : "outline"}
-                      className="w-full"
-                      onClick={() => setActiveTab(tab.value)}
-                    >
-                      {tab.label}
-                    </Button>
-                  </DrawerClose>
+                  <SelectItem key={tab.value} value={tab.value}>
+                    {tab.label}
+                  </SelectItem>
                 ))}
-              </div>
-              <DrawerFooter className="pt-2">
-                <DrawerClose asChild>
-                  <Button variant="outline">Close</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="pb-4">
             {renderTabContent(activeTab)}
           </div>
