@@ -16,10 +16,22 @@ import EditedPhotosManager from "@/components/admin/EditedPhotosManager";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 const Admin = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [activeTab, setActiveTab] = useState("home");
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -55,60 +67,108 @@ const Admin = () => {
 
   if (!isAdmin) return null;
 
+  const tabItems = [
+    { value: "home", label: "Home Page" },
+    { value: "skills", label: "Skills" },
+    { value: "experience", label: "Experience" },
+    { value: "projects", label: "Projects" },
+    { value: "certifications", label: "Certifications" },
+    { value: "social", label: "Social Links" },
+    { value: "gallery", label: "Photo Gallery" },
+    { value: "edited-photos", label: "Edited Photos" },
+    { value: "blog", label: "Blog Posts" },
+    { value: "products", label: "Products" },
+  ];
+
+  const renderTabContent = (value: string) => {
+    switch (value) {
+      case "home":
+        return <HomePageManager />;
+      case "skills":
+        return <SkillsManager />;
+      case "experience":
+        return <ExperienceManager />;
+      case "projects":
+        return <ProjectManager />;
+      case "certifications":
+        return <CertificationManager />;
+      case "social":
+        return <SocialLinksManager />;
+      case "gallery":
+        return <PhotoGalleryManager />;
+      case "edited-photos":
+        return <EditedPhotosManager />;
+      case "blog":
+        return <BlogManager />;
+      case "products":
+        return <ProductManager />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <Button variant="outline" onClick={handleLogout}>
+    <div className="container mx-auto p-3 md:p-6">
+      <div className="flex justify-between items-center mb-4 md:mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold">Admin Dashboard</h1>
+        <Button variant="outline" onClick={handleLogout} className="h-9 px-2 md:px-4">
           <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          <span className="hidden md:inline">Logout</span>
         </Button>
       </div>
       
-      <Tabs defaultValue="home" className="space-y-4">
-        <TabsList className="flex flex-wrap gap-2">
-          <TabsTrigger value="home">Home Page</TabsTrigger>
-          <TabsTrigger value="skills">Skills</TabsTrigger>
-          <TabsTrigger value="experience">Experience</TabsTrigger>
-          <TabsTrigger value="projects">Projects</TabsTrigger>
-          <TabsTrigger value="certifications">Certifications</TabsTrigger>
-          <TabsTrigger value="social">Social Links</TabsTrigger>
-          <TabsTrigger value="gallery">Photo Gallery</TabsTrigger>
-          <TabsTrigger value="edited-photos">Edited Photos</TabsTrigger>
-          <TabsTrigger value="blog">Blog Posts</TabsTrigger>
-          <TabsTrigger value="products">Products</TabsTrigger>
-        </TabsList>
-        <TabsContent value="home">
-          <HomePageManager />
-        </TabsContent>
-        <TabsContent value="skills">
-          <SkillsManager />
-        </TabsContent>
-        <TabsContent value="experience">
-          <ExperienceManager />
-        </TabsContent>
-        <TabsContent value="projects">
-          <ProjectManager />
-        </TabsContent>
-        <TabsContent value="certifications">
-          <CertificationManager />
-        </TabsContent>
-        <TabsContent value="social">
-          <SocialLinksManager />
-        </TabsContent>
-        <TabsContent value="gallery">
-          <PhotoGalleryManager />
-        </TabsContent>
-        <TabsContent value="edited-photos">
-          <EditedPhotosManager />
-        </TabsContent>
-        <TabsContent value="blog">
-          <BlogManager />
-        </TabsContent>
-        <TabsContent value="products">
-          <ProductManager />
-        </TabsContent>
-      </Tabs>
+      {isMobile ? (
+        <>
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="outline" className="w-full mb-4">
+                {tabItems.find(tab => tab.value === activeTab)?.label || "Select Section"}
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Select Section</DrawerTitle>
+              </DrawerHeader>
+              <div className="grid grid-cols-2 gap-2 px-4">
+                {tabItems.map((tab) => (
+                  <DrawerClose key={tab.value} asChild>
+                    <Button 
+                      variant={activeTab === tab.value ? "default" : "outline"}
+                      className="w-full"
+                      onClick={() => setActiveTab(tab.value)}
+                    >
+                      {tab.label}
+                    </Button>
+                  </DrawerClose>
+                ))}
+              </div>
+              <DrawerFooter className="pt-2">
+                <DrawerClose asChild>
+                  <Button variant="outline">Close</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+          <div className="pb-4">
+            {renderTabContent(activeTab)}
+          </div>
+        </>
+      ) : (
+        <Tabs defaultValue="home" className="space-y-4" value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="flex flex-wrap gap-2">
+            {tabItems.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {tabItems.map((tab) => (
+            <TabsContent key={tab.value} value={tab.value}>
+              {renderTabContent(tab.value)}
+            </TabsContent>
+          ))}
+        </Tabs>
+      )}
     </div>
   );
 };
