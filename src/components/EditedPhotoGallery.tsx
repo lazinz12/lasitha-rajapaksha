@@ -9,12 +9,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card } from "@/components/ui/card";
-import { Image } from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Image, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { EditedPhoto } from "@/integrations/supabase/types/index.d";
 
 export const EditedPhotoGallery = () => {
   const [photos, setPhotos] = useState<EditedPhoto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPhoto, setSelectedPhoto] = useState<EditedPhoto | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     fetchPhotos();
@@ -38,6 +42,33 @@ export const EditedPhotoGallery = () => {
     }
   };
 
+  const openPhotoModal = (photo: EditedPhoto, index: number) => {
+    setSelectedPhoto(photo);
+    setCurrentIndex(index);
+  };
+
+  const goToNextPhoto = () => {
+    if (photos.length === 0) return;
+    const nextIndex = (currentIndex + 1) % photos.length;
+    setCurrentIndex(nextIndex);
+    setSelectedPhoto(photos[nextIndex]);
+  };
+
+  const goToPrevPhoto = () => {
+    if (photos.length === 0) return;
+    const prevIndex = (currentIndex - 1 + photos.length) % photos.length;
+    setCurrentIndex(prevIndex);
+    setSelectedPhoto(photos[prevIndex]);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowRight') {
+      goToNextPhoto();
+    } else if (e.key === 'ArrowLeft') {
+      goToPrevPhoto();
+    }
+  };
+
   return (
     <div className="space-y-8">
       {loading ? (
@@ -52,14 +83,46 @@ export const EditedPhotoGallery = () => {
       ) : (
         <div className="space-y-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {photos.map((photo) => (
-              <div key={photo.id} className="aspect-square relative rounded-md overflow-hidden border group">
-                <img
-                  src={photo.image_url}
-                  alt=""
-                  className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
-                />
-              </div>
+            {photos.map((photo, index) => (
+              <Dialog key={photo.id}>
+                <DialogTrigger asChild>
+                  <div className="aspect-square relative rounded-md overflow-hidden border group cursor-pointer">
+                    <img
+                      src={photo.image_url}
+                      alt=""
+                      className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                      onClick={() => openPhotoModal(photo, index)}
+                    />
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-4xl" onKeyDown={handleKeyDown}>
+                  <div className="relative w-full h-full">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={goToPrevPhoto}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/20 hover:bg-black/40 text-white rounded-full"
+                    >
+                      <ChevronLeft className="h-8 w-8" />
+                    </Button>
+                    <div className="flex items-center justify-center">
+                      <img
+                        src={photos[currentIndex]?.image_url}
+                        alt=""
+                        className="max-h-[80vh] max-w-full object-contain"
+                      />
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={goToNextPhoto}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/20 hover:bg-black/40 text-white rounded-full"
+                    >
+                      <ChevronRight className="h-8 w-8" />
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             ))}
           </div>
           
@@ -67,17 +130,49 @@ export const EditedPhotoGallery = () => {
             <h2 className="text-xl font-semibold mb-4">Slideshow View</h2>
             <Carousel className="w-full max-w-md mx-auto">
               <CarouselContent>
-                {photos.map((photo) => (
+                {photos.map((photo, index) => (
                   <CarouselItem key={photo.id}>
-                    <div className="p-1">
-                      <div className="flex aspect-square items-center justify-center p-2">
-                        <img
-                          src={photo.image_url}
-                          alt=""
-                          className="w-full h-full object-contain rounded-md"
-                        />
-                      </div>
-                    </div>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <div className="p-1 cursor-pointer">
+                          <div className="flex aspect-square items-center justify-center p-2">
+                            <img
+                              src={photo.image_url}
+                              alt=""
+                              className="w-full h-full object-contain rounded-md hover:opacity-90 transition-opacity"
+                              onClick={() => openPhotoModal(photo, index)}
+                            />
+                          </div>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-4xl" onKeyDown={handleKeyDown}>
+                        <div className="relative w-full h-full">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={goToPrevPhoto}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/20 hover:bg-black/40 text-white rounded-full"
+                          >
+                            <ChevronLeft className="h-8 w-8" />
+                          </Button>
+                          <div className="flex items-center justify-center">
+                            <img
+                              src={photos[currentIndex]?.image_url}
+                              alt=""
+                              className="max-h-[80vh] max-w-full object-contain"
+                            />
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={goToNextPhoto}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/20 hover:bg-black/40 text-white rounded-full"
+                          >
+                            <ChevronRight className="h-8 w-8" />
+                          </Button>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </CarouselItem>
                 ))}
               </CarouselContent>
