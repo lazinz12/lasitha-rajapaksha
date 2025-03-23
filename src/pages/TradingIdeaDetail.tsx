@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -36,8 +35,8 @@ const TradingIdeaDetail = () => {
       try {
         // Try to use RPC first without type constraints
         const { data, error } = await supabase.rpc(
-          "get_trading_idea_by_slug", 
-          { slug_param: slug || '' }
+          "get_trading_idea_by_slug" as unknown as never, 
+          { slug_param: slug || '' } as unknown as never
         );
         
         if (error) {
