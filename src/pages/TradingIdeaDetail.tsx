@@ -37,7 +37,7 @@ const TradingIdeaDetail = () => {
         // Try to use RPC first
         const { data, error } = await (supabase.rpc('get_trading_idea_by_slug', { 
           slug_param: slug || '' 
-        }) as any);
+        }, { count: 'exact' }) as any);
         
         if (error) {
           throw error;
