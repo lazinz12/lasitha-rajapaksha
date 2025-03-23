@@ -11,6 +11,16 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 
+interface TradingIdea {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  created_at: string;
+  likes: number;
+  profiles?: { email: string } | null;
+}
+
 const TradingIdeaDetail = () => {
   const { slug } = useParams();
   const [liked, setLiked] = useState(false);
@@ -21,18 +31,29 @@ const TradingIdeaDetail = () => {
   const { data: idea, isLoading } = useQuery({
     queryKey: ["trading-idea", slug],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("trading_ideas")
-        .select("*, profiles(email)")
-        .eq("slug", slug)
-        .eq("published", true)
-        .maybeSingle();
-
-      if (error) throw error;
-      if (data) {
+      const { data, error } = await supabase.rpc('get_trading_idea_by_slug', { slug_param: slug });
+      
+      // Fallback to manual query if RPC isn't available yet
+      if (error) {
+        console.log("Falling back to manual query");
+        const { data: manualData, error: manualError } = await supabase
+          .from('trading_ideas')
+          .select('*, profiles(email)')
+          .eq('slug', slug)
+          .eq('published', true)
+          .maybeSingle();
+        
+        if (manualError) throw manualError;
+        if (manualData) {
+          setLikesCount(manualData.likes || 0);
+          return manualData as TradingIdea;
+        }
+      } else if (data) {
         setLikesCount(data.likes || 0);
+        return data as TradingIdea;
       }
-      return data;
+      
+      return null;
     },
   });
 
@@ -103,7 +124,7 @@ const TradingIdeaDetail = () => {
           <CardHeader>
             <CardTitle className="text-4xl">{idea.title}</CardTitle>
             <CardDescription>
-              By {idea.profiles?.email} on {format(new Date(idea.created_at), "MMM dd, yyyy")}
+              By {idea.profiles?.email || "Anonymous"} on {format(new Date(idea.created_at), "MMM dd, yyyy")}
             </CardDescription>
           </CardHeader>
           <div className="px-6">

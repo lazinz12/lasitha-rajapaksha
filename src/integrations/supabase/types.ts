@@ -347,6 +347,80 @@ export type Database = {
         }
         Relationships: []
       }
+      trading_idea_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          trading_idea_id: string
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          trading_idea_id: string
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          trading_idea_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trading_idea_comments_trading_idea_id_fkey"
+            columns: ["trading_idea_id"]
+            isOneToOne: false
+            referencedRelation: "trading_ideas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trading_ideas: {
+        Row: {
+          author_id: string | null
+          comments: number | null
+          created_at: string
+          description: string
+          id: string
+          image_url: string
+          likes: number | null
+          published: boolean | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          comments?: number | null
+          created_at?: string
+          description: string
+          id?: string
+          image_url: string
+          likes?: number | null
+          published?: boolean | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          comments?: number | null
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string
+          likes?: number | null
+          published?: boolean | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,221 +1,158 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { toast } from "sonner";
-import { TrendingUp, Upload, Eye, FileImage } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { FileUploader } from "../ui/file-uploader";
 import { supabase } from "@/integrations/supabase/client";
-import { generateSlug } from "@/utils/slugUtils";
-
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(5, { message: "Title must be at least 5 characters long" })
-    .max(100, { message: "Title must be less than 100 characters" }),
-  description: z
-    .string()
-    .min(10, { message: "Description must be at least 10 characters long" })
-    .max(1000, { message: "Description must be less than 1000 characters" }),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { createSlug } from "@/utils/slugUtils";
 
 const TradingIdeaForm = () => {
   const navigate = useNavigate();
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-    },
-  });
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setImageFile(file);
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const onSubmit = async (values: FormValues) => {
-    if (!imageFile) {
-      toast.error("Please upload an image for your trading idea");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!title || !description || !imageUrl) {
+      toast.error("Please fill all fields and upload an image");
       return;
     }
-
+    
     setIsSubmitting(true);
     
     try {
-      // Create slug from title
-      const slug = generateSlug(values.title);
+      // Get the current user
+      const { data: { session } } = await supabase.auth.getSession();
       
-      // Upload image to Supabase Storage
-      const { data: imageData, error: imageError } = await supabase.storage
-        .from('trading-ideas')
-        .upload(`${slug}-${Date.now()}`, imageFile);
+      if (!session) {
+        toast.error("You must be logged in to share trading ideas");
+        navigate("/login");
+        return;
+      }
       
-      if (imageError) throw imageError;
+      const slug = createSlug(title);
       
-      // Get the public URL for the uploaded image
-      const { data: publicUrlData } = supabase.storage
-        .from('trading-ideas')
-        .getPublicUrl(imageData.path);
-      
-      // Submit trading idea to database
-      const { error: insertError } = await supabase
+      // Insert the trading idea into the database using a raw query
+      const { error } = await supabase
         .from('trading_ideas')
         .insert({
-          title: values.title,
-          description: values.description,
-          image_url: publicUrlData.publicUrl,
-          slug: slug,
+          title,
+          description,
+          image_url: imageUrl,
+          slug,
+          author_id: session.user.id,
+          published: true
         });
       
-      if (insertError) throw insertError;
+      if (error) {
+        console.error("Error submitting trading idea:", error);
+        toast.error("Failed to submit trading idea");
+        return;
+      }
       
-      toast.success("Trading idea submitted successfully!");
-      navigate("/trading-ideas");
+      toast.success("Trading idea shared successfully!");
+      navigate(`/trading-ideas/${slug}`);
     } catch (error) {
-      console.error("Error submitting trading idea:", error);
-      toast.error("Failed to submit trading idea. Please try again.");
+      console.error("Error:", error);
+      toast.error("An unexpected error occurred");
     } finally {
       setIsSubmitting(false);
     }
   };
+  
+  const handleImageUpload = async (file: File) => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+      const filePath = `${fileName}`;
+      
+      // Upload to Supabase Storage
+      const { error: uploadError, data } = await supabase
+        .storage
+        .from('trading-ideas')
+        .upload(filePath, file);
+        
+      if (uploadError) {
+        throw uploadError;
+      }
+      
+      // Get the public URL
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from('trading-ideas')
+        .getPublicUrl(filePath);
+        
+      setImageUrl(publicUrl);
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Failed to upload image");
+    }
+  };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5" />
-          Share a Trading Idea
-        </CardTitle>
+        <CardTitle className="text-2xl">Share Your Trading Idea</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter a catchy title for your trading idea" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    A clear, descriptive title helps others understand your idea quickly.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              placeholder="E.g., 'EURUSD Bullish Breakout Setup'"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
             />
-            
-            <FormItem className="space-y-2">
-              <FormLabel>Chart Image</FormLabel>
-              <div className="flex items-center gap-4">
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md border-gray-300 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <FileImage className="w-8 h-8 mb-2 text-gray-500" />
-                    <p className="text-sm text-gray-500">
-                      <span className="font-semibold">Click to upload</span> or drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500">PNG, JPG, GIF (Max 10MB)</p>
-                  </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageChange}
-                  />
-                </label>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="image">Chart Image</Label>
+            <FileUploader 
+              onUpload={handleImageUpload}
+              acceptedFileTypes={["image/jpeg", "image/png", "image/gif"]}
+              maxFileSizeMB={5}
+            />
+            {imageUrl && (
+              <div className="mt-2">
+                <p className="text-sm text-muted-foreground mb-2">Preview:</p>
+                <img 
+                  src={imageUrl} 
+                  alt="Chart preview" 
+                  className="w-full max-h-80 object-contain border rounded-md"
+                />
               </div>
-              {imagePreview && (
-                <div className="mt-4">
-                  <p className="text-sm font-medium mb-2">Preview:</p>
-                  <img
-                    src={imagePreview}
-                    alt="Chart preview"
-                    className="max-h-60 rounded-md object-contain"
-                  />
-                </div>
-              )}
-            </FormItem>
-            
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Explain your trading idea, analysis, and potential outcomes..."
-                      className="min-h-[150px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Include your strategy, timeframe, and analysis reasoning.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+            )}
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              placeholder="Describe your trading idea, analysis, and potential entry/exit points..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="min-h-32"
+              required
             />
-            
-            <CardFooter className="px-0 flex gap-3 justify-end">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate("/trading-ideas")}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                className="gap-1"
-                onClick={() => form.handleSubmit(onSubmit)()}
-                disabled={!imageFile || isSubmitting}
-              >
-                <Eye className="h-4 w-4" /> Preview
-              </Button>
-              <Button
-                type="submit"
-                className="gap-1"
-                disabled={!imageFile || isSubmitting}
-              >
-                <Upload className="h-4 w-4" /> {isSubmitting ? "Submitting..." : "Publish"}
-              </Button>
-            </CardFooter>
-          </form>
-        </Form>
+          </div>
+          
+          <CardFooter className="px-0 pt-4">
+            <Button type="submit" className="w-full" disabled={isSubmitting || !title || !description || !imageUrl}>
+              {isSubmitting ? "Submitting..." : "Share Trading Idea"}
+            </Button>
+          </CardFooter>
+        </form>
       </CardContent>
     </Card>
   );

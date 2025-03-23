@@ -8,31 +8,59 @@ import { useState } from "react";
 
 type SortOption = "trending" | "latest" | "most-liked";
 
+interface TradingIdea {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  created_at: string;
+  likes: number;
+  comments: number;
+  slug: string;
+  profiles?: { email: string } | null;
+}
+
 const TradingIdeaList = () => {
   const [sortBy, setSortBy] = useState<SortOption>("latest");
 
   const { data: ideas, isLoading } = useQuery({
     queryKey: ["trading-ideas", sortBy],
     queryFn: async () => {
-      let query = supabase
-        .from("trading_ideas")
-        .select("*, profiles(email)")
-        .eq("published", true);
+      // Use raw query to fetch trading ideas
+      let query = supabase.rpc('select_trading_ideas');
 
       if (sortBy === "latest") {
-        query = query.order("created_at", { ascending: false });
+        query = supabase.rpc('select_trading_ideas_by_date');
       } else if (sortBy === "most-liked") {
-        query = query.order("likes", { ascending: false });
+        query = supabase.rpc('select_trading_ideas_by_likes');
       } else if (sortBy === "trending") {
-        // For trending, we could implement a more complex algorithm
-        // Here we're just sorting by a combination of recency and popularity
-        query = query.order("created_at", { ascending: false });
+        query = supabase.rpc('select_trading_ideas_trending');
+      }
+
+      // Fallback to manual query if RPC isn't available yet
+      if (!query) {
+        query = supabase.from('trading_ideas')
+          .select('*, profiles(email)')
+          .eq('published', true);
+
+        if (sortBy === "latest") {
+          query = query.order("created_at", { ascending: false });
+        } else if (sortBy === "most-liked") {
+          query = query.order("likes", { ascending: false });
+        } else if (sortBy === "trending") {
+          // For trending, we're just sorting by recency for now
+          query = query.order("created_at", { ascending: false });
+        }
       }
 
       const { data, error } = await query;
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error("Error fetching trading ideas:", error);
+        throw error;
+      }
+      
+      return data as TradingIdea[];
     },
   });
 
