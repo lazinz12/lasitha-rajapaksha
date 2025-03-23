@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { FileUploader } from "../ui/file-uploader";
 import { supabase } from "@/integrations/supabase/client";
-import { createSlug } from "@/utils/slugUtils";
+import { generateSlug } from "@/utils/slugUtils";
 
 const TradingIdeaForm = () => {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const TradingIdeaForm = () => {
         return;
       }
       
-      const slug = createSlug(title);
+      const slug = generateSlug(title);
       
       // Insert the trading idea into the database using a raw query
       const { error } = await supabase

@@ -26,19 +26,31 @@ const TradingIdeaList = () => {
   const { data: ideas, isLoading } = useQuery({
     queryKey: ["trading-ideas", sortBy],
     queryFn: async () => {
-      // Use raw query to fetch trading ideas
-      let query = supabase.rpc('select_trading_ideas');
-
-      if (sortBy === "latest") {
-        query = supabase.rpc('select_trading_ideas_by_date');
-      } else if (sortBy === "most-liked") {
-        query = supabase.rpc('select_trading_ideas_by_likes');
-      } else if (sortBy === "trending") {
-        query = supabase.rpc('select_trading_ideas_trending');
-      }
-
-      // Fallback to manual query if RPC isn't available yet
-      if (!query) {
+      let query: any;
+      
+      try {
+        // Try to use RPC functions first
+        if (sortBy === "latest") {
+          query = supabase.rpc('select_trading_ideas_by_date');
+        } else if (sortBy === "most-liked") {
+          query = supabase.rpc('select_trading_ideas_by_likes');
+        } else if (sortBy === "trending") {
+          query = supabase.rpc('select_trading_ideas_trending');
+        } else {
+          query = supabase.rpc('select_trading_ideas');
+        }
+        
+        const { data, error } = await query;
+        
+        if (error) {
+          throw error;
+        }
+        
+        return data as TradingIdea[];
+      } catch (rpcError) {
+        console.log("RPC not available, falling back to direct query", rpcError);
+        
+        // Fallback to manual query if RPC isn't available yet
         query = supabase.from('trading_ideas')
           .select('*, profiles(email)')
           .eq('published', true);
@@ -51,16 +63,16 @@ const TradingIdeaList = () => {
           // For trending, we're just sorting by recency for now
           query = query.order("created_at", { ascending: false });
         }
-      }
+        
+        const { data, error } = await query;
 
-      const { data, error } = await query;
-
-      if (error) {
-        console.error("Error fetching trading ideas:", error);
-        throw error;
+        if (error) {
+          console.error("Error fetching trading ideas:", error);
+          throw error;
+        }
+        
+        return data as TradingIdea[];
       }
-      
-      return data as TradingIdea[];
     },
   });
 

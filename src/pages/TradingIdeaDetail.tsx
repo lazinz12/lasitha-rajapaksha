@@ -18,7 +18,9 @@ interface TradingIdea {
   image_url: string;
   created_at: string;
   likes: number;
+  comments?: number;
   profiles?: { email: string } | null;
+  slug?: string;
 }
 
 const TradingIdeaDetail = () => {
@@ -31,29 +33,40 @@ const TradingIdeaDetail = () => {
   const { data: idea, isLoading } = useQuery({
     queryKey: ["trading-idea", slug],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_trading_idea_by_slug', { slug_param: slug });
-      
-      // Fallback to manual query if RPC isn't available yet
-      if (error) {
-        console.log("Falling back to manual query");
+      try {
+        // Try to use RPC first
+        const { data, error } = await supabase.rpc('get_trading_idea_by_slug', { 
+          slug_param: slug 
+        });
+        
+        if (error) {
+          throw error;
+        }
+        
+        if (data) {
+          setLikesCount(data.likes || 0);
+          return data as TradingIdea;
+        }
+        
+        throw new Error("Idea not found");
+      } catch (rpcError) {
+        console.log("Falling back to manual query", rpcError);
+        // Fallback to manual query if RPC isn't available yet
         const { data: manualData, error: manualError } = await supabase
           .from('trading_ideas')
           .select('*, profiles(email)')
-          .eq('slug', slug)
+          .eq('slug', slug as string)
           .eq('published', true)
           .maybeSingle();
         
         if (manualError) throw manualError;
         if (manualData) {
           setLikesCount(manualData.likes || 0);
-          return manualData as TradingIdea;
+          return manualData as unknown as TradingIdea;
         }
-      } else if (data) {
-        setLikesCount(data.likes || 0);
-        return data as TradingIdea;
+        
+        return null;
       }
-      
-      return null;
     },
   });
 
