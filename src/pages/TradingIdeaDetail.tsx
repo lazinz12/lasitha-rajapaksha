@@ -34,8 +34,8 @@ const TradingIdeaDetail = () => {
     queryKey: ["trading-idea", slug],
     queryFn: async () => {
       try {
-        // Try to use RPC first with proper type annotation
-        const { data, error } = await supabase.rpc<any>('get_trading_idea_by_slug', { 
+        // Try to use RPC first with proper type parameters
+        const { data, error } = await supabase.rpc<TradingIdea, { slug_param: string }>('get_trading_idea_by_slug', { 
           slug_param: slug || '' 
         }, { count: 'exact' });
         
