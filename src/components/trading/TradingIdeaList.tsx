@@ -29,15 +29,15 @@ const TradingIdeaList = () => {
       let query: any;
       
       try {
-        // Try to use RPC functions first
+        // Try to use RPC functions first - specify void as the param type to fix errors
         if (sortBy === "latest") {
-          query = supabase.rpc('select_trading_ideas_by_date', {}, { count: 'exact' }) as any;
+          query = supabase.rpc<any>('select_trading_ideas_by_date', {}, { count: 'exact' });
         } else if (sortBy === "most-liked") {
-          query = supabase.rpc('select_trading_ideas_by_likes', {}, { count: 'exact' }) as any;
+          query = supabase.rpc<any>('select_trading_ideas_by_likes', {}, { count: 'exact' });
         } else if (sortBy === "trending") {
-          query = supabase.rpc('select_trading_ideas_trending', {}, { count: 'exact' }) as any;
+          query = supabase.rpc<any>('select_trading_ideas_trending', {}, { count: 'exact' });
         } else {
-          query = supabase.rpc('select_trading_ideas', {}, { count: 'exact' }) as any;
+          query = supabase.rpc<any>('select_trading_ideas', {}, { count: 'exact' });
         }
         
         const { data, error } = await query;
