@@ -31,13 +31,13 @@ const TradingIdeaList = () => {
       try {
         // Try to use RPC functions first
         if (sortBy === "latest") {
-          query = supabase.rpc('select_trading_ideas_by_date');
+          query = supabase.rpc("select_trading_ideas_by_date" as never);
         } else if (sortBy === "most-liked") {
-          query = supabase.rpc('select_trading_ideas_by_likes');
+          query = supabase.rpc("select_trading_ideas_by_likes" as never);
         } else if (sortBy === "trending") {
-          query = supabase.rpc('select_trading_ideas_trending');
+          query = supabase.rpc("select_trading_ideas_trending" as never);
         } else {
-          query = supabase.rpc('select_trading_ideas');
+          query = supabase.rpc("select_trading_ideas" as never);
         }
         
         const { data, error } = await query;

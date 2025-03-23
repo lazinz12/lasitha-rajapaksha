@@ -36,9 +36,9 @@ const TradingIdeaDetail = () => {
       try {
         // Try to use RPC first
         const { data, error } = await supabase.rpc(
-          'get_trading_idea_by_slug', 
+          "get_trading_idea_by_slug" as never, 
           { slug_param: slug || '' }
-        ) as { data: TradingIdea | null, error: any };
+        );
         
         if (error) {
           throw error;
