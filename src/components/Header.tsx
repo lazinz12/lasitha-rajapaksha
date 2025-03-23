@@ -1,40 +1,19 @@
-
-import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { BookOpen, Wrench, Image, Menu, X, TrendingUp } from "lucide-react"
-import { useState } from "react"
-import { useIsMobile } from "@/hooks/use-mobile"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-} from "@/components/ui/dropdown-menu"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet"
-
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { BookOpen, Wrench, Image, Menu, X, TrendingUp } from "lucide-react";
+import { useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 const Header = () => {
-  const isMobile = useIsMobile()
-
-  return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  const isMobile = useIsMobile();
+  return <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between">
         <Link to="/" className="mr-6 flex items-center space-x-2">
           <span className="font-bold">Lasitha Rajapaksha</span>
         </Link>
         
-        {isMobile ? (
-          <Sheet>
+        {isMobile ? <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
@@ -147,9 +126,7 @@ const Header = () => {
                 </div>
               </div>
             </SheetContent>
-          </Sheet>
-        ) : (
-          <div className="flex space-x-4">
+          </Sheet> : <div className="flex space-x-4">
             <Link to="/blog">
               <Button variant="ghost" className="flex items-center">
                 <BookOpen className="mr-2 h-4 w-4" />
@@ -157,10 +134,7 @@ const Header = () => {
               </Button>
             </Link>
             <Link to="/edited-photos">
-              <Button variant="ghost" className="flex items-center">
-                <Image className="mr-2 h-4 w-4" />
-                Edited Photos
-              </Button>
+              
             </Link>
             <Link to="/trading-ideas">
               <Button variant="ghost" className="flex items-center">
@@ -293,11 +267,8 @@ const Header = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-        )}
+          </div>}
       </div>
-    </header>
-  )
-}
-
-export default Header
+    </header>;
+};
+export default Header;
