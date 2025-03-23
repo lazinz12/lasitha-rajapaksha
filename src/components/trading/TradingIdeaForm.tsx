@@ -113,6 +113,7 @@ const TradingIdeaForm = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              className="w-full"
             />
           </div>
           

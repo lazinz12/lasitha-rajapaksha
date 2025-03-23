@@ -96,7 +96,10 @@ export const FileUploader = ({
           accept={acceptedFileTypes.join(",")}
           className="hidden"
         />
-        <Label htmlFor="file-upload" className="w-full h-full absolute inset-0 cursor-pointer opacity-0">
+        <Label 
+          htmlFor="file-upload" 
+          className="cursor-pointer w-full h-full absolute inset-0 opacity-0"
+        >
           Upload file
         </Label>
       </div>
