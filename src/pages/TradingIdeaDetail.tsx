@@ -34,9 +34,9 @@ const TradingIdeaDetail = () => {
     queryKey: ["trading-idea", slug],
     queryFn: async () => {
       try {
-        // Try to use RPC first
+        // Try to use RPC first without type constraints
         const { data, error } = await supabase.rpc(
-          "get_trading_idea_by_slug" as never, 
+          "get_trading_idea_by_slug", 
           { slug_param: slug || '' }
         );
         
@@ -45,8 +45,9 @@ const TradingIdeaDetail = () => {
         }
         
         if (data) {
-          setLikesCount(data.likes || 0);
-          return data as TradingIdea;
+          const typedData = data as TradingIdea;
+          setLikesCount(typedData.likes || 0);
+          return typedData;
         }
         
         throw new Error("Idea not found");
