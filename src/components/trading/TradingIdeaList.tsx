@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import TradingIdeaCard from "./TradingIdeaCard";
@@ -30,13 +31,13 @@ const TradingIdeaList = () => {
       try {
         // Try to use RPC functions first
         if (sortBy === "latest") {
-          query = supabase.rpc('select_trading_ideas_by_date', {});
+          query = supabase.rpc('select_trading_ideas_by_date');
         } else if (sortBy === "most-liked") {
-          query = supabase.rpc('select_trading_ideas_by_likes', {});
+          query = supabase.rpc('select_trading_ideas_by_likes');
         } else if (sortBy === "trending") {
-          query = supabase.rpc('select_trading_ideas_trending', {});
+          query = supabase.rpc('select_trading_ideas_trending');
         } else {
-          query = supabase.rpc('select_trading_ideas', {});
+          query = supabase.rpc('select_trading_ideas');
         }
         
         const { data, error } = await query;

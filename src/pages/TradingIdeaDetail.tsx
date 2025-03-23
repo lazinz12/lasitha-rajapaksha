@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,7 +38,7 @@ const TradingIdeaDetail = () => {
         const { data, error } = await supabase.rpc(
           'get_trading_idea_by_slug', 
           { slug_param: slug || '' }
-        );
+        ) as { data: TradingIdea | null, error: any };
         
         if (error) {
           throw error;
