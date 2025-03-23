@@ -35,9 +35,9 @@ const TradingIdeaDetail = () => {
     queryFn: async () => {
       try {
         // Try to use RPC first
-        const { data, error } = await supabase.rpc('get_trading_idea_by_slug', { 
-          slug_param: slug 
-        });
+        const { data, error } = await (supabase.rpc('get_trading_idea_by_slug', { 
+          slug_param: slug as string 
+        }) as any);
         
         if (error) {
           throw error;
