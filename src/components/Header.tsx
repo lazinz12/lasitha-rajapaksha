@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { BookOpen, Wrench, Image, Menu, X } from "lucide-react"
+import { BookOpen, Wrench, Image, Menu, X, TrendingUp } from "lucide-react"
 import { useState } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
 import {
@@ -56,6 +56,12 @@ const Header = () => {
                   <Link to="/edited-photos" className="flex items-center py-2">
                     <Image className="mr-2 h-4 w-4" />
                     Edited Photos
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/trading-ideas" className="flex items-center py-2">
+                    <TrendingUp className="mr-2 h-4 w-4" />
+                    Trading Ideas
                   </Link>
                 </SheetClose>
                 
@@ -154,6 +160,12 @@ const Header = () => {
               <Button variant="ghost" className="flex items-center">
                 <Image className="mr-2 h-4 w-4" />
                 Edited Photos
+              </Button>
+            </Link>
+            <Link to="/trading-ideas">
+              <Button variant="ghost" className="flex items-center">
+                <TrendingUp className="mr-2 h-4 w-4" />
+                Trading Ideas
               </Button>
             </Link>
             <DropdownMenu>
