@@ -70,7 +70,7 @@ export const FileUploader = ({
   };
 
   return (
-    <div>
+    <div className="relative">
       <div
         className={`border-2 border-dashed rounded-md p-8 text-center ${
           isDragging ? "border-primary bg-primary/5" : "border-muted-foreground/25"
@@ -98,7 +98,7 @@ export const FileUploader = ({
         />
         <Label 
           htmlFor="file-upload" 
-          className="cursor-pointer w-full h-full absolute inset-0 opacity-0"
+          className="absolute inset-0 cursor-pointer opacity-0 z-0"
         >
           Upload file
         </Label>
