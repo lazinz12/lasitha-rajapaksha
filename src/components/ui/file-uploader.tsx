@@ -3,21 +3,25 @@ import { ChangeEvent, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Upload } from "lucide-react";
+import { Upload, X } from "lucide-react";
+import { Button } from "./button";
 
 interface FileUploaderProps {
   onUpload: (file: File) => void;
   acceptedFileTypes?: string[];
   maxFileSizeMB?: number;
+  maxFiles?: number;
 }
 
 export const FileUploader = ({
   onUpload,
   acceptedFileTypes = ["image/jpeg", "image/png"],
-  maxFileSizeMB = 2
+  maxFileSizeMB = 2,
+  maxFiles = 5
 }: FileUploaderProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const handleFileValidation = (file: File): boolean => {
     // Check file type
@@ -36,12 +40,24 @@ export const FileUploader = ({
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (handleFileValidation(file)) {
+    const files = Array.from(e.target.files || []);
+    
+    if (uploadedFiles.length + files.length > maxFiles) {
+      toast.error(`You can only upload a maximum of ${maxFiles} files.`);
+      return;
+    }
+    
+    let validFiles = files.filter(file => handleFileValidation(file));
+    
+    if (validFiles.length > 0) {
       setIsUploading(true);
-      onUpload(file);
+      
+      // Process each valid file
+      validFiles.forEach(file => {
+        onUpload(file);
+        setUploadedFiles(prev => [...prev, file]);
+      });
+      
       setIsUploading(false);
     }
   };
@@ -59,14 +75,30 @@ export const FileUploader = ({
     e.preventDefault();
     setIsDragging(false);
 
-    const file = e.dataTransfer.files?.[0];
-    if (!file) return;
-
-    if (handleFileValidation(file)) {
+    const files = Array.from(e.dataTransfer.files || []);
+    
+    if (uploadedFiles.length + files.length > maxFiles) {
+      toast.error(`You can only upload a maximum of ${maxFiles} files.`);
+      return;
+    }
+    
+    let validFiles = files.filter(file => handleFileValidation(file));
+    
+    if (validFiles.length > 0) {
       setIsUploading(true);
-      onUpload(file);
+      
+      // Process each valid file
+      validFiles.forEach(file => {
+        onUpload(file);
+        setUploadedFiles(prev => [...prev, file]);
+      });
+      
       setIsUploading(false);
     }
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -85,9 +117,31 @@ export const FileUploader = ({
             <span className="font-semibold">Click to upload</span> or drag and drop
           </p>
           <p className="text-xs text-muted-foreground">
-            {acceptedFileTypes.join(", ")} (Max: {maxFileSizeMB}MB)
+            {acceptedFileTypes.join(", ")} (Max: {maxFileSizeMB}MB, up to {maxFiles} files)
           </p>
           {isUploading && <p className="mt-2 text-sm text-primary">Uploading...</p>}
+          
+          {uploadedFiles.length > 0 && (
+            <div className="mt-4 w-full">
+              <p className="text-sm font-medium mb-2">Uploaded files ({uploadedFiles.length}/{maxFiles}):</p>
+              <div className="space-y-2">
+                {uploadedFiles.map((file, index) => (
+                  <div key={index} className="flex items-center justify-between bg-muted p-2 rounded-md">
+                    <span className="text-sm truncate max-w-[200px]">{file.name}</span>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => removeFile(index)}
+                      className="h-6 w-6 p-0"
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove</span>
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <Input
           id="file-upload"
@@ -95,6 +149,8 @@ export const FileUploader = ({
           onChange={handleFileChange}
           accept={acceptedFileTypes.join(",")}
           className="hidden"
+          multiple={true}
+          disabled={uploadedFiles.length >= maxFiles}
         />
         <Label 
           htmlFor="file-upload" 

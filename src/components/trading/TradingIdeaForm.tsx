@@ -15,14 +15,14 @@ const TradingIdeaForm = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!title || !description || !imageUrl) {
-      toast.error("Please fill all fields and upload an image");
+    if (!title || !description || imageUrls.length === 0) {
+      toast.error("Please fill all fields and upload at least one image");
       return;
     }
     
@@ -40,13 +40,14 @@ const TradingIdeaForm = () => {
       
       const slug = generateSlug(title);
       
-      // Insert the trading idea into the database using a raw query
+      // Insert the trading idea into the database
       const { error } = await supabase
         .from('trading_ideas')
         .insert({
           title,
           description,
-          image_url: imageUrl,
+          image_url: imageUrls[0], // Store the first image as the main image
+          additional_images: imageUrls.slice(1), // Store additional images in an array
           slug,
           author_id: session.user.id,
           published: true
@@ -90,7 +91,7 @@ const TradingIdeaForm = () => {
         .from('trading-ideas')
         .getPublicUrl(filePath);
         
-      setImageUrl(publicUrl);
+      setImageUrls(prev => [...prev, publicUrl]);
       toast.success("Image uploaded successfully!");
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -118,20 +119,29 @@ const TradingIdeaForm = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="image">Chart Image</Label>
+            <Label htmlFor="image">Chart Images (Maximum 5)</Label>
             <FileUploader 
               onUpload={handleImageUpload}
               acceptedFileTypes={["image/jpeg", "image/png", "image/gif"]}
               maxFileSizeMB={5}
+              maxFiles={5}
             />
-            {imageUrl && (
-              <div className="mt-2">
-                <p className="text-sm text-muted-foreground mb-2">Preview:</p>
-                <img 
-                  src={imageUrl} 
-                  alt="Chart preview" 
-                  className="w-full max-h-80 object-contain border rounded-md"
-                />
+            {imageUrls.length > 0 && (
+              <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+                {imageUrls.map((url, idx) => (
+                  <div key={idx} className="relative aspect-video border rounded-md overflow-hidden">
+                    <img 
+                      src={url} 
+                      alt={`Chart ${idx + 1}`} 
+                      className="w-full h-full object-cover"
+                    />
+                    {idx === 0 && (
+                      <div className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
+                        Main
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -149,7 +159,7 @@ const TradingIdeaForm = () => {
           </div>
           
           <CardFooter className="px-0 pt-4">
-            <Button type="submit" className="w-full" disabled={isSubmitting || !title || !description || !imageUrl}>
+            <Button type="submit" className="w-full" disabled={isSubmitting || !title || !description || imageUrls.length === 0}>
               {isSubmitting ? "Submitting..." : "Share Trading Idea"}
             </Button>
           </CardFooter>
