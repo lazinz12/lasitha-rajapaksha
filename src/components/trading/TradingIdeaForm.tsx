@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +39,16 @@ const TradingIdeaForm = () => {
       
       const slug = generateSlug(title);
       
-      const { error } = await supabase
+      console.log("Submitting trading idea with data:", {
+        title,
+        description,
+        image_url: imageUrls[0],
+        additional_images: imageUrls.slice(1),
+        slug,
+        author_id: session.user.id
+      });
+      
+      const { error, data } = await supabase
         .from('trading_ideas')
         .insert({
           title,
@@ -56,6 +66,7 @@ const TradingIdeaForm = () => {
         return;
       }
       
+      console.log("Trading idea submitted successfully:", data);
       toast.success("Trading idea shared successfully!");
       navigate(`/trading-ideas/${slug}`);
     } catch (error) {

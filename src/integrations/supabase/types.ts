@@ -381,6 +381,7 @@ export type Database = {
       }
       trading_ideas: {
         Row: {
+          additional_images: string[] | null
           author_id: string | null
           comments: number | null
           created_at: string
@@ -394,6 +395,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          additional_images?: string[] | null
           author_id?: string | null
           comments?: number | null
           created_at?: string
@@ -407,6 +409,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          additional_images?: string[] | null
           author_id?: string | null
           comments?: number | null
           created_at?: string
