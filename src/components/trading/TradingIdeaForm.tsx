@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,7 +28,6 @@ const TradingIdeaForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Get the current user
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -40,14 +38,13 @@ const TradingIdeaForm = () => {
       
       const slug = generateSlug(title);
       
-      // Insert the trading idea into the database
       const { error } = await supabase
         .from('trading_ideas')
         .insert({
           title,
           description,
-          image_url: imageUrls[0], // Store the first image as the main image
-          additional_images: imageUrls.slice(1), // Store additional images in an array
+          image_url: imageUrls[0],
+          additional_images: imageUrls.slice(1),
           slug,
           author_id: session.user.id,
           published: true
@@ -75,7 +72,6 @@ const TradingIdeaForm = () => {
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       const filePath = `${fileName}`;
       
-      // Upload to Supabase Storage
       const { error: uploadError, data } = await supabase
         .storage
         .from('trading-ideas')
@@ -85,7 +81,6 @@ const TradingIdeaForm = () => {
         throw uploadError;
       }
       
-      // Get the public URL
       const { data: { publicUrl } } = supabase
         .storage
         .from('trading-ideas')
@@ -160,7 +155,7 @@ const TradingIdeaForm = () => {
           
           <CardFooter className="px-0 pt-4">
             <Button type="submit" className="w-full" disabled={isSubmitting || !title || !description || imageUrls.length === 0}>
-              {isSubmitting ? "Submitting..." : "Share Trading Idea"}
+              {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </CardFooter>
         </form>
