@@ -58,7 +58,9 @@ const TradingIdeaForm = () => {
           slug,
           author_id: session.user.id,
           published: true
-        });
+        })
+        .select('slug')
+        .single();
       
       if (error) {
         console.error("Error submitting trading idea:", error);
@@ -68,7 +70,16 @@ const TradingIdeaForm = () => {
       
       console.log("Trading idea submitted successfully:", data);
       toast.success("Trading idea shared successfully!");
-      navigate(`/trading-ideas/${slug}`);
+      
+      // Ensure we navigate with the returned slug from the database
+      const savedSlug = data?.slug || slug;
+      console.log("Navigating to trading idea with slug:", savedSlug);
+      
+      // Add a small delay to ensure the database has time to process
+      setTimeout(() => {
+        navigate(`/trading-ideas/${savedSlug}`);
+      }, 500);
+      
     } catch (error) {
       console.error("Error:", error);
       toast.error("An unexpected error occurred");

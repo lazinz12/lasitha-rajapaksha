@@ -44,44 +44,54 @@ const TradingIdeaDetail = () => {
       try {
         console.log("Fetching trading idea with slug:", slug);
         
-        // Try direct query first without relationships that might be causing issues
+        if (!slug) {
+          console.error("No slug provided");
+          return null;
+        }
+        
+        // First try - direct query with tracing
+        console.log("Attempting direct query with slug:", slug);
         const { data, error } = await supabase
           .from('trading_ideas')
           .select('*')
-          .eq('slug', slug as string)
+          .eq('slug', slug)
           .maybeSingle();
         
         if (error) {
-          console.error("Error fetching trading idea:", error);
+          console.error("Error in initial query:", error);
           throw error;
         }
         
         if (data) {
-          console.log("Trading idea data found:", data);
+          console.log("SUCCESS - Trading idea found:", data);
           setLikesCount(data.likes || 0);
           
-          // If we have author_id, try to get author info separately
+          // If author_id exists, get profile data
           if (data.author_id) {
-            const { data: profileData, error: profileError } = await supabase
-              .from('profiles')
-              .select('email')
-              .eq('id', data.author_id)
-              .maybeSingle();
-              
-            if (profileError) {
-              console.error("Error fetching profile data:", profileError);
-            }
-              
-            if (profileData) {
-              console.log("Author profile found:", profileData);
-              return { ...data, profiles: profileData } as TradingIdea;
+            try {
+              const { data: profileData, error: profileError } = await supabase
+                .from('profiles')
+                .select('email')
+                .eq('id', data.author_id)
+                .maybeSingle();
+                
+              if (profileError) {
+                console.error("Error fetching profile data:", profileError);
+              } else if (profileData) {
+                console.log("Author profile found:", profileData);
+                return { ...data, profiles: profileData } as TradingIdea;
+              }
+            } catch (profileFetchError) {
+              console.error("Error in profile fetch:", profileFetchError);
+              // Continue with just the idea data if profile fetch fails
             }
           }
           
           return data as TradingIdea;
         }
         
-        console.error("No data found for slug:", slug);
+        // If we got here, no data was found
+        console.error("No trading idea found with slug:", slug);
         return null;
       } catch (fetchError) {
         console.error("Error while fetching trading idea:", fetchError);
@@ -89,6 +99,8 @@ const TradingIdeaDetail = () => {
       }
     },
     enabled: !!slug,
+    retry: 2,
+    retryDelay: 1000,
   });
 
   const handleLike = () => {
