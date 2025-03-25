@@ -1,5 +1,5 @@
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { format } from "date-fns";
 import { Heart, MessageSquare, Share2, Bookmark, Twitter, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -27,21 +27,28 @@ interface TradingIdea {
 
 const TradingIdeaDetail = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
   const [comment, setComment] = useState("");
 
+  // Debug the slug
+  useEffect(() => {
+    console.log("Current slug param:", slug);
+  }, [slug]);
+
   const { data: idea, isLoading, error } = useQuery({
     queryKey: ["trading-idea", slug],
     queryFn: async () => {
       try {
+        console.log("Fetching trading idea with slug:", slug);
+        
         // Try direct query first without relationships that might be causing issues
         const { data, error } = await supabase
           .from('trading_ideas')
           .select('*')
           .eq('slug', slug as string)
-          .eq('published', true)
           .maybeSingle();
         
         if (error) {
@@ -50,18 +57,23 @@ const TradingIdeaDetail = () => {
         }
         
         if (data) {
-          console.log("Trading idea data:", data);
+          console.log("Trading idea data found:", data);
           setLikesCount(data.likes || 0);
           
           // If we have author_id, try to get author info separately
           if (data.author_id) {
-            const { data: profileData } = await supabase
+            const { data: profileData, error: profileError } = await supabase
               .from('profiles')
               .select('email')
               .eq('id', data.author_id)
               .maybeSingle();
               
+            if (profileError) {
+              console.error("Error fetching profile data:", profileError);
+            }
+              
             if (profileData) {
+              console.log("Author profile found:", profileData);
               return { ...data, profiles: profileData } as TradingIdea;
             }
           }
@@ -69,12 +81,14 @@ const TradingIdeaDetail = () => {
           return data as TradingIdea;
         }
         
+        console.error("No data found for slug:", slug);
         return null;
       } catch (fetchError) {
         console.error("Error while fetching trading idea:", fetchError);
         return null;
       }
     },
+    enabled: !!slug,
   });
 
   const handleLike = () => {
@@ -126,6 +140,7 @@ const TradingIdeaDetail = () => {
 
   if (error) {
     console.error("Error in trading idea detail:", error);
+    toast.error("Failed to load trading idea");
   }
 
   if (!idea) {
@@ -136,7 +151,7 @@ const TradingIdeaDetail = () => {
           <Card className="p-8 text-center">
             <h1 className="text-2xl font-bold mb-4">Trading Idea Not Found</h1>
             <p className="text-muted-foreground mb-6">The trading idea you're looking for doesn't exist or has been removed.</p>
-            <Button onClick={() => window.history.back()}>Go Back</Button>
+            <Button onClick={() => navigate("/trading-ideas")}>Return to Trading Ideas</Button>
           </Card>
         </div>
       </div>
