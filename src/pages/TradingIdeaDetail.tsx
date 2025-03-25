@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,11 +16,13 @@ interface TradingIdea {
   title: string;
   description: string;
   image_url: string;
+  additional_images?: string[] | null;
   created_at: string;
   likes: number;
   comments?: number;
   profiles?: { email: string } | null;
   slug?: string;
+  author_id?: string | null;
 }
 
 const TradingIdeaDetail = () => {
@@ -29,43 +32,46 @@ const TradingIdeaDetail = () => {
   const [bookmarked, setBookmarked] = useState(false);
   const [comment, setComment] = useState("");
 
-  const { data: idea, isLoading } = useQuery({
+  const { data: idea, isLoading, error } = useQuery({
     queryKey: ["trading-idea", slug],
     queryFn: async () => {
       try {
-        // Try to use RPC first without type constraints
-        const { data, error } = await supabase.rpc(
-          "get_trading_idea_by_slug" as unknown as never, 
-          { slug_param: slug || '' } as unknown as never
-        );
-        
-        if (error) {
-          throw error;
-        }
-        
-        if (data) {
-          const typedData = data as TradingIdea;
-          setLikesCount(typedData.likes || 0);
-          return typedData;
-        }
-        
-        throw new Error("Idea not found");
-      } catch (rpcError) {
-        console.log("Falling back to manual query", rpcError);
-        // Fallback to manual query if RPC isn't available yet
-        const { data: manualData, error: manualError } = await supabase
+        // Try direct query first without relationships that might be causing issues
+        const { data, error } = await supabase
           .from('trading_ideas')
-          .select('*, profiles(email)')
+          .select('*')
           .eq('slug', slug as string)
           .eq('published', true)
           .maybeSingle();
         
-        if (manualError) throw manualError;
-        if (manualData) {
-          setLikesCount(manualData.likes || 0);
-          return manualData as unknown as TradingIdea;
+        if (error) {
+          console.error("Error fetching trading idea:", error);
+          throw error;
         }
         
+        if (data) {
+          console.log("Trading idea data:", data);
+          setLikesCount(data.likes || 0);
+          
+          // If we have author_id, try to get author info separately
+          if (data.author_id) {
+            const { data: profileData } = await supabase
+              .from('profiles')
+              .select('email')
+              .eq('id', data.author_id)
+              .maybeSingle();
+              
+            if (profileData) {
+              return { ...data, profiles: profileData } as TradingIdea;
+            }
+          }
+          
+          return data as TradingIdea;
+        }
+        
+        return null;
+      } catch (fetchError) {
+        console.error("Error while fetching trading idea:", fetchError);
         return null;
       }
     },
@@ -118,13 +124,20 @@ const TradingIdeaDetail = () => {
     );
   }
 
+  if (error) {
+    console.error("Error in trading idea detail:", error);
+  }
+
   if (!idea) {
     return (
       <div className="min-h-screen">
         <Header />
         <div className="container mx-auto py-8">
-          <h1 className="text-4xl font-bold mb-8">Trading Idea Not Found</h1>
-          <p>The trading idea you're looking for doesn't exist or has been removed.</p>
+          <Card className="p-8 text-center">
+            <h1 className="text-2xl font-bold mb-4">Trading Idea Not Found</h1>
+            <p className="text-muted-foreground mb-6">The trading idea you're looking for doesn't exist or has been removed.</p>
+            <Button onClick={() => window.history.back()}>Go Back</Button>
+          </Card>
         </div>
       </div>
     );
@@ -147,6 +160,19 @@ const TradingIdeaDetail = () => {
               alt={idea.title}
               className="w-full h-auto rounded-md mb-6"
             />
+            
+            {idea.additional_images && idea.additional_images.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                {idea.additional_images.map((image, index) => (
+                  <img 
+                    key={index}
+                    src={image}
+                    alt={`${idea.title} - Additional image ${index + 1}`}
+                    className="w-full h-auto rounded-md"
+                  />
+                ))}
+              </div>
+            )}
           </div>
           <CardContent>
             <div className="prose max-w-none mb-8">
