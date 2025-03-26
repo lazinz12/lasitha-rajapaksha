@@ -23,6 +23,13 @@ const TradingIdeaDetail = () => {
 
   const { idea, isLoading, error, likesCount } = useTradingIdea(slug);
 
+  useEffect(() => {
+    if (error) {
+      console.error("Error loading trading idea:", error);
+      toast.error("Failed to load trading idea");
+    }
+  }, [error]);
+
   const scrollToComments = () => {
     commentSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -36,11 +43,6 @@ const TradingIdeaDetail = () => {
         </div>
       </div>
     );
-  }
-
-  if (error) {
-    console.error("Error in trading idea detail:", error);
-    toast.error("Failed to load trading idea");
   }
 
   if (!idea) {

@@ -42,9 +42,10 @@ export function useTradingIdeaForm() {
         author_id: session.user.id
       });
       
+      // Using upsert to ensure we don't get conflicts
       const { error, data } = await supabase
         .from('trading_ideas')
-        .insert({
+        .upsert({
           title,
           description,
           image_url: imageUrls[0],
@@ -53,31 +54,35 @@ export function useTradingIdeaForm() {
           author_id: session.user.id,
           published: true
         })
-        .select('slug')
+        .select('id, slug')
         .single();
       
       if (error) {
         console.error("Error submitting trading idea:", error);
         toast.error("Failed to submit trading idea");
+        setIsSubmitting(false);
         return;
       }
       
       console.log("Trading idea submitted successfully:", data);
       toast.success("Trading idea shared successfully!");
       
-      // Ensure we navigate with the returned slug from the database
-      const savedSlug = data?.slug || slug;
-      console.log("Navigating to trading idea with slug:", savedSlug);
+      if (!data || !data.slug) {
+        console.error("No data returned from submission");
+        toast.error("Error retrieving submission data");
+        setIsSubmitting(false);
+        return;
+      }
       
-      // Add a small delay to ensure the database has time to process
+      // Add a longer delay to ensure the database has time to process
       setTimeout(() => {
-        navigate(`/trading-ideas/${savedSlug}`);
-      }, 500);
+        navigate(`/trading-ideas/${data.slug}`);
+        setIsSubmitting(false);
+      }, 1500);
       
     } catch (error) {
       console.error("Error:", error);
       toast.error("An unexpected error occurred");
-    } finally {
       setIsSubmitting(false);
     }
   };

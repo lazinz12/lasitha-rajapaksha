@@ -31,7 +31,7 @@ export const useTradingIdea = (slug: string | undefined) => {
           return null;
         }
         
-        // First try - direct query with tracing
+        // First try - direct query
         console.log("Attempting direct query with slug:", slug);
         const { data, error } = await supabase
           .from('trading_ideas')
@@ -65,24 +65,47 @@ export const useTradingIdea = (slug: string | undefined) => {
               }
             } catch (profileFetchError) {
               console.error("Error in profile fetch:", profileFetchError);
-              // Continue with just the idea data if profile fetch fails
             }
           }
           
           return data as TradingIdea;
         }
         
-        // If we got here, no data was found
-        console.error("No trading idea found with slug:", slug);
+        // If we get here, no data was found on the first try
+        console.log("No trading idea found on first try. Waiting and retrying...");
+        
+        // Introduce a delay and retry
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Second attempt
+        const { data: secondTryData, error: secondTryError } = await supabase
+          .from('trading_ideas')
+          .select('*')
+          .eq('slug', slug)
+          .maybeSingle();
+          
+        if (secondTryError) {
+          console.error("Error in second query attempt:", secondTryError);
+          throw secondTryError;
+        }
+        
+        if (secondTryData) {
+          console.log("SUCCESS on second try - Trading idea found:", secondTryData);
+          setLikesCount(secondTryData.likes || 0);
+          return secondTryData as TradingIdea;
+        }
+        
+        console.error("No trading idea found with slug after retries:", slug);
         return null;
       } catch (fetchError) {
         console.error("Error while fetching trading idea:", fetchError);
-        return null;
+        throw fetchError;
       }
     },
     enabled: !!slug,
-    retry: 2,
-    retryDelay: 1000,
+    retry: 3,
+    retryDelay: attempt => Math.min(attempt > 1 ? 2000 : 1000, 5000),
+    staleTime: 30000, // Keep data fresh for 30 seconds
   });
 
   return { 
