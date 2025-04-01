@@ -29,7 +29,10 @@ const TradingIdeaImageUploader = ({ imageUrls, setImageUrls }: TradingIdeaImageU
         .from('trading-ideas')
         .getPublicUrl(filePath);
         
-      setImageUrls(prev => [...prev, publicUrl]);
+      // Fix: Create a new array with all previous URLs plus the new one
+      const updatedImageUrls = [...imageUrls, publicUrl];
+      setImageUrls(updatedImageUrls);
+      
       toast.success("Image uploaded successfully!");
     } catch (error) {
       console.error("Error uploading image:", error);
