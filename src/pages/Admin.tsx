@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -13,17 +12,11 @@ import CertificationManager from "@/components/admin/CertificationManager";
 import SocialLinksManager from "@/components/admin/SocialLinksManager";
 import PhotoGalleryManager from "@/components/admin/PhotoGalleryManager";
 import EditedPhotosManager from "@/components/admin/EditedPhotosManager";
+import TradingIdeasManager from "@/components/admin/TradingIdeasManager";
 import { Button } from "@/components/ui/button";
-import { LogOut, ChevronDown } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import {
   Select,
   SelectContent,
@@ -83,6 +76,7 @@ const Admin = () => {
     { value: "edited-photos", label: "Edited Photos" },
     { value: "blog", label: "Blog Posts" },
     { value: "products", label: "Products" },
+    { value: "trading-ideas", label: "Trading Ideas" },
   ];
 
   const renderTabContent = (value: string) => {
@@ -107,6 +101,8 @@ const Admin = () => {
         return <BlogManager />;
       case "products":
         return <ProductManager />;
+      case "trading-ideas":
+        return <TradingIdeasManager />;
       default:
         return null;
     }
