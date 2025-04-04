@@ -6,10 +6,21 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import TradingIdeaForm from "@/components/trading/TradingIdeaForm";
 
+interface TradingIdea {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  created_at: string;
+  slug: string;
+  additional_images?: string[] | null;
+  published?: boolean;
+}
+
 const TradingIdeaEdit = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [tradingIdea, setTradingIdea] = useState(null);
+  const [tradingIdea, setTradingIdea] = useState<TradingIdea | null>(null);
   const navigate = useNavigate();
   const { slug } = useParams();
 
@@ -58,7 +69,7 @@ const TradingIdeaEdit = () => {
           return;
         }
         
-        setTradingIdea(data);
+        setTradingIdea(data as TradingIdea);
       }
       
       setIsLoading(false);

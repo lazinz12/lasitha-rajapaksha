@@ -17,7 +17,9 @@ interface TradingIdea {
   likes: number;
   comments: number;
   slug: string;
+  // Make the profiles optional since we're having issues with the join
   profiles?: { email: string } | null;
+  author_id?: string;
 }
 
 const TradingIdeaList = () => {
@@ -29,63 +31,61 @@ const TradingIdeaList = () => {
       console.log("Fetching trading ideas with sort option:", sortBy);
       
       try {
-        // Try to use RPC functions first
+        let query = supabase
+          .from('trading_ideas')
+          .select('*')
+          .eq('published', true);
+          
         if (sortBy === "latest") {
-          const { data, error } = await supabase
-            .from('trading_ideas')
-            .select('*, profiles(email)')
-            .eq('published', true)
-            .order("created_at", { ascending: false });
-            
-          if (error) {
-            console.error("Error fetching trading ideas:", error);
-            throw error;
-          }
-          
-          console.log("Fetched trading ideas:", data);
-          return data as TradingIdea[];
+          query = query.order("created_at", { ascending: false });
         } else if (sortBy === "most-liked") {
-          const { data, error } = await supabase
-            .from('trading_ideas')
-            .select('*, profiles(email)')
-            .eq('published', true)
-            .order("likes", { ascending: false });
-            
-          if (error) {
-            console.error("Error fetching trading ideas:", error);
-            throw error;
-          }
-          
-          console.log("Fetched trading ideas:", data);
-          return data as TradingIdea[];
+          query = query.order("likes", { ascending: false });
         } else if (sortBy === "trending") {
-          const { data, error } = await supabase
-            .from('trading_ideas')
-            .select('*, profiles(email)')
-            .eq('published', true)
-            .order("created_at", { ascending: false });
-            
-          if (error) {
-            console.error("Error fetching trading ideas:", error);
-            throw error;
-          }
-          
-          console.log("Fetched trading ideas:", data);
-          return data as TradingIdea[];
-        } else {
-          const { data, error } = await supabase
-            .from('trading_ideas')
-            .select('*, profiles(email)')
-            .eq('published', true);
-            
-          if (error) {
-            console.error("Error fetching trading ideas:", error);
-            throw error;
-          }
-          
-          console.log("Fetched trading ideas:", data);
-          return data as TradingIdea[];
+          // For trending, we can use created_at as a simple proxy
+          // In a real app, you might want a more sophisticated algorithm
+          query = query.order("created_at", { ascending: false });
         }
+        
+        const { data, error } = await query;
+            
+        if (error) {
+          console.error("Error fetching trading ideas:", error);
+          throw error;
+        }
+        
+        // For each trading idea, try to get the author's email
+        const ideasWithAuthorEmails = await Promise.all(
+          (data || []).map(async (idea) => {
+            if (idea.author_id) {
+              try {
+                const { data: profileData } = await supabase
+                  .from('profiles')
+                  .select('email')
+                  .eq('id', idea.author_id)
+                  .single();
+                  
+                return {
+                  ...idea,
+                  profiles: profileData || { email: "Anonymous" }
+                };
+              } catch (err) {
+                console.log("Couldn't fetch profile for author:", idea.author_id);
+                return {
+                  ...idea,
+                  profiles: { email: "Anonymous" }
+                };
+              }
+            }
+            
+            return {
+              ...idea,
+              profiles: { email: "Anonymous" }
+            };
+          })
+        );
+        
+        console.log("Fetched trading ideas:", ideasWithAuthorEmails);
+        return ideasWithAuthorEmails as TradingIdea[];
       } catch (error) {
         console.error("Error fetching trading ideas:", error);
         throw error;
@@ -95,7 +95,7 @@ const TradingIdeaList = () => {
 
   if (isLoading) {
     return (
-      <div className="container py-8 grid grid-cols-1 gap-8">
+      <div className="py-8 grid grid-cols-1 gap-8">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="rounded-lg bg-gray-100 animate-pulse h-64"></div>
         ))}
@@ -104,7 +104,7 @@ const TradingIdeaList = () => {
   }
 
   return (
-    <div className="container py-8">
+    <div className="py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Trading Ideas</h1>
         <div className="flex gap-2">
