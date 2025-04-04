@@ -26,52 +26,69 @@ const TradingIdeaList = () => {
   const { data: ideas, isLoading } = useQuery({
     queryKey: ["trading-ideas", sortBy],
     queryFn: async () => {
-      let query: any;
+      console.log("Fetching trading ideas with sort option:", sortBy);
       
       try {
         // Try to use RPC functions first
         if (sortBy === "latest") {
-          query = supabase.rpc("select_trading_ideas_by_date" as never);
+          const { data, error } = await supabase
+            .from('trading_ideas')
+            .select('*, profiles(email)')
+            .eq('published', true)
+            .order("created_at", { ascending: false });
+            
+          if (error) {
+            console.error("Error fetching trading ideas:", error);
+            throw error;
+          }
+          
+          console.log("Fetched trading ideas:", data);
+          return data as TradingIdea[];
         } else if (sortBy === "most-liked") {
-          query = supabase.rpc("select_trading_ideas_by_likes" as never);
+          const { data, error } = await supabase
+            .from('trading_ideas')
+            .select('*, profiles(email)')
+            .eq('published', true)
+            .order("likes", { ascending: false });
+            
+          if (error) {
+            console.error("Error fetching trading ideas:", error);
+            throw error;
+          }
+          
+          console.log("Fetched trading ideas:", data);
+          return data as TradingIdea[];
         } else if (sortBy === "trending") {
-          query = supabase.rpc("select_trading_ideas_trending" as never);
+          const { data, error } = await supabase
+            .from('trading_ideas')
+            .select('*, profiles(email)')
+            .eq('published', true)
+            .order("created_at", { ascending: false });
+            
+          if (error) {
+            console.error("Error fetching trading ideas:", error);
+            throw error;
+          }
+          
+          console.log("Fetched trading ideas:", data);
+          return data as TradingIdea[];
         } else {
-          query = supabase.rpc("select_trading_ideas" as never);
+          const { data, error } = await supabase
+            .from('trading_ideas')
+            .select('*, profiles(email)')
+            .eq('published', true);
+            
+          if (error) {
+            console.error("Error fetching trading ideas:", error);
+            throw error;
+          }
+          
+          console.log("Fetched trading ideas:", data);
+          return data as TradingIdea[];
         }
-        
-        const { data, error } = await query;
-        
-        if (error) {
-          throw error;
-        }
-        
-        return data as TradingIdea[];
-      } catch (rpcError) {
-        console.log("RPC not available, falling back to direct query", rpcError);
-        
-        // Fallback to manual query if RPC isn't available yet
-        query = supabase.from('trading_ideas')
-          .select('*, profiles(email)')
-          .eq('published', true);
-
-        if (sortBy === "latest") {
-          query = query.order("created_at", { ascending: false });
-        } else if (sortBy === "most-liked") {
-          query = query.order("likes", { ascending: false });
-        } else if (sortBy === "trending") {
-          // For trending, we're just sorting by recency for now
-          query = query.order("created_at", { ascending: false });
-        }
-        
-        const { data, error } = await query;
-
-        if (error) {
-          console.error("Error fetching trading ideas:", error);
-          throw error;
-        }
-        
-        return data as TradingIdea[];
+      } catch (error) {
+        console.error("Error fetching trading ideas:", error);
+        throw error;
       }
     },
   });
@@ -121,7 +138,7 @@ const TradingIdeaList = () => {
         {ideas?.map((idea) => (
           <TradingIdeaCard key={idea.id} idea={idea} />
         ))}
-        {ideas?.length === 0 && (
+        {(!ideas || ideas.length === 0) && (
           <div className="col-span-full text-center py-12">
             <TrendingUp className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <h3 className="text-xl font-medium text-gray-900 mb-2">No trading ideas yet</h3>
