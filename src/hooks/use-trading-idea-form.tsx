@@ -1,16 +1,44 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { generateSlug } from "@/utils/slugUtils";
 
-export function useTradingIdeaForm() {
+interface TradingIdeaData {
+  id?: string;
+  title: string;
+  description: string;
+  image_url: string;
+  additional_images?: string[] | null;
+  published?: boolean;
+  slug?: string;
+}
+
+export function useTradingIdeaForm(initialData: TradingIdeaData | null = null, isEdit = false) {
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [imageUrls, setImageUrls] = useState<string[]>(
+    initialData 
+      ? [initialData.image_url, ...(initialData.additional_images || [])]
+      : []
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title);
+      setDescription(initialData.description);
+      
+      const allImages = [
+        initialData.image_url,
+        ...(initialData.additional_images || [])
+      ].filter(Boolean);
+      
+      setImageUrls(allImages);
+    }
+  }, [initialData]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,52 +59,54 @@ export function useTradingIdeaForm() {
         return;
       }
       
-      const slug = generateSlug(title);
+      const slug = isEdit && initialData?.slug 
+        ? initialData.slug 
+        : generateSlug(title);
       
-      console.log("Submitting trading idea with data:", {
+      console.log(`${isEdit ? "Updating" : "Submitting"} trading idea with data:`, {
         title,
         description,
         image_url: imageUrls[0],
         additional_images: imageUrls.slice(1),
         slug,
-        author_id: session.user.id
+        author_id: session.user.id,
+        ...(isEdit && initialData?.id ? { id: initialData.id } : {})
       });
       
-      // Using upsert to ensure we don't get conflicts
-      const { error, data } = await supabase
-        .from('trading_ideas')
-        .upsert({
-          title,
-          description,
-          image_url: imageUrls[0],
-          additional_images: imageUrls.slice(1),
-          slug,
-          author_id: session.user.id,
-          published: true
-        })
-        .select('id, slug')
-        .single();
+      const data = {
+        title,
+        description,
+        image_url: imageUrls[0],
+        additional_images: imageUrls.slice(1),
+        slug,
+        author_id: session.user.id,
+        published: true
+      };
       
-      if (error) {
-        console.error("Error submitting trading idea:", error);
-        toast.error("Failed to submit trading idea");
+      const operation = isEdit 
+        ? supabase
+            .from('trading_ideas')
+            .update(data)
+            .eq('id', initialData?.id)
+        : supabase
+            .from('trading_ideas')
+            .insert(data);
+            
+      const result = await operation.select('id, slug').single();
+      
+      if (result.error) {
+        console.error(`Error ${isEdit ? "updating" : "submitting"} trading idea:`, result.error);
+        toast.error(`Failed to ${isEdit ? "update" : "submit"} trading idea`);
         setIsSubmitting(false);
         return;
       }
       
-      console.log("Trading idea submitted successfully:", data);
-      toast.success("Trading idea shared successfully!");
-      
-      if (!data || !data.slug) {
-        console.error("No data returned from submission");
-        toast.error("Error retrieving submission data");
-        setIsSubmitting(false);
-        return;
-      }
+      console.log(`Trading idea ${isEdit ? "updated" : "submitted"} successfully:`, result.data);
+      toast.success(`Trading idea ${isEdit ? "updated" : "shared"} successfully!`);
       
       // Add a longer delay to ensure the database has time to process
       setTimeout(() => {
-        navigate(`/trading-ideas/${data.slug}`);
+        navigate(`/trading-ideas/${result.data.slug}`);
         setIsSubmitting(false);
       }, 1500);
       
