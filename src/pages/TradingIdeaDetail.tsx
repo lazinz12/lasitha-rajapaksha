@@ -10,6 +10,7 @@ import TradingIdeaNotFound from "@/components/trading/TradingIdeaNotFound";
 import TradingIdeaActions from "@/components/trading/TradingIdeaActions";
 import TradingIdeaComments from "@/components/trading/TradingIdeaComments";
 import TradingIdeaImages from "@/components/trading/TradingIdeaImages";
+import YouTubeEmbed from "@/components/trading/YouTubeEmbed";
 import { useTradingIdea } from "@/hooks/use-trading-idea";
 
 const TradingIdeaDetail = () => {
@@ -73,6 +74,12 @@ const TradingIdeaDetail = () => {
             title={idea.title}
             additionalImages={idea.additional_images}
           />
+          
+          {idea.youtube_url && (
+            <div className="px-6">
+              <YouTubeEmbed url={idea.youtube_url} title={idea.title} />
+            </div>
+          )}
           
           <CardContent>
             <div className="prose max-w-none mb-8">

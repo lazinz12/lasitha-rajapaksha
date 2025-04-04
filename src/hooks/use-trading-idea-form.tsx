@@ -13,12 +13,14 @@ interface TradingIdeaData {
   additional_images?: string[] | null;
   published?: boolean;
   slug?: string;
+  youtube_url?: string;
 }
 
 export function useTradingIdeaForm(initialData: TradingIdeaData | null = null, isEdit = false) {
   const navigate = useNavigate();
   const [title, setTitle] = useState(initialData?.title || "");
   const [description, setDescription] = useState(initialData?.description || "");
+  const [youtubeUrl, setYoutubeUrl] = useState(initialData?.youtube_url || "");
   const [imageUrls, setImageUrls] = useState<string[]>(
     initialData 
       ? [initialData.image_url, ...(initialData.additional_images || [])]
@@ -30,6 +32,7 @@ export function useTradingIdeaForm(initialData: TradingIdeaData | null = null, i
     if (initialData) {
       setTitle(initialData.title);
       setDescription(initialData.description);
+      setYoutubeUrl(initialData.youtube_url || "");
       
       const allImages = [
         initialData.image_url,
@@ -68,6 +71,7 @@ export function useTradingIdeaForm(initialData: TradingIdeaData | null = null, i
         description,
         image_url: imageUrls[0],
         additional_images: imageUrls.slice(1),
+        youtube_url: youtubeUrl,
         slug,
         author_id: session.user.id,
         ...(isEdit && initialData?.id ? { id: initialData.id } : {})
@@ -78,6 +82,7 @@ export function useTradingIdeaForm(initialData: TradingIdeaData | null = null, i
         description,
         image_url: imageUrls[0],
         additional_images: imageUrls.slice(1),
+        youtube_url: youtubeUrl,
         slug,
         author_id: session.user.id,
         published: true
@@ -122,6 +127,8 @@ export function useTradingIdeaForm(initialData: TradingIdeaData | null = null, i
     setTitle,
     description,
     setDescription,
+    youtubeUrl,
+    setYoutubeUrl,
     imageUrls,
     setImageUrls,
     isSubmitting,

@@ -11,6 +11,8 @@ interface TradingIdeaFormFieldsProps {
   setDescription: (description: string) => void;
   imageUrls: string[];
   setImageUrls: (urls: string[]) => void;
+  youtubeUrl: string;
+  setYoutubeUrl: (url: string) => void;
 }
 
 const TradingIdeaFormFields = ({
@@ -19,7 +21,9 @@ const TradingIdeaFormFields = ({
   description,
   setDescription,
   imageUrls,
-  setImageUrls
+  setImageUrls,
+  youtubeUrl,
+  setYoutubeUrl
 }: TradingIdeaFormFieldsProps) => {
   return (
     <>
@@ -41,6 +45,20 @@ const TradingIdeaFormFields = ({
           imageUrls={imageUrls}
           setImageUrls={setImageUrls}
         />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="youtubeUrl">YouTube Video URL (Optional)</Label>
+        <Input
+          id="youtubeUrl"
+          placeholder="https://www.youtube.com/watch?v=..."
+          value={youtubeUrl}
+          onChange={(e) => setYoutubeUrl(e.target.value)}
+          className="w-full"
+        />
+        <p className="text-xs text-muted-foreground">
+          Add a YouTube video to provide additional context or analysis
+        </p>
       </div>
       
       <div className="space-y-2">

@@ -13,6 +13,7 @@ interface TradingIdeaFormProps {
     additional_images?: string[] | null;
     published?: boolean;
     slug: string;
+    youtube_url?: string;
   } | null;
   isEdit?: boolean;
 }
@@ -23,6 +24,8 @@ const TradingIdeaForm = ({ initialData, isEdit = false }: TradingIdeaFormProps) 
     setTitle,
     description,
     setDescription,
+    youtubeUrl,
+    setYoutubeUrl,
     imageUrls,
     setImageUrls,
     isSubmitting,
@@ -43,6 +46,8 @@ const TradingIdeaForm = ({ initialData, isEdit = false }: TradingIdeaFormProps) 
             setDescription={setDescription}
             imageUrls={imageUrls}
             setImageUrls={setImageUrls}
+            youtubeUrl={youtubeUrl}
+            setYoutubeUrl={setYoutubeUrl}
           />
           
           <CardFooter className="px-0 pt-4">
