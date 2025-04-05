@@ -59,6 +59,11 @@ const TradingIdeaDetail = () => {
     );
   }
 
+  // Format description with proper paragraph spacing
+  const formattedDescription = idea.description
+    .split('\n')
+    .filter(para => para.trim() !== ''); // Remove empty paragraphs
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -85,8 +90,8 @@ const TradingIdeaDetail = () => {
           
           <CardContent className={isMobile ? 'p-4' : ''}>
             <div className="prose max-w-none mb-6">
-              {idea.description.split('\n').map((paragraph, index) => (
-                <p key={index} className={isMobile ? 'text-sm' : ''}>{paragraph}</p>
+              {formattedDescription.map((paragraph, index) => (
+                <p key={index} className={`${isMobile ? 'text-sm' : ''} mb-4`}>{paragraph}</p>
               ))}
             </div>
             
