@@ -12,7 +12,7 @@ interface TradingIdea {
   created_at: string;
   likes: number;
   comments: number;
-  youtube_url?: string;
+  youtube_url?: string | null;
   author_id: string;
   profiles?: { email: string } | null;
 }
