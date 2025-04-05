@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface YouTubeEmbedProps {
   url: string;
@@ -8,6 +9,7 @@ interface YouTubeEmbedProps {
 
 const YouTubeEmbed = ({ url, title }: YouTubeEmbedProps) => {
   const [videoId, setVideoId] = useState<string | null>(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     if (!url) return;
@@ -40,7 +42,7 @@ const YouTubeEmbed = ({ url, title }: YouTubeEmbedProps) => {
   if (!videoId) return null;
   
   return (
-    <div className="aspect-video w-full mb-6 rounded-md overflow-hidden">
+    <div className={`aspect-video w-full mb-6 rounded-md overflow-hidden ${isMobile ? 'px-0' : 'px-6'}`}>
       <iframe
         src={`https://www.youtube.com/embed/${videoId}`}
         title={title}

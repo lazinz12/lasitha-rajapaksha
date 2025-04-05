@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import TradingIdeaFormFields from "./TradingIdeaFormFields";
 import { useTradingIdeaForm } from "@/hooks/use-trading-idea-form";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TradingIdeaFormProps {
   initialData?: {
@@ -19,6 +20,8 @@ interface TradingIdeaFormProps {
 }
 
 const TradingIdeaForm = ({ initialData, isEdit = false }: TradingIdeaFormProps) => {
+  const isMobile = useIsMobile();
+  
   const {
     title,
     setTitle,
@@ -33,9 +36,9 @@ const TradingIdeaForm = ({ initialData, isEdit = false }: TradingIdeaFormProps) 
   } = useTradingIdeaForm(initialData, isEdit);
 
   return (
-    <Card className="max-w-3xl mx-auto">
+    <Card className={`${isMobile ? 'w-full mx-2' : 'max-w-3xl mx-auto'}`}>
       <CardHeader>
-        <CardTitle className="text-2xl">{isEdit ? "Edit Trading Idea" : "Share Your Trading Idea"}</CardTitle>
+        <CardTitle className={`${isMobile ? 'text-xl' : 'text-2xl'}`}>{isEdit ? "Edit Trading Idea" : "Share Your Trading Idea"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
