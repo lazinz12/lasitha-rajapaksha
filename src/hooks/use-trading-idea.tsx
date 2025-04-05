@@ -65,7 +65,13 @@ export function useTradingIdea(slug: string | undefined) {
           return;
         }
 
-        // Fetch author profile
+        // Create a complete trading idea object with profiles property
+        const tradingIdeaWithProfiles: TradingIdea = {
+          ...data,
+          profiles: null // Initialize profiles as null
+        };
+
+        // Fetch author profile if author_id exists
         if (data.author_id) {
           const { data: authorData, error: authorError } = await supabase
             .from("profiles")
@@ -74,13 +80,13 @@ export function useTradingIdea(slug: string | undefined) {
             .single();
 
           if (!authorError && authorData) {
-            data.profiles = authorData;
+            tradingIdeaWithProfiles.profiles = authorData;
           }
         }
 
-        console.log("Trading idea data:", data);
-        setIdea(data as TradingIdea);
-        setLikesCount(data.likes || 0);
+        console.log("Trading idea data:", tradingIdeaWithProfiles);
+        setIdea(tradingIdeaWithProfiles);
+        setLikesCount(tradingIdeaWithProfiles.likes || 0);
         setIsLoading(false);
       } catch (err) {
         console.error("Error in useTradingIdea hook:", err);
