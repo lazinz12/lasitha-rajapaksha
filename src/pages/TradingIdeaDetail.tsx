@@ -12,10 +12,12 @@ import TradingIdeaComments from "@/components/trading/TradingIdeaComments";
 import TradingIdeaImages from "@/components/trading/TradingIdeaImages";
 import YouTubeEmbed from "@/components/trading/YouTubeEmbed";
 import { useTradingIdea } from "@/hooks/use-trading-idea";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const TradingIdeaDetail = () => {
   const { slug } = useParams();
   const commentSectionRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   
   // Debug the slug
   useEffect(() => {
@@ -60,10 +62,10 @@ const TradingIdeaDetail = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      <div className="container mx-auto py-8">
+      <div className={`container mx-auto ${isMobile ? 'py-4 px-2' : 'py-8'}`}>
         <Card>
-          <CardHeader>
-            <CardTitle className="text-4xl">{idea.title}</CardTitle>
+          <CardHeader className={isMobile ? 'p-4' : ''}>
+            <CardTitle className={isMobile ? 'text-2xl' : 'text-4xl'}>{idea.title}</CardTitle>
             <CardDescription>
               By {idea.profiles?.email || "Anonymous"} on {format(new Date(idea.created_at), "MMM dd, yyyy")}
             </CardDescription>
@@ -76,15 +78,15 @@ const TradingIdeaDetail = () => {
           />
           
           {idea.youtube_url && (
-            <div className="px-6">
+            <div className={isMobile ? 'px-2' : 'px-6'}>
               <YouTubeEmbed url={idea.youtube_url} title={idea.title} />
             </div>
           )}
           
-          <CardContent>
-            <div className="prose max-w-none mb-8">
+          <CardContent className={isMobile ? 'p-4' : ''}>
+            <div className="prose max-w-none mb-6">
               {idea.description.split('\n').map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
+                <p key={index} className={isMobile ? 'text-sm' : ''}>{paragraph}</p>
               ))}
             </div>
             
@@ -93,7 +95,7 @@ const TradingIdeaDetail = () => {
               onCommentClick={scrollToComments} 
             />
             
-            <div ref={commentSectionRef}>
+            <div ref={commentSectionRef} className="mt-6">
               <TradingIdeaComments />
             </div>
           </CardContent>
