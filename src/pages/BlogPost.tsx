@@ -30,6 +30,11 @@ const BlogPost = () => {
     },
   });
 
+  // Check if content is HTML format
+  const isHtmlContent = (content: string) => {
+    return content && (content.includes('<') && content.includes('>'));
+  };
+
   // Format content into sections based on headings
   const formatContent = (content: string) => {
     if (!content) return [];
@@ -81,6 +86,7 @@ const BlogPost = () => {
   }
 
   const paragraphs = formatContent(post.content);
+  const isHtml = isHtmlContent(post.content);
 
   return (
     <div className="min-h-screen">
@@ -105,45 +111,52 @@ const BlogPost = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className={isMobile ? 'p-4' : 'p-6'}>
-            <div className="prose max-w-none">
-              {paragraphs.map((paragraph, index) => {
-                // Check if paragraph is a heading
-                if (paragraph.startsWith('# ')) {
-                  return (
-                    <h1 key={index} className="text-2xl font-bold mt-6 mb-4">
-                      {paragraph.replace('# ', '')}
-                    </h1>
-                  );
-                } else if (paragraph.startsWith('## ')) {
-                  return (
-                    <h2 key={index} className="text-xl font-bold mt-5 mb-3">
-                      {paragraph.replace('## ', '')}
-                    </h2>
-                  );
-                } else if (paragraph.startsWith('### ')) {
-                  return (
-                    <h3 key={index} className="text-lg font-bold mt-4 mb-2">
-                      {paragraph.replace('### ', '')}
-                    </h3>
-                  );
-                } else if (paragraph.startsWith('- ')) {
-                  // Bullet list item
-                  return (
-                    <div key={index} className="flex gap-2 ml-4 mb-2">
-                      <span>•</span>
-                      <span>{paragraph.replace('- ', '')}</span>
-                    </div>
-                  );
-                } else {
-                  // Regular paragraph
-                  return (
-                    <p key={index} className={`${isMobile ? 'text-sm' : 'text-base'} mb-4 leading-relaxed`}>
-                      {paragraph}
-                    </p>
-                  );
-                }
-              })}
-            </div>
+            {isHtml ? (
+              <div 
+                className="prose max-w-none" 
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
+            ) : (
+              <div className="prose max-w-none">
+                {paragraphs.map((paragraph, index) => {
+                  // Check if paragraph is a heading
+                  if (paragraph.startsWith('# ')) {
+                    return (
+                      <h1 key={index} className="text-2xl font-bold mt-6 mb-4">
+                        {paragraph.replace('# ', '')}
+                      </h1>
+                    );
+                  } else if (paragraph.startsWith('## ')) {
+                    return (
+                      <h2 key={index} className="text-xl font-bold mt-5 mb-3">
+                        {paragraph.replace('## ', '')}
+                      </h2>
+                    );
+                  } else if (paragraph.startsWith('### ')) {
+                    return (
+                      <h3 key={index} className="text-lg font-bold mt-4 mb-2">
+                        {paragraph.replace('### ', '')}
+                      </h3>
+                    );
+                  } else if (paragraph.startsWith('- ')) {
+                    // Bullet list item
+                    return (
+                      <div key={index} className="flex gap-2 ml-4 mb-2">
+                        <span>•</span>
+                        <span>{paragraph.replace('- ', '')}</span>
+                      </div>
+                    );
+                  } else {
+                    // Regular paragraph
+                    return (
+                      <p key={index} className={`${isMobile ? 'text-sm' : 'text-base'} mb-4 leading-relaxed`}>
+                        {paragraph}
+                      </p>
+                    );
+                  }
+                })}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
