@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import Header from "@/components/Header";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Helmet } from "react-helmet";
 
 const Blog = () => {
   const { data: posts, isLoading } = useQuery({
@@ -27,6 +29,17 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen">
+      <Helmet>
+        <title>Blog - Lasitha Rajapaksha | Developer & Forex Trader</title>
+        <meta name="description" content="Read the latest articles from Lasitha Rajapaksha on programming, trading, and web development." />
+        <meta name="keywords" content="blog, programming, forex trading, web development, lasitha rajapaksha" />
+        <meta property="og:title" content="Blog - Lasitha Rajapaksha" />
+        <meta property="og:description" content="Read the latest articles from Lasitha Rajapaksha on programming, trading, and web development." />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="/blog" />
+      </Helmet>
+      
       <Header />
       <div className="container mx-auto py-8">
         <h1 className="text-4xl font-bold mb-8">Blog Posts</h1>

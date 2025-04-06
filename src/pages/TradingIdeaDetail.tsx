@@ -13,6 +13,7 @@ import TradingIdeaImages from "@/components/trading/TradingIdeaImages";
 import YouTubeEmbed from "@/components/trading/YouTubeEmbed";
 import { useTradingIdea } from "@/hooks/use-trading-idea";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Helmet } from "react-helmet";
 
 const TradingIdeaDetail = () => {
   const { slug } = useParams();
@@ -66,6 +67,18 @@ const TradingIdeaDetail = () => {
 
   return (
     <div className="min-h-screen">
+      <Helmet>
+        <title>{idea.title} - Trading Idea | Lasitha Rajapaksha</title>
+        <meta name="description" content={idea.description.substring(0, 160)} />
+        <meta name="keywords" content={`forex trading, ${idea.title.toLowerCase()}, market analysis, trading strategy, lasitha rajapaksha`} />
+        <meta property="og:title" content={`${idea.title} - Trading Idea | Lasitha Rajapaksha`} />
+        <meta property="og:description" content={idea.description.substring(0, 160)} />
+        <meta property="og:image" content={idea.image_url} />
+        <meta property="og:type" content="article" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={`/trading-ideas/${slug}`} />
+      </Helmet>
+
       <Header />
       <div className={`container mx-auto ${isMobile ? 'py-4 px-2' : 'py-8'}`}>
         <Card>
