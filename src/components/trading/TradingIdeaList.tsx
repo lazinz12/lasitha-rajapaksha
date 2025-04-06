@@ -5,6 +5,7 @@ import TradingIdeaCard from "./TradingIdeaCard";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Star, Clock } from "lucide-react";
 import { useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type SortOption = "trending" | "latest" | "most-liked";
 
@@ -24,6 +25,7 @@ interface TradingIdea {
 
 const TradingIdeaList = () => {
   const [sortBy, setSortBy] = useState<SortOption>("latest");
+  const isMobile = useIsMobile();
 
   const { data: ideas, isLoading } = useQuery({
     queryKey: ["trading-ideas", sortBy],
@@ -105,32 +107,35 @@ const TradingIdeaList = () => {
 
   return (
     <div className="py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Trading Ideas</h1>
-        <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold mb-4 sm:mb-0">Trading Ideas</h1>
+        <div className="flex gap-2 bg-gray-50 p-2 rounded-lg shadow-sm w-full sm:w-auto">
           <Button
-            variant={sortBy === "trending" ? "default" : "outline"}
+            variant={sortBy === "trending" ? "default" : "ghost"}
             size="sm"
             onClick={() => setSortBy("trending")}
-            className="gap-1"
+            className="gap-1 flex-1 sm:flex-initial"
           >
-            <TrendingUp className="h-4 w-4" /> Trending
+            <TrendingUp className="h-4 w-4" /> 
+            <span className="whitespace-nowrap">Trending</span>
           </Button>
           <Button
-            variant={sortBy === "latest" ? "default" : "outline"}
+            variant={sortBy === "latest" ? "default" : "ghost"}
             size="sm"
             onClick={() => setSortBy("latest")}
-            className="gap-1"
+            className="gap-1 flex-1 sm:flex-initial"
           >
-            <Clock className="h-4 w-4" /> Latest
+            <Clock className="h-4 w-4" /> 
+            <span className="whitespace-nowrap">Latest</span>
           </Button>
           <Button
-            variant={sortBy === "most-liked" ? "default" : "outline"}
+            variant={sortBy === "most-liked" ? "default" : "ghost"}
             size="sm"
             onClick={() => setSortBy("most-liked")}
-            className="gap-1"
+            className="gap-1 flex-1 sm:flex-initial"
           >
-            <Star className="h-4 w-4" /> Most Liked
+            <Star className="h-4 w-4" /> 
+            <span className="whitespace-nowrap">Most Liked</span>
           </Button>
         </div>
       </div>
