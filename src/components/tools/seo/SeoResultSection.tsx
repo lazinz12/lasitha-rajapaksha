@@ -1,3 +1,4 @@
+
 import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 interface SeoResultSectionProps {

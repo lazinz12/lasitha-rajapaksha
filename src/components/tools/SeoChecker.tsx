@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -128,7 +129,7 @@ export const SeoChecker = () => {
               <CardContent className="pt-6">
                 <div className="space-y-6">
                   <SeoResultSection icon="success" title="Page Title" score={results.title.score}>
-                    <p className="text-gray-700 mb-2">{results.title.text}</p>
+                    <div dangerouslySetInnerHTML={{ __html: results.title.text }} className="text-gray-700 mb-2" />
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="text-green-500 h-4 w-4" />
                       <p className="text-sm">
@@ -149,16 +150,14 @@ export const SeoChecker = () => {
                     <ul className="list-disc pl-5 space-y-2">
                       {results.loadingSpeed.reasons.map((reason: string, index: number) => (
                         <li key={index} className="text-sm text-gray-600">
-                          {reason}
+                          <div dangerouslySetInnerHTML={{ __html: reason }} />
                         </li>
                       ))}
                     </ul>
                   </SeoResultSection>
 
                   <SeoResultSection icon="success" title="File robots.txt">
-                    <p className="text-gray-700 mb-2">
-                      {results.robotsTxt.message}
-                    </p>
+                    <div dangerouslySetInnerHTML={{ __html: results.robotsTxt.message }} className="text-gray-700 mb-2" />
                   </SeoResultSection>
 
                   {aiRecommendations && (

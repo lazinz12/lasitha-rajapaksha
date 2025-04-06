@@ -1,3 +1,4 @@
+
 import { SeoResultSection } from "./SeoResultSection";
 import { Badge } from "@/components/ui/badge";
 
@@ -37,8 +38,12 @@ export const AiRecommendations = ({ recommendations }: AiRecommendationsProps) =
               </Badge>
               <Badge variant="outline">{rec.category}</Badge>
             </div>
-            <p className="text-gray-900 font-medium mb-1">{rec.recommendation}</p>
-            <p className="text-sm text-gray-600">{rec.impact}</p>
+            <p className="text-gray-900 font-medium mb-1">
+              <div dangerouslySetInnerHTML={{ __html: rec.recommendation }} />
+            </p>
+            <p className="text-sm text-gray-600">
+              <div dangerouslySetInnerHTML={{ __html: rec.impact }} />
+            </p>
           </div>
         ))}
       </div>
