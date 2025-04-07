@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Heart, MessageSquare } from "lucide-react";
+import { Heart, MessageSquare, Image } from "lucide-react";
 import { format } from "date-fns";
 
 interface TradingIdea {
@@ -13,6 +13,7 @@ interface TradingIdea {
   likes: number;
   comments: number;
   slug: string;
+  additional_images?: string[] | null;
   profiles?: { email: string } | null;
 }
 
@@ -28,6 +29,7 @@ const TradingIdeaCard = ({ idea }: TradingIdeaCardProps) => {
 
   const authorEmail = idea.profiles?.email || "Anonymous";
   const formattedDate = format(new Date(idea.created_at), "MMM dd, yyyy");
+  const hasAdditionalImages = idea.additional_images && idea.additional_images.length > 0;
 
   return (
     <Link to={`/trading-ideas/${idea.slug}`}>
@@ -36,8 +38,14 @@ const TradingIdeaCard = ({ idea }: TradingIdeaCardProps) => {
           <img
             src={idea.image_url}
             alt={idea.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
           />
+          {hasAdditionalImages && (
+            <div className="absolute bottom-2 right-2 bg-black/60 text-white rounded-full p-1.5 flex items-center">
+              <Image className="h-4 w-4 mr-1" />
+              <span className="text-xs">{idea.additional_images?.length + 1}</span>
+            </div>
+          )}
         </div>
         <CardContent className="pt-4 flex-grow">
           <h3 className="text-xl font-semibold mb-2 line-clamp-2">{idea.title}</h3>
