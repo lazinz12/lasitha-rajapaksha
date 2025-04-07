@@ -23,10 +23,10 @@ const TradingIdeaImages = ({ mainImage, title, additionalImages }: TradingIdeaIm
   };
 
   return (
-    <div className={`${isMobile ? 'px-3' : 'px-6'}`}>
+    <div className={`${isMobile ? 'px-3 py-2' : 'px-6 py-4'}`}>
       {/* Main Image */}
       <div 
-        className="cursor-pointer overflow-hidden rounded-md mb-6" 
+        className="cursor-pointer overflow-hidden rounded-md mb-4 md:mb-6" 
         onClick={() => openImageModal(0)}
       >
         <img
@@ -38,17 +38,17 @@ const TradingIdeaImages = ({ mainImage, title, additionalImages }: TradingIdeaIm
       
       {/* Additional Images Grid */}
       {additionalImages && additionalImages.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mb-4 md:mb-6">
           {additionalImages.map((image, index) => (
             <div 
               key={index}
-              className="cursor-pointer overflow-hidden rounded-md" 
+              className="cursor-pointer overflow-hidden rounded-md aspect-video" 
               onClick={() => openImageModal(index + 1)}
             >
               <img 
                 src={image}
                 alt={`${title} - Additional image ${index + 1}`}
-                className="w-full h-auto hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
               />
             </div>
           ))}

@@ -5,12 +5,11 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TradingIdeaImageModalProps {
   isOpen: boolean;
@@ -61,16 +60,21 @@ const TradingIdeaImageModal = ({
     if (activeIndex < images.length - 1) setActiveIndex(activeIndex + 1);
   };
   
+  const sideClass = isMobile ? "bottom" : "right";
+  const modalWidthClass = isMobile 
+    ? "w-full" 
+    : "sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-xl";
+  
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
-        className="w-full sm:max-w-xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl p-0 bg-black/95"
-        side="bottom"
+        className={`${modalWidthClass} p-0 bg-black/95 overflow-hidden`}
+        side={sideClass}
       >
-        <div className="relative h-full flex flex-col">
+        <div className="flex flex-col h-full max-h-screen">
           {/* Header with close button and image counter */}
-          <div className="flex justify-between items-center p-3 bg-black/80 text-white z-10">
-            <h3 className="text-sm font-medium truncate max-w-[75%]">
+          <div className="flex justify-between items-center p-3 bg-black/80 text-white sticky top-0 z-10">
+            <h3 className="text-sm font-medium truncate max-w-[70%]">
               {title} - Image {activeIndex + 1} of {images.length}
             </h3>
             <Button
@@ -84,7 +88,7 @@ const TradingIdeaImageModal = ({
           </div>
           
           {/* Main image carousel */}
-          <div className="flex-grow p-2 md:p-4 relative">
+          <div className="flex-grow relative overflow-hidden">
             <Carousel 
               className="w-full h-full" 
               opts={{ startIndex: activeIndex }}
@@ -96,48 +100,60 @@ const TradingIdeaImageModal = ({
             >
               <CarouselContent>
                 {images.map((img, index) => (
-                  <CarouselItem key={index}>
-                    <div className="flex justify-center items-center h-[70vh]">
+                  <CarouselItem key={index} className="flex justify-center items-center">
+                    <div className="flex justify-center items-center h-[calc(100vh-10rem)] max-h-[70vh] md:h-[calc(100vh-12rem)] w-full px-2">
                       <img
                         src={img}
                         alt={`${title} - Image ${index + 1}`}
-                        className="max-h-full max-w-full object-contain"
+                        className="max-h-full max-w-full object-contain mx-auto"
                       />
                     </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              
-              {/* Custom navigation buttons for better visibility */}
+            </Carousel>
+            
+            {/* Custom navigation buttons */}
+            <TooltipProvider>
               <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="bg-black/30 hover:bg-black/50 text-white rounded-full h-10 w-10"
-                  onClick={handlePrevious}
-                  disabled={activeIndex === 0}
-                >
-                  <ChevronLeft className="h-6 w-6" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="bg-black/30 hover:bg-black/50 text-white rounded-full h-10 w-10"
+                      onClick={handlePrevious}
+                      disabled={activeIndex === 0}
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Previous</TooltipContent>
+                </Tooltip>
               </div>
               
               <div className="absolute right-2 top-1/2 -translate-y-1/2 z-10">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="bg-black/30 hover:bg-black/50 text-white rounded-full h-10 w-10"
-                  onClick={handleNext}
-                  disabled={activeIndex === images.length - 1}
-                >
-                  <ChevronRight className="h-6 w-6" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="bg-black/30 hover:bg-black/50 text-white rounded-full h-10 w-10"
+                      onClick={handleNext}
+                      disabled={activeIndex === images.length - 1}
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="left">Next</TooltipContent>
+                </Tooltip>
               </div>
-            </Carousel>
+            </TooltipProvider>
           </div>
           
-          {/* Optional: Thumbnail navigation for desktop */}
+          {/* Thumbnail navigation bar */}
           {!isMobile && images.length > 1 && (
-            <div className="p-2 bg-black/80 flex justify-center gap-2 overflow-x-auto">
+            <div className="p-2 bg-black/80 flex justify-center gap-2 overflow-x-auto sticky bottom-0">
               {images.map((img, index) => (
                 <button
                   key={index}
