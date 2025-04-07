@@ -68,12 +68,12 @@ const TradingIdeaImageModal = ({
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
-        className={`${modalWidthClass} p-0 bg-black/95 overflow-hidden`}
+        className={`${modalWidthClass} p-0 bg-white dark:bg-gray-800 overflow-hidden`}
         side={sideClass}
       >
         <div className="flex flex-col h-full max-h-screen">
           {/* Header with close button and image counter */}
-          <div className="flex justify-between items-center p-3 bg-black/80 text-white sticky top-0 z-10">
+          <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700 text-black dark:text-white sticky top-0 z-10">
             <h3 className="text-sm font-medium truncate max-w-[70%]">
               {title} - Image {activeIndex + 1} of {images.length}
             </h3>
@@ -81,14 +81,14 @@ const TradingIdeaImageModal = ({
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="text-white hover:bg-white/20"
+              className="text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
             >
               <X className="h-5 w-5" />
             </Button>
           </div>
           
           {/* Main image carousel */}
-          <div className="flex-grow relative overflow-hidden">
+          <div className="flex-grow relative overflow-hidden bg-gray-50 dark:bg-gray-900">
             <Carousel 
               className="w-full h-full" 
               opts={{ startIndex: activeIndex }}
@@ -121,7 +121,7 @@ const TradingIdeaImageModal = ({
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="bg-black/30 hover:bg-black/50 text-white rounded-full h-10 w-10"
+                      className="bg-gray-200/80 hover:bg-gray-300/80 text-gray-800 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 dark:text-white rounded-full h-10 w-10"
                       onClick={handlePrevious}
                       disabled={activeIndex === 0}
                     >
@@ -138,7 +138,7 @@ const TradingIdeaImageModal = ({
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="bg-black/30 hover:bg-black/50 text-white rounded-full h-10 w-10"
+                      className="bg-gray-200/80 hover:bg-gray-300/80 text-gray-800 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 dark:text-white rounded-full h-10 w-10"
                       onClick={handleNext}
                       disabled={activeIndex === images.length - 1}
                     >
@@ -153,15 +153,15 @@ const TradingIdeaImageModal = ({
           
           {/* Thumbnail navigation bar */}
           {!isMobile && images.length > 1 && (
-            <div className="p-2 bg-black/80 flex justify-center gap-2 overflow-x-auto sticky bottom-0">
+            <div className="p-2 bg-gray-100 dark:bg-gray-700 flex justify-center gap-2 overflow-x-auto sticky bottom-0">
               {images.map((img, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveIndex(index)}
                   className={`w-16 h-16 flex-shrink-0 transition-all ${
                     activeIndex === index 
-                      ? 'border-2 border-white opacity-100 scale-105' 
-                      : 'border border-gray-700 opacity-70 hover:opacity-100'
+                      ? 'border-2 border-primary opacity-100 scale-105' 
+                      : 'border border-gray-300 dark:border-gray-600 opacity-70 hover:opacity-100'
                   }`}
                 >
                   <img 

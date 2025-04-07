@@ -26,7 +26,7 @@ const TradingIdeaImages = ({ mainImage, title, additionalImages }: TradingIdeaIm
     <div className={`${isMobile ? 'px-3 py-2' : 'px-6 py-4'}`}>
       {/* Main Image */}
       <div 
-        className="cursor-pointer overflow-hidden rounded-md mb-4 md:mb-6" 
+        className="cursor-pointer overflow-hidden rounded-md mb-4 md:mb-6 border border-gray-200 dark:border-gray-700 shadow-sm" 
         onClick={() => openImageModal(0)}
       >
         <img
@@ -42,7 +42,7 @@ const TradingIdeaImages = ({ mainImage, title, additionalImages }: TradingIdeaIm
           {additionalImages.map((image, index) => (
             <div 
               key={index}
-              className="cursor-pointer overflow-hidden rounded-md aspect-video" 
+              className="cursor-pointer overflow-hidden rounded-md aspect-video border border-gray-200 dark:border-gray-700 shadow-sm" 
               onClick={() => openImageModal(index + 1)}
             >
               <img 
