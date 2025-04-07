@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import {
   Carousel,
@@ -28,6 +28,12 @@ const TradingIdeaImageModal = ({
   initialIndex = 0,
 }: TradingIdeaImageModalProps) => {
   const isMobile = useIsMobile();
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
+  
+  // Update activeIndex when initialIndex changes
+  useEffect(() => {
+    setActiveIndex(initialIndex);
+  }, [initialIndex]);
   
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -48,7 +54,7 @@ const TradingIdeaImageModal = ({
           </div>
           
           <div className="flex-grow p-4 pt-12">
-            <Carousel className="w-full" defaultIndex={initialIndex}>
+            <Carousel className="w-full" opts={{ startIndex: activeIndex }}>
               <CarouselContent>
                 {images.map((img, index) => (
                   <CarouselItem key={index}>
@@ -72,7 +78,7 @@ const TradingIdeaImageModal = ({
           </div>
           
           <div className="p-2 bg-black/80 text-white text-center">
-            <p className="text-sm">Image {initialIndex + 1} of {images.length}</p>
+            <p className="text-sm">Image {activeIndex + 1} of {images.length}</p>
           </div>
         </div>
       </SheetContent>
