@@ -60,35 +60,25 @@ const TradingIdeaImageModal = ({
     if (activeIndex < images.length - 1) setActiveIndex(activeIndex + 1);
   };
   
-  const sideClass = isMobile ? "bottom" : "right";
-  const modalWidthClass = isMobile 
-    ? "w-full" 
-    : "sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-xl";
-  
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
-        className={`${modalWidthClass} p-0 bg-white dark:bg-gray-800 overflow-hidden`}
-        side={sideClass}
+        className="p-0 w-full h-full max-w-none bg-black/95 overflow-hidden"
+        side="right"
       >
-        <div className="flex flex-col h-full max-h-screen">
-          {/* Header with close button and image counter */}
-          <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700 text-black dark:text-white sticky top-0 z-10">
-            <h3 className="text-sm font-medium truncate max-w-[70%]">
-              {title} - Image {activeIndex + 1} of {images.length}
-            </h3>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-            >
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
+        <div className="flex flex-col h-full relative">
+          {/* Close button - positioned absolutely in top-right */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="absolute top-4 right-4 z-50 text-white/80 hover:bg-black/30 hover:text-white rounded-full"
+          >
+            <X className="h-6 w-6" />
+          </Button>
           
-          {/* Main image carousel */}
-          <div className="flex-grow relative overflow-hidden bg-gray-50 dark:bg-gray-900">
+          {/* Main image carousel - takes full height and width */}
+          <div className="flex-grow flex items-center justify-center w-full h-full">
             <Carousel 
               className="w-full h-full" 
               opts={{ startIndex: activeIndex }}
@@ -100,12 +90,12 @@ const TradingIdeaImageModal = ({
             >
               <CarouselContent>
                 {images.map((img, index) => (
-                  <CarouselItem key={index} className="flex justify-center items-center">
-                    <div className="flex justify-center items-center h-[calc(100vh-10rem)] max-h-[70vh] md:h-[calc(100vh-12rem)] w-full px-2">
+                  <CarouselItem key={index} className="flex justify-center items-center h-full">
+                    <div className="flex justify-center items-center h-full w-full">
                       <img
                         src={img}
                         alt={`${title} - Image ${index + 1}`}
-                        className="max-h-full max-w-full object-contain mx-auto"
+                        className="max-h-[85vh] max-w-full object-contain"
                       />
                     </div>
                   </CarouselItem>
@@ -113,64 +103,36 @@ const TradingIdeaImageModal = ({
               </CarouselContent>
             </Carousel>
             
-            {/* Custom navigation buttons */}
-            <TooltipProvider>
-              <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="bg-gray-200/80 hover:bg-gray-300/80 text-gray-800 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 dark:text-white rounded-full h-10 w-10"
-                      onClick={handlePrevious}
-                      disabled={activeIndex === 0}
-                    >
-                      <ChevronLeft className="h-6 w-6" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">Previous</TooltipContent>
-                </Tooltip>
-              </div>
-              
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 z-10">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="bg-gray-200/80 hover:bg-gray-300/80 text-gray-800 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 dark:text-white rounded-full h-10 w-10"
-                      onClick={handleNext}
-                      disabled={activeIndex === images.length - 1}
-                    >
-                      <ChevronRight className="h-6 w-6" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">Next</TooltipContent>
-                </Tooltip>
-              </div>
-            </TooltipProvider>
+            {/* Navigation buttons */}
+            {images.length > 1 && (
+              <>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white/90 hover:text-white rounded-full h-10 w-10"
+                  onClick={handlePrevious}
+                  disabled={activeIndex === 0}
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </Button>
+                
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white/90 hover:text-white rounded-full h-10 w-10"
+                  onClick={handleNext}
+                  disabled={activeIndex === images.length - 1}
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </Button>
+              </>
+            )}
           </div>
           
-          {/* Thumbnail navigation bar */}
-          {!isMobile && images.length > 1 && (
-            <div className="p-2 bg-gray-100 dark:bg-gray-700 flex justify-center gap-2 overflow-x-auto sticky bottom-0">
-              {images.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveIndex(index)}
-                  className={`w-16 h-16 flex-shrink-0 transition-all ${
-                    activeIndex === index 
-                      ? 'border-2 border-primary opacity-100 scale-105' 
-                      : 'border border-gray-300 dark:border-gray-600 opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <img 
-                    src={img} 
-                    alt={`Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+          {/* Image caption/title at bottom */}
+          {title && (
+            <div className="w-full text-center py-4 text-white/90 bg-black/80 absolute bottom-0 left-0 right-0">
+              {title}
             </div>
           )}
         </div>
