@@ -88,14 +88,15 @@ const TradingIdeaImageModal = ({
                 });
               }}
             >
-              <CarouselContent>
+              <CarouselContent className="h-full">
                 {images.map((img, index) => (
                   <CarouselItem key={index} className="flex justify-center items-center h-full">
                     <div className="flex justify-center items-center h-full w-full">
                       <img
                         src={img}
                         alt={`${title} - Image ${index + 1}`}
-                        className="max-h-[85vh] max-w-full object-contain"
+                        className="max-h-[100vh] max-w-full w-auto h-auto object-contain"
+                        style={{ objectFit: "contain" }}
                       />
                     </div>
                   </CarouselItem>
