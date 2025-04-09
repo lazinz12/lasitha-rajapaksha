@@ -60,6 +60,34 @@ const TextBehindImage = () => {
     reader.readAsDataURL(file);
   };
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      
+      if (!file.type.startsWith("image/")) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      setImage(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
@@ -135,12 +163,27 @@ const TextBehindImage = () => {
         setResultUrl(dataUrl);
       } catch (error) {
         console.error("Error generating image:", error);
+        toast({
+          title: "Error",
+          description: "Failed to generate the image",
+          variant: "destructive",
+        });
       }
       
       setLoading(false);
     };
     
     img.src = imagePreview;
+    
+    // Handle image loading errors
+    img.onerror = () => {
+      setLoading(false);
+      toast({
+        title: "Error",
+        description: "Failed to load the image",
+        variant: "destructive",
+      });
+    };
   };
 
   const downloadImage = () => {
@@ -190,6 +233,8 @@ const TextBehindImage = () => {
               <Label>Upload Image</Label>
               <div
                 onClick={() => fileInputRef.current?.click()}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
                 className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
               >
                 <Input
@@ -204,6 +249,16 @@ const TextBehindImage = () => {
                   Click to upload or drag and drop<br />
                   PNG, JPG or GIF (max. 10MB)
                 </p>
+                {imagePreview && (
+                  <div className="mt-4">
+                    <p className="text-sm text-green-500 mb-2">Image uploaded successfully!</p>
+                    <img 
+                      src={imagePreview} 
+                      alt="Preview" 
+                      className="max-h-32 mx-auto rounded border" 
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
