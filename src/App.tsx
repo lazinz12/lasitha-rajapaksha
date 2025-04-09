@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -36,6 +37,7 @@ import TradingIdeas from "@/pages/TradingIdeas";
 import TradingIdeaCreate from "@/pages/TradingIdeaCreate";
 import TradingIdeaDetail from "@/pages/TradingIdeaDetail";
 import TradingIdeaEdit from "@/pages/TradingIdeaEdit";
+import TextBehindImage from "@/pages/TextBehindImage";
 import { SeasonalEffects } from "@/components/SeasonalEffects";
 
 // Create a client
@@ -65,6 +67,7 @@ function App() {
             <Route path="/trading-ideas/new" element={<TradingIdeaCreate />} />
             <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
             <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
+            <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
             
             {/* Text Tools */}
             <Route path="/tools/case-converter" element={<CaseConverter />} />

@@ -1,6 +1,7 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -40,6 +41,12 @@ const Header = () => {
                     Trading Ideas
                   </Link>
                 </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/tools/text-behind-image" className="flex items-center py-2">
+                    <ImagePlus className="mr-2 h-4 w-4" />
+                    Text Behind Image
+                  </Link>
+                </SheetClose>
               </div>
             </SheetContent>
           </Sheet>
@@ -55,6 +62,12 @@ const Header = () => {
               <Button variant="ghost" className="flex items-center">
                 <TrendingUp className="mr-2 h-4 w-4" />
                 Trading Ideas
+              </Button>
+            </Link>
+            <Link to="/tools/text-behind-image">
+              <Button variant="ghost" className="flex items-center">
+                <ImagePlus className="mr-2 h-4 w-4" />
+                Text Behind Image
               </Button>
             </Link>
             <DropdownMenu>
@@ -145,6 +158,9 @@ const Header = () => {
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Image Tools</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="bg-popover/100">
+                    <DropdownMenuItem asChild>
+                      <Link to="/tools/text-behind-image">Text Behind Image</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link to="/tools/image-converter">Image Converter</Link>
                     </DropdownMenuItem>
