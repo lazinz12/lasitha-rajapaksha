@@ -1,20 +1,14 @@
 
-import React, { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
+import React, { useState, useRef } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { Download, Upload, Image as ImageIcon, Wand, Eraser, Check, Settings, ChevronDown } from "lucide-react";
+import { Label } from "@/components/ui/label";
 import Header from "@/components/Header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ColorPicker } from "@/components/tools/ColorPicker";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Switch } from "@/components/ui/switch";
+import { ImageUploader } from "@/components/tools/background-removal/ImageUploader";
+import { BackgroundOptions } from "@/components/tools/background-removal/BackgroundOptions";
+import { AdvancedOptions } from "@/components/tools/background-removal/AdvancedOptions";
+import { ActionButtons } from "@/components/tools/background-removal/ActionButtons";
+import { ResultPreview } from "@/components/tools/background-removal/ResultPreview";
+import { BackgroundRemovalProcessor } from "@/components/tools/background-removal/BackgroundRemovalProcessor";
 
 const BackgroundRemovalTool = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -31,25 +25,10 @@ const BackgroundRemovalTool = () => {
   const [preserveDetails, setPreserveDetails] = useState<boolean>(true);
   const [enhanceQuality, setEnhanceQuality] = useState<boolean>(false);
   
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return;
-    
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      toast({
-        title: "Invalid file type",
-        description: "Please select an image file",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleImageChange = (file: File) => {
     setImage(file);
     const reader = new FileReader();
     reader.onload = () => {
@@ -57,38 +36,6 @@ const BackgroundRemovalTool = () => {
       setResultUrl(null); // Reset result when new image is uploaded
     };
     reader.readAsDataURL(file);
-    
-    // Reset file input so the same file can be selected again
-    e.target.value = '';
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      
-      if (!file.type.startsWith("image/")) {
-        toast({
-          title: "Invalid file type",
-          description: "Please select an image file",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      setImage(file);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImagePreview(reader.result as string);
-        setResultUrl(null); // Reset result when new image is uploaded
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const removeBackground = async () => {
@@ -104,20 +51,27 @@ const BackgroundRemovalTool = () => {
     setLoading(true);
 
     try {
-      // This is a placeholder for actual background removal logic
-      // In a real implementation, you would use a machine learning model or API
-      
-      // Simulate background removal with a setTimeout for demo purposes
+      // Simulate processing time
       setTimeout(() => {
         const canvas = canvasRef.current;
         if (!canvas) {
           setLoading(false);
+          toast({
+            title: "Error",
+            description: "Canvas not available",
+            variant: "destructive",
+          });
           return;
         }
 
         const ctx = canvas.getContext('2d');
         if (!ctx) {
           setLoading(false);
+          toast({
+            title: "Error",
+            description: "Canvas context not available",
+            variant: "destructive",
+          });
           return;
         }
 
@@ -281,244 +235,59 @@ const BackgroundRemovalTool = () => {
             {/* Image Upload */}
             <div className="space-y-4">
               <Label>Upload Image</Label>
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-                <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-sm text-muted-foreground">
-                  Click to upload or drag and drop<br />
-                  PNG, JPG or GIF (max. 10MB)
-                </p>
-                {imagePreview && (
-                  <div className="mt-4">
-                    <p className="text-sm text-green-500 mb-2">Image uploaded successfully!</p>
-                    <img 
-                      src={imagePreview} 
-                      alt="Preview" 
-                      className="max-h-32 mx-auto rounded border" 
-                    />
-                  </div>
-                )}
-              </div>
+              <ImageUploader 
+                imagePreview={imagePreview} 
+                onImageChange={handleImageChange} 
+              />
             </div>
 
             {/* Background Options */}
-            <Tabs defaultValue="transparent" onValueChange={(value) => setBackgroundMode(value as "transparent" | "color" | "blur")}>
-              <Label className="mb-2 block">Background Type</Label>
-              <TabsList className="w-full grid grid-cols-3">
-                <TabsTrigger value="transparent">Transparent</TabsTrigger>
-                <TabsTrigger value="color">Solid Color</TabsTrigger>
-                <TabsTrigger value="blur">Blurred</TabsTrigger>
-              </TabsList>
-              <TabsContent value="transparent" className="pt-4">
-                <p className="text-sm text-muted-foreground">
-                  The background will be completely transparent, ideal for using in designs.
-                </p>
-              </TabsContent>
-              <TabsContent value="color" className="pt-4">
-                <div className="space-y-2">
-                  <Label>Background Color</Label>
-                  <ColorPicker value={backgroundColor} onChange={setBackgroundColor} />
-                </div>
-              </TabsContent>
-              <TabsContent value="blur" className="pt-4 space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <Label>Blur Amount: {blurAmount}px</Label>
-                  </div>
-                  <Slider 
-                    value={[blurAmount]} 
-                    min={1} 
-                    max={20} 
-                    step={1} 
-                    onValueChange={(values) => setBlurAmount(values[0])} 
-                  />
-                </div>
-              </TabsContent>
-            </Tabs>
+            <BackgroundOptions
+              backgroundMode={backgroundMode}
+              backgroundColor={backgroundColor}
+              blurAmount={blurAmount}
+              onBackgroundModeChange={setBackgroundMode}
+              onBackgroundColorChange={setBackgroundColor}
+              onBlurAmountChange={setBlurAmount}
+            />
 
             {/* Advanced Options */}
-            <Collapsible
-              open={advancedOpen}
-              onOpenChange={setAdvancedOpen}
-              className="border rounded-lg p-4"
-            >
-              <CollapsibleTrigger asChild>
-                <div className="flex items-center justify-between cursor-pointer">
-                  <div className="flex items-center space-x-2">
-                    <Settings className="h-4 w-4" />
-                    <h3 className="text-sm font-medium">Advanced Options</h3>
-                  </div>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${advancedOpen ? "transform rotate-180" : ""}`} />
-                </div>
-              </CollapsibleTrigger>
-              
-              <CollapsibleContent className="mt-4 space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <Label>Detection Sensitivity: {detectionSensitivity}%</Label>
-                  </div>
-                  <Slider 
-                    value={[detectionSensitivity]} 
-                    min={0} 
-                    max={100} 
-                    step={1} 
-                    onValueChange={(values) => setDetectionSensitivity(values[0])} 
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="feather-edges">Feather Edges</Label>
-                    <Switch 
-                      id="feather-edges" 
-                      checked={featherEdges} 
-                      onCheckedChange={setFeatherEdges} 
-                    />
-                  </div>
-                  
-                  {featherEdges && (
-                    <div className="pt-2">
-                      <div className="flex justify-between">
-                        <Label className="text-sm">Feather Amount: {featherAmount}px</Label>
-                      </div>
-                      <Slider 
-                        value={[featherAmount]} 
-                        min={1} 
-                        max={10} 
-                        step={1} 
-                        onValueChange={(values) => setFeatherAmount(values[0])} 
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="preserve-details">Preserve Details</Label>
-                  <Switch 
-                    id="preserve-details" 
-                    checked={preserveDetails} 
-                    onCheckedChange={setPreserveDetails} 
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="enhance-quality">Enhance Quality</Label>
-                  <Switch 
-                    id="enhance-quality" 
-                    checked={enhanceQuality} 
-                    onCheckedChange={setEnhanceQuality} 
-                  />
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
+            <AdvancedOptions
+              advancedOpen={advancedOpen}
+              detectionSensitivity={detectionSensitivity}
+              featherEdges={featherEdges}
+              featherAmount={featherAmount}
+              preserveDetails={preserveDetails}
+              enhanceQuality={enhanceQuality}
+              onAdvancedOpenChange={setAdvancedOpen}
+              onDetectionSensitivityChange={setDetectionSensitivity}
+              onFeatherEdgesChange={setFeatherEdges}
+              onFeatherAmountChange={setFeatherAmount}
+              onPreserveDetailsChange={setPreserveDetails}
+              onEnhanceQualityChange={setEnhanceQuality}
+            />
 
             {/* Action Buttons */}
-            <div className="flex gap-4">
-              <Button 
-                onClick={removeBackground} 
-                className="w-full" 
-                disabled={!image || loading}
-              >
-                {loading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    <span>Processing...</span>
-                  </div>
-                ) : (
-                  <>
-                    <Eraser className="mr-2 h-4 w-4" />
-                    Remove Background
-                  </>
-                )}
-              </Button>
-              <Button 
-                onClick={downloadImage} 
-                className="w-full" 
-                variant="outline"
-                disabled={!resultUrl}
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download
-              </Button>
-            </div>
+            <ActionButtons
+              onRemoveBackground={removeBackground}
+              onDownloadImage={downloadImage}
+              loading={loading}
+              hasImage={!!image}
+              hasResult={!!resultUrl}
+            />
           </div>
 
           <div className="space-y-4">
             <Label>Preview</Label>
-            <div className="border rounded-lg overflow-hidden bg-[#f0f0f0] dark:bg-zinc-800 flex flex-col">
-              <canvas ref={canvasRef} className="hidden" />
-              {resultUrl ? (
-                <div className="relative">
-                  {loading ? (
-                    <div className="flex items-center justify-center p-8 min-h-[300px]">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-                    </div>
-                  ) : (
-                    <div className="grid place-items-center p-4" style={{
-                      backgroundImage: "linear-gradient(45deg, #e0e0e0 25%, transparent 25%), linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e0e0e0 75%), linear-gradient(-45deg, transparent 75%, #e0e0e0 75%)",
-                      backgroundSize: "20px 20px",
-                      backgroundPosition: "0 0, 0 10px, 10px -10px, -10px 0px"
-                    }}>
-                      <img
-                        src={resultUrl}
-                        alt="Background Removed"
-                        className="max-w-full h-auto"
-                      />
-                    </div>
-                  )}
-                  <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    {loading ? "Processing..." : "Background Removed"}
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="text-center p-8 text-muted-foreground">
-                    <Wand className="mx-auto h-12 w-12 mb-4" />
-                    <p>Upload an image and remove its background</p>
-                  </div>
-                  <div className="border-t p-4">
-                    <p className="text-sm font-medium mb-2">Examples:</p>
-                    <div className="grid grid-cols-2 gap-2">
-                      {previewExamples.map((example, index) => (
-                        <img 
-                          key={index}
-                          src={example}
-                          alt={`Example ${index + 1}`}
-                          className="w-full h-auto rounded border shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Check className="h-4 w-4 text-green-500" /> 
-                <span>Remove backgrounds from photos with precision</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Check className="h-4 w-4 text-green-500" /> 
-                <span>Choose transparent, solid color, or blurred backgrounds</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Check className="h-4 w-4 text-green-500" /> 
-                <span>Advanced options for professional-quality results</span>
-              </div>
-            </div>
+            <ResultPreview
+              resultUrl={resultUrl}
+              loading={loading}
+              previewExamples={previewExamples}
+            />
           </div>
         </div>
+
+        <canvas ref={canvasRef} className="hidden" />
       </div>
     </div>
   );
