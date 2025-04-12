@@ -1,5 +1,5 @@
-
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
+import { loadImage, removeBackground } from "@/utils/backgroundRemovalService";
 
 interface BackgroundRemovalProcessorProps {
   image: File | null;
@@ -26,112 +26,86 @@ export const BackgroundRemovalProcessor: React.FC<BackgroundRemovalProcessorProp
   setResultUrl,
   setLoading,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
   const processImage = async () => {
-    if (!image || !imagePreview || !canvasRef.current) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
+    if (!image) return;
     
-    img.onload = () => {
-      // Set canvas dimensions to match the image
-      canvas.width = img.width;
-      canvas.height = img.height;
+    try {
+      // Load the image
+      const img = await loadImage(image);
       
-      // Draw the original image
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // For demonstration purposes, we're creating a fake "background removed" effect
-      // First draw the background
-      if (backgroundMode === "color") {
-        ctx.fillStyle = backgroundColor;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      } else if (backgroundMode === "blur") {
-        // Draw the original image blurred
-        ctx.filter = `blur(${blurAmount}px)`;
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        ctx.filter = 'none';
-      } else {
-        // For transparent background, we don't need to do anything
-        // Just ensure the canvas is cleared
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-
-      // Simulate subject extraction
-      // This is a very basic simulation for demo purposes
-      // Get the center coordinates
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
+      // Remove background
+      const resultBlob = await removeBackground(img);
       
-      // Create a radial gradient for feathering edges
-      const radius = Math.min(canvas.width, canvas.height) * 0.4;
-      const featherRadius = featherEdges ? featherAmount * 20 : 0;
+      // Apply background based on selected mode
+      const resultCanvas = document.createElement('canvas');
+      const resultCtx = resultCanvas.getContext('2d');
       
-      // Draw the "subject" (center portion of the image)
-      ctx.save();
-      
-      // Create a clipping region for the subject
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.closePath();
-      
-      // Apply feathering if enabled
-      if (featherEdges) {
-        // Create a soft mask
-        const gradient = ctx.createRadialGradient(
-          centerX, centerY, radius - featherRadius,
-          centerX, centerY, radius
-        );
-        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        
-        ctx.fillStyle = gradient;
-        ctx.fill();
-        
-        // Use composite operation to apply the original image only where the mask is
-        ctx.globalCompositeOperation = 'source-in';
-      } else {
-        ctx.clip();
+      if (!resultCtx) {
+        throw new Error('Could not get result canvas context');
       }
       
-      // Draw the original image (only visible in the clipped/masked region)
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      // Create an image from the result blob
+      const resultImg = new Image();
+      resultImg.src = URL.createObjectURL(resultBlob);
       
-      ctx.restore();
+      await new Promise<void>((resolve) => {
+        resultImg.onload = () => {
+          resultCanvas.width = resultImg.width;
+          resultCanvas.height = resultImg.height;
+          
+          // Apply selected background
+          if (backgroundMode === "color") {
+            // Fill with solid color
+            resultCtx.fillStyle = backgroundColor;
+            resultCtx.fillRect(0, 0, resultCanvas.width, resultCanvas.height);
+          } else if (backgroundMode === "blur") {
+            // Create a blurred version of the original image
+            const bgCanvas = document.createElement('canvas');
+            bgCanvas.width = resultImg.width;
+            bgCanvas.height = resultImg.height;
+            const bgCtx = bgCanvas.getContext('2d');
+            
+            if (bgCtx) {
+              // Draw and blur the original image
+              bgCtx.filter = `blur(${blurAmount}px)`;
+              bgCtx.drawImage(img, 0, 0, resultImg.width, resultImg.height);
+              resultCtx.drawImage(bgCanvas, 0, 0);
+            }
+          }
+          // For transparent mode, do nothing to keep transparency
+          
+          // Draw the processed image with transparency
+          resultCtx.drawImage(resultImg, 0, 0);
+          
+          // Apply quality enhancement if enabled
+          if (enhanceQuality) {
+            resultCtx.filter = 'contrast(1.1) saturate(1.1)';
+            resultCtx.globalCompositeOperation = 'source-atop';
+            resultCtx.drawImage(resultCanvas, 0, 0);
+            resultCtx.filter = 'none';
+            resultCtx.globalCompositeOperation = 'source-over';
+          }
+          
+          resolve();
+        };
+      });
       
-      // Apply quality enhancement if enabled (simulated effect)
-      if (enhanceQuality) {
-        ctx.filter = 'contrast(1.1) saturate(1.1)';
-        ctx.globalCompositeOperation = 'source-atop';
-        ctx.drawImage(canvas, 0, 0);
-        ctx.filter = 'none';
-        ctx.globalCompositeOperation = 'source-over';
-      }
-      
-      // Convert to data URL and set as result
-      try {
-        const dataUrl = canvas.toDataURL('image/png');
-        setResultUrl(dataUrl);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error generating image:", error);
-        setLoading(false);
-      }
-    };
-    
-    img.src = imagePreview;
-    
-    img.onerror = () => {
+      // Convert to data URL
+      const dataUrl = resultCanvas.toDataURL('image/png');
+      setResultUrl(dataUrl);
+    } catch (error) {
+      console.error('Error processing image:', error);
+    } finally {
       setLoading(false);
-    };
+    }
   };
 
-  return (
-    <canvas ref={canvasRef} className="hidden" data-testid="background-removal-canvas" />
-  );
+  useEffect(() => {
+    if (image && imagePreview) {
+      setLoading(true);
+      processImage();
+    }
+  }, []);
+
+  return null;
 };
