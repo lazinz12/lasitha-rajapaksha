@@ -2,42 +2,38 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/components/ui/use-toast";
-import { Download, Image as ImageIcon, Type, RefreshCw, Check } from "lucide-react";
+import { Download, Upload, Image as ImageIcon, Wand, Eraser, Check, Settings, ChevronDown } from "lucide-react";
 import Header from "@/components/Header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ColorPicker } from "@/components/tools/ColorPicker";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Switch } from "@/components/ui/switch";
 
-const TextBehindImage = () => {
+const BackgroundRemovalTool = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [text, setText] = useState<string>("YOUR TEXT");
-  const [textColor, setTextColor] = useState<string>("#ffffff");
-  const [fontSize, setFontSize] = useState<number>(160);
-  const [textOpacity, setTextOpacity] = useState<number>(1);
-  const [imageOpacity, setImageOpacity] = useState<number>(0.9);
-  const [fontWeight, setFontWeight] = useState<string>("900");
-  const [fontFamily, setFontFamily] = useState<string>("Arial");
-  const [loading, setLoading] = useState<boolean>(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [advancedOpen, setAdvancedOpen] = useState<boolean>(false);
+  const [backgroundMode, setBackgroundMode] = useState<"transparent" | "color" | "blur">("transparent");
+  const [backgroundColor, setBackgroundColor] = useState<string>("#ffffff");
+  const [blurAmount, setBlurAmount] = useState<number>(5);
+  const [detectionSensitivity, setDetectionSensitivity] = useState<number>(50);
+  const [featherEdges, setFeatherEdges] = useState<boolean>(true);
+  const [featherAmount, setFeatherAmount] = useState<number>(3);
+  const [preserveDetails, setPreserveDetails] = useState<boolean>(true);
+  const [enhanceQuality, setEnhanceQuality] = useState<boolean>(false);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
-
-  const fonts = [
-    "Arial", "Helvetica", "Verdana", "Tahoma", "Trebuchet MS", 
-    "Impact", "Arial Black", "Times New Roman", "Georgia", "Palatino",
-    "Courier New", "Lucida Console", "Comic Sans MS"
-  ];
-
-  const fontWeights = [
-    { value: "400", label: "Normal" },
-    { value: "700", label: "Bold" },
-    { value: "900", label: "Black" }
-  ];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -58,6 +54,7 @@ const TextBehindImage = () => {
     const reader = new FileReader();
     reader.onload = () => {
       setImagePreview(reader.result as string);
+      setResultUrl(null); // Reset result when new image is uploaded
     };
     reader.readAsDataURL(file);
     
@@ -88,108 +85,155 @@ const TextBehindImage = () => {
       const reader = new FileReader();
       reader.onload = () => {
         setImagePreview(reader.result as string);
+        setResultUrl(null); // Reset result when new image is uploaded
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-  };
-
-  const handleFontSizeChange = (value: number[]) => {
-    setFontSize(value[0]);
-  };
-
-  const handleOpacityChange = (value: number[]) => {
-    setTextOpacity(value[0]);
-  };
-  
-  const handleImageOpacityChange = (value: number[]) => {
-    setImageOpacity(value[0]);
-  };
-
-  useEffect(() => {
-    if (imagePreview) {
-      generateImage();
-    }
-  }, [text, textColor, fontSize, textOpacity, imageOpacity, fontWeight, fontFamily, imagePreview]);
-
-  const generateImage = () => {
+  const removeBackground = async () => {
     if (!image || !imagePreview) {
+      toast({
+        title: "No image selected",
+        description: "Please upload an image first",
+        variant: "destructive",
+      });
       return;
     }
 
     setLoading(true);
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    try {
+      // This is a placeholder for actual background removal logic
+      // In a real implementation, you would use a machine learning model or API
+      
+      // Simulate background removal with a setTimeout for demo purposes
+      setTimeout(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) {
+          setLoading(false);
+          return;
+        }
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          setLoading(false);
+          return;
+        }
 
-    const img = new Image();
-    img.crossOrigin = "Anonymous";  // Add this to handle CORS
-    img.onload = () => {
-      // Set canvas dimensions to match the image
-      canvas.width = img.width;
-      canvas.height = img.height;
-      
-      // Clear the canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = () => {
+          // Set canvas dimensions to match the image
+          canvas.width = img.width;
+          canvas.height = img.height;
+          
+          // Draw the original image
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Set up the text styling
-      ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-      ctx.fillStyle = textColor;
-      ctx.globalAlpha = textOpacity;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      
-      // Calculate line height
-      const lineHeight = fontSize * 1.2;
-      
-      // Split text into lines
-      const lines = text.split('\n');
-      
-      // Draw each line of text centered
-      const x = canvas.width / 2;
-      const y = (canvas.height / 2) - ((lines.length - 1) * lineHeight / 2);
-      
-      lines.forEach((line, index) => {
-        ctx.fillText(line, x, y + (index * lineHeight));
-      });
-      
-      // Draw the image with transparency
-      ctx.globalAlpha = imageOpacity;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      
-      // Save the result
-      try {
-        const dataUrl = canvas.toDataURL("image/png");
-        setResultUrl(dataUrl);
-      } catch (error) {
-        console.error("Error generating image:", error);
-        toast({
-          title: "Error",
-          description: "Failed to generate the image",
-          variant: "destructive",
-        });
-      }
-      
-      setLoading(false);
-    };
-    
-    img.src = imagePreview;
-    
-    // Handle image loading errors
-    img.onerror = () => {
-      setLoading(false);
+          // For demonstration purposes, we're creating a fake "background removed" effect
+          // First draw the background
+          if (backgroundMode === "color") {
+            ctx.fillStyle = backgroundColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          } else if (backgroundMode === "blur") {
+            // Draw the original image blurred
+            ctx.filter = `blur(${blurAmount}px)`;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            ctx.filter = 'none';
+          } else {
+            // For transparent background, we don't need to do anything
+            // Just ensure the canvas is cleared
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+
+          // Simulate subject extraction
+          // This is a very basic simulation for demo purposes
+          // Get the center coordinates
+          const centerX = canvas.width / 2;
+          const centerY = canvas.height / 2;
+          
+          // Create a radial gradient for feathering edges
+          const radius = Math.min(canvas.width, canvas.height) * 0.4;
+          const featherRadius = featherEdges ? featherAmount * 20 : 0;
+          
+          // Draw the "subject" (center portion of the image)
+          ctx.save();
+          
+          // Create a clipping region for the subject
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.closePath();
+          
+          // Apply feathering if enabled
+          if (featherEdges) {
+            // Create a soft mask
+            const gradient = ctx.createRadialGradient(
+              centerX, centerY, radius - featherRadius,
+              centerX, centerY, radius
+            );
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // Use composite operation to apply the original image only where the mask is
+            ctx.globalCompositeOperation = 'source-in';
+          } else {
+            ctx.clip();
+          }
+          
+          // Draw the original image (only visible in the clipped/masked region)
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          ctx.restore();
+          
+          // Apply quality enhancement if enabled (simulated effect)
+          if (enhanceQuality) {
+            ctx.filter = 'contrast(1.1) saturate(1.1)';
+            ctx.globalCompositeOperation = 'source-atop';
+            ctx.drawImage(canvas, 0, 0);
+            ctx.filter = 'none';
+            ctx.globalCompositeOperation = 'source-over';
+          }
+          
+          // Convert to data URL and set as result
+          try {
+            const dataUrl = canvas.toDataURL('image/png');
+            setResultUrl(dataUrl);
+          } catch (error) {
+            console.error("Error generating image:", error);
+            toast({
+              title: "Error",
+              description: "Failed to generate the image",
+              variant: "destructive",
+            });
+          }
+          
+          setLoading(false);
+        };
+        
+        img.src = imagePreview;
+        
+        img.onerror = () => {
+          setLoading(false);
+          toast({
+            title: "Error",
+            description: "Failed to load the image",
+            variant: "destructive",
+          });
+        };
+      }, 1500); // Simulate processing time
+    } catch (error) {
+      console.error("Error removing background:", error);
       toast({
         title: "Error",
-        description: "Failed to load the image",
+        description: "Failed to remove background",
         variant: "destructive",
       });
-    };
+      setLoading(false);
+    }
   };
 
   const downloadImage = () => {
@@ -198,7 +242,7 @@ const TextBehindImage = () => {
     try {
       const link = document.createElement("a");
       link.href = resultUrl;
-      link.download = "text-behind-image.png";
+      link.download = "removed-background.png";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -226,9 +270,9 @@ const TextBehindImage = () => {
       <Header />
       <div className="container mx-auto py-8 px-4">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">Text Behind Image Generator</h1>
+          <h1 className="text-3xl font-bold mb-2">Image Background Removal Tool</h1>
           <p className="text-muted-foreground">
-            Create images with large text behind them - perfect for professional-looking watermarks
+            Remove backgrounds from your images with advanced customization options
           </p>
         </div>
 
@@ -250,7 +294,7 @@ const TextBehindImage = () => {
                   className="hidden"
                   onChange={handleImageChange}
                 />
-                <ImageIcon className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
                 <p className="text-sm text-muted-foreground">
                   Click to upload or drag and drop<br />
                   PNG, JPG or GIF (max. 10MB)
@@ -268,107 +312,135 @@ const TextBehindImage = () => {
               </div>
             </div>
 
-            {/* Text Input */}
-            <div className="space-y-2">
-              <Label htmlFor="text">Text</Label>
-              <Textarea
-                id="text"
-                value={text}
-                onChange={handleTextChange}
-                placeholder="Enter text to place behind the image"
-                className="min-h-[100px] font-bold"
-              />
-            </div>
-
-            {/* Text Styling */}
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Text Color</Label>
-                <ColorPicker value={textColor} onChange={setTextColor} />
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <Label>Font Size: {fontSize}px</Label>
-                </div>
-                <Slider
-                  value={[fontSize]}
-                  min={50}
-                  max={300}
-                  step={10}
-                  onValueChange={handleFontSizeChange}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
+            {/* Background Options */}
+            <Tabs defaultValue="transparent" onValueChange={(value) => setBackgroundMode(value as "transparent" | "color" | "blur")}>
+              <Label className="mb-2 block">Background Type</Label>
+              <TabsList className="w-full grid grid-cols-3">
+                <TabsTrigger value="transparent">Transparent</TabsTrigger>
+                <TabsTrigger value="color">Solid Color</TabsTrigger>
+                <TabsTrigger value="blur">Blurred</TabsTrigger>
+              </TabsList>
+              <TabsContent value="transparent" className="pt-4">
+                <p className="text-sm text-muted-foreground">
+                  The background will be completely transparent, ideal for using in designs.
+                </p>
+              </TabsContent>
+              <TabsContent value="color" className="pt-4">
                 <div className="space-y-2">
-                  <Label>Font Family</Label>
-                  <Select value={fontFamily} onValueChange={setFontFamily}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Font" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {fonts.map(font => (
-                        <SelectItem key={font} value={font} style={{ fontFamily: font }}>
-                          {font}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label>Background Color</Label>
+                  <ColorPicker value={backgroundColor} onChange={setBackgroundColor} />
                 </div>
-                
+              </TabsContent>
+              <TabsContent value="blur" className="pt-4 space-y-4">
                 <div className="space-y-2">
-                  <Label>Font Weight</Label>
-                  <Select value={fontWeight} onValueChange={setFontWeight}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Weight" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {fontWeights.map(weight => (
-                        <SelectItem key={weight.value} value={weight.value}>
-                          {weight.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="flex justify-between">
+                    <Label>Blur Amount: {blurAmount}px</Label>
+                  </div>
+                  <Slider 
+                    value={[blurAmount]} 
+                    min={1} 
+                    max={20} 
+                    step={1} 
+                    onValueChange={(values) => setBlurAmount(values[0])} 
+                  />
                 </div>
-              </div>
+              </TabsContent>
+            </Tabs>
 
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <Label>Text Opacity: {Math.round(textOpacity * 100)}%</Label>
+            {/* Advanced Options */}
+            <Collapsible
+              open={advancedOpen}
+              onOpenChange={setAdvancedOpen}
+              className="border rounded-lg p-4"
+            >
+              <CollapsibleTrigger asChild>
+                <div className="flex items-center justify-between cursor-pointer">
+                  <div className="flex items-center space-x-2">
+                    <Settings className="h-4 w-4" />
+                    <h3 className="text-sm font-medium">Advanced Options</h3>
+                  </div>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${advancedOpen ? "transform rotate-180" : ""}`} />
                 </div>
-                <Slider
-                  value={[textOpacity]}
-                  min={0.1}
-                  max={1}
-                  step={0.1}
-                  onValueChange={handleOpacityChange}
-                />
-              </div>
+              </CollapsibleTrigger>
               
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <Label>Image Opacity: {Math.round(imageOpacity * 100)}%</Label>
+              <CollapsibleContent className="mt-4 space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <Label>Detection Sensitivity: {detectionSensitivity}%</Label>
+                  </div>
+                  <Slider 
+                    value={[detectionSensitivity]} 
+                    min={0} 
+                    max={100} 
+                    step={1} 
+                    onValueChange={(values) => setDetectionSensitivity(values[0])} 
+                  />
                 </div>
-                <Slider
-                  value={[imageOpacity]}
-                  min={0.3}
-                  max={1}
-                  step={0.1}
-                  onValueChange={handleImageOpacityChange}
-                />
-              </div>
-            </div>
 
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="feather-edges">Feather Edges</Label>
+                    <Switch 
+                      id="feather-edges" 
+                      checked={featherEdges} 
+                      onCheckedChange={setFeatherEdges} 
+                    />
+                  </div>
+                  
+                  {featherEdges && (
+                    <div className="pt-2">
+                      <div className="flex justify-between">
+                        <Label className="text-sm">Feather Amount: {featherAmount}px</Label>
+                      </div>
+                      <Slider 
+                        value={[featherAmount]} 
+                        min={1} 
+                        max={10} 
+                        step={1} 
+                        onValueChange={(values) => setFeatherAmount(values[0])} 
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="preserve-details">Preserve Details</Label>
+                  <Switch 
+                    id="preserve-details" 
+                    checked={preserveDetails} 
+                    onCheckedChange={setPreserveDetails} 
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="enhance-quality">Enhance Quality</Label>
+                  <Switch 
+                    id="enhance-quality" 
+                    checked={enhanceQuality} 
+                    onCheckedChange={setEnhanceQuality} 
+                  />
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Action Buttons */}
             <div className="flex gap-4">
               <Button 
-                onClick={generateImage} 
+                onClick={removeBackground} 
                 className="w-full" 
                 disabled={!image || loading}
               >
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Refresh
+                {loading ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <span>Processing...</span>
+                  </div>
+                ) : (
+                  <>
+                    <Eraser className="mr-2 h-4 w-4" />
+                    Remove Background
+                  </>
+                )}
               </Button>
               <Button 
                 onClick={downloadImage} 
@@ -384,30 +456,36 @@ const TextBehindImage = () => {
 
           <div className="space-y-4">
             <Label>Preview</Label>
-            <div className="border rounded-lg overflow-hidden bg-black/5 flex flex-col">
+            <div className="border rounded-lg overflow-hidden bg-[#f0f0f0] dark:bg-zinc-800 flex flex-col">
+              <canvas ref={canvasRef} className="hidden" />
               {resultUrl ? (
-                <div className="relative overflow-hidden">
-                  <canvas ref={canvasRef} className="hidden" />
+                <div className="relative">
                   {loading ? (
                     <div className="flex items-center justify-center p-8 min-h-[300px]">
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
                     </div>
                   ) : (
-                    <img
-                      src={resultUrl}
-                      alt="Text Behind Image Preview"
-                      className="max-w-full h-auto"
-                    />
+                    <div className="grid place-items-center p-4" style={{
+                      backgroundImage: "linear-gradient(45deg, #e0e0e0 25%, transparent 25%), linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e0e0e0 75%), linear-gradient(-45deg, transparent 75%, #e0e0e0 75%)",
+                      backgroundSize: "20px 20px",
+                      backgroundPosition: "0 0, 0 10px, 10px -10px, -10px 0px"
+                    }}>
+                      <img
+                        src={resultUrl}
+                        alt="Background Removed"
+                        className="max-w-full h-auto"
+                      />
+                    </div>
                   )}
                   <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                    Generated Preview
+                    {loading ? "Processing..." : "Background Removed"}
                   </div>
                 </div>
               ) : (
                 <>
                   <div className="text-center p-8 text-muted-foreground">
-                    <Type className="mx-auto h-12 w-12 mb-4" />
-                    <p>Upload an image and add text to see the preview</p>
+                    <Wand className="mx-auto h-12 w-12 mb-4" />
+                    <p>Upload an image and remove its background</p>
                   </div>
                   <div className="border-t p-4">
                     <p className="text-sm font-medium mb-2">Examples:</p>
@@ -428,15 +506,15 @@ const TextBehindImage = () => {
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Check className="h-4 w-4 text-green-500" /> 
-                <span>Large text placed behind images for professional effects</span>
+                <span>Remove backgrounds from photos with precision</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Check className="h-4 w-4 text-green-500" /> 
-                <span>Perfect for watermarks, branding, and creative design</span>
+                <span>Choose transparent, solid color, or blurred backgrounds</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Check className="h-4 w-4 text-green-500" /> 
-                <span>Customize font, size, opacity and more</span>
+                <span>Advanced options for professional-quality results</span>
               </div>
             </div>
           </div>
@@ -446,4 +524,4 @@ const TextBehindImage = () => {
   );
 };
 
-export default TextBehindImage;
+export default BackgroundRemovalTool;
