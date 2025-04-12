@@ -40,7 +40,9 @@ const TextBehindImage = () => {
   ];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    const file = e.target.files[0];
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
@@ -58,6 +60,9 @@ const TextBehindImage = () => {
       setImagePreview(reader.result as string);
     };
     reader.readAsDataURL(file);
+    
+    // Reset file input so the same file can be selected again
+    e.target.value = '';
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -124,6 +129,7 @@ const TextBehindImage = () => {
     if (!ctx) return;
 
     const img = new Image();
+    img.crossOrigin = "Anonymous";  // Add this to handle CORS
     img.onload = () => {
       // Set canvas dimensions to match the image
       canvas.width = img.width;
@@ -237,7 +243,7 @@ const TextBehindImage = () => {
                 onDrop={handleDrop}
                 className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
               >
-                <Input
+                <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
