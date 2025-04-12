@@ -38,6 +38,7 @@ import TradingIdeaCreate from "@/pages/TradingIdeaCreate";
 import TradingIdeaDetail from "@/pages/TradingIdeaDetail";
 import TradingIdeaEdit from "@/pages/TradingIdeaEdit";
 import TextBehindImage from "@/pages/TextBehindImage";
+import BackgroundRemover from "@/pages/BackgroundRemover";
 import { SeasonalEffects } from "@/components/SeasonalEffects";
 
 // Create a client
@@ -68,6 +69,7 @@ function App() {
             <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
             <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
             <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
+            <Route path="/tools/background-remover" element={<BackgroundRemover />} />
             
             {/* Text Tools */}
             <Route path="/tools/case-converter" element={<CaseConverter />} />
