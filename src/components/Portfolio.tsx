@@ -5,6 +5,20 @@ import { ExternalLink } from "lucide-react";
 
 const projects = [
   {
+    title: "Invoice Generator",
+    description: "A user-friendly web application that allows businesses to create, customize, and download professional invoices. Features include dynamic line item addition, tax calculation, auto-totaling, and PDF export capabilities.",
+    link: "https://invoicegeneratorr.netlify.app/",
+    category: "Web Development",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    title: "Compress-Go",
+    description: "An advanced image compression tool that reduces file sizes while maintaining quality. Supports multiple image formats with drag-and-drop functionality, batch processing, and customizable compression levels for optimal results.",
+    link: "https://compress-go.netlify.app/",
+    category: "Web Development",
+    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
     title: "Backlink Shop",
     description: "A web platform connecting backlink providers with buyers, featuring AI-powered personalized itineraries, tag-based filtering, and real-time notifications for enhanced user engagement.",
     link: "#",
@@ -87,12 +101,15 @@ export const Portfolio = () => {
                     >
                       {project.title}
                     </motion.span>
-                    <motion.div
+                    <motion.a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       whileHover={{ scale: 1.2, rotate: 45 }}
                       transition={{ duration: 0.2 }}
                     >
                       <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                    </motion.div>
+                    </motion.a>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
