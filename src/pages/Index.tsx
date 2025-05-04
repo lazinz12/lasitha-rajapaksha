@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Briefcase, Code, ChevronDown, Activity } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Skills } from "@/components/Skills";
@@ -13,7 +12,13 @@ import { PhotoGallery } from "@/components/PhotoGallery";
 import { CursorEffect } from "@/components/CursorEffect";
 import Header from "@/components/Header";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Button } from "@/components/ui/button";
+import { SectionContainer } from "@/components/layout/SectionContainer";
+import { ScrollToTop } from "@/components/navigation/ScrollToTop";
+import { NavigationDots } from "@/components/navigation/NavigationDots";
+import { QuickActionButtons } from "@/components/navigation/QuickActionButtons";
+
+// Array of section IDs for navigation
+const SECTIONS = ["hero", "about", "skills", "experience", "portfolio", "certifications", "contact", "gallery"];
 
 const Index = () => {
   const isMobile = useIsMobile();
@@ -43,14 +48,6 @@ const Index = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
-  // Scroll to top function
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-  
   // Scroll to next section function
   const scrollToNextSection = () => {
     const heroSection = document.getElementById("hero");
@@ -75,126 +72,48 @@ const Index = () => {
           exit={{ opacity: 0 }}
           className={`${isMobile ? 'space-y-12' : 'space-y-20'}`}
         >
-          <section id="hero">
+          <SectionContainer id="hero">
             <Hero onScrollDown={scrollToNextSection} />
-          </section>
+          </SectionContainer>
           
-          <section id="about">
+          <SectionContainer id="about">
             <About />
-          </section>
+          </SectionContainer>
           
-          <section id="skills">
+          <SectionContainer id="skills">
             <Skills />
-          </section>
+          </SectionContainer>
           
-          <section id="experience">
+          <SectionContainer id="experience">
             <Experience />
-          </section>
+          </SectionContainer>
           
-          <section id="portfolio">
+          <SectionContainer id="portfolio">
             <Portfolio />
-          </section>
+          </SectionContainer>
           
-          <section id="certifications">
+          <SectionContainer id="certifications">
             <Certifications />
-          </section>
+          </SectionContainer>
           
-          <section id="contact">
+          <SectionContainer id="contact">
             <Contact />
-          </section>
+          </SectionContainer>
           
-          <section id="gallery">
+          <SectionContainer id="gallery">
             <PhotoGallery />
-          </section>
+          </SectionContainer>
         </motion.div>
       </AnimatePresence>
       
       {/* Navigation dots for desktop */}
-      {!isMobile && (
-        <motion.div 
-          className="fixed right-8 top-1/2 transform -translate-y-1/2 z-50 hidden lg:flex flex-col items-center space-y-4"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1 }}
-        >
-          {["hero", "about", "skills", "experience", "portfolio", "certifications", "contact", "gallery"].map((section) => (
-            <motion.div
-              key={section}
-              className={`w-3 h-3 rounded-full cursor-pointer ${
-                activeSection === section ? "bg-primary w-4 h-4" : "bg-gray-300"
-              }`}
-              whileHover={{ scale: 1.5 }}
-              onClick={() => {
-                const element = document.getElementById(section);
-                if (element) {
-                  element.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-              title={section.charAt(0).toUpperCase() + section.slice(1)}
-            />
-          ))}
-        </motion.div>
-      )}
+      {!isMobile && <NavigationDots sections={SECTIONS} activeSection={activeSection} />}
       
       {/* Scroll to top button */}
-      <AnimatePresence>
-        {showScrollButton && (
-          <motion.div
-            className="fixed bottom-8 right-8 z-50"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-          >
-            <Button
-              onClick={scrollToTop}
-              variant="outline"
-              size="icon"
-              className="rounded-full shadow-lg bg-background/80 backdrop-blur-sm hover:bg-primary hover:text-white transition-all duration-300"
-            >
-              <ChevronDown className="h-5 w-5 rotate-180" />
-            </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <ScrollToTop showScrollButton={showScrollButton} />
       
       {/* Quick action buttons */}
-      <motion.div
-        className="fixed left-8 bottom-8 z-40 hidden lg:flex flex-col space-y-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5 }}
-      >
-        <a href="/tools/background-remover">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full shadow-lg bg-background/80 backdrop-blur-sm hover:bg-primary hover:text-white transition-all duration-300"
-            title="Background Remover Tool"
-          >
-            <Code className="h-5 w-5" />
-          </Button>
-        </a>
-        <a href="/trading-ideas">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full shadow-lg bg-background/80 backdrop-blur-sm hover:bg-primary hover:text-white transition-all duration-300"
-            title="Trading Ideas"
-          >
-            <Activity className="h-5 w-5" />
-          </Button>
-        </a>
-        <a href="/blog">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full shadow-lg bg-background/80 backdrop-blur-sm hover:bg-primary hover:text-white transition-all duration-300"
-            title="Blog"
-          >
-            <Briefcase className="h-5 w-5" />
-          </Button>
-        </a>
-      </motion.div>
+      <QuickActionButtons />
     </div>
   );
 };
