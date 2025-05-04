@@ -1,4 +1,9 @@
 
 User-agent: *
-Allow: /lovable-uploads/
 Allow: /
+Allow: /blog/
+Allow: /trading-ideas/
+Allow: /tools/
+Allow: /lovable-uploads/
+
+Sitemap: https://lasitharajapaksha.netlify.app/sitemap.xml

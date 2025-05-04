@@ -28,7 +28,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
   };
 
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center text-center p-4 relative overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-center items-center text-center p-4 relative overflow-hidden" aria-labelledby="hero-heading">
       {/* Background gradient effects */}
       <div className="absolute inset-0 z-[-1]">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-blue-100/30 blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
@@ -54,6 +54,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
         <motion.h1 
           variants={itemVariants}
           className="text-4xl md:text-6xl font-bold text-primary"
+          id="hero-heading"
         >
           Lasitha Rajapaksha
         </motion.h1>
@@ -95,7 +96,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
             asChild
             className="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105"
           >
-            <a href="/blog">Read Blog</a>
+            <a href="/blog" aria-label="Read Blog">Read Blog</a>
           </Button>
 
           <Button 
@@ -103,7 +104,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
             variant="outline"
             className="bg-white text-primary border-primary hover:bg-primary/10 font-medium px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105"
           >
-            <a href="/tools/background-remover">Try Tools</a>
+            <a href="/tools/background-remover" aria-label="Try Tools">Try Tools</a>
           </Button>
         </motion.div>
       </motion.div>
@@ -114,6 +115,8 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
         transition={{ delay: 2, duration: 1, repeat: Infinity, repeatType: "reverse" }}
         className="absolute bottom-12 cursor-pointer"
         onClick={onScrollDown}
+        aria-label="Scroll down"
+        role="button"
       >
         <ArrowDown className="w-8 h-8 text-gray-500" />
       </motion.div>

@@ -34,6 +34,8 @@ export const About = () => {
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
       className="py-20 bg-gradient-to-b from-gray-50 to-white"
+      id="about-section"
+      aria-labelledby="about-heading"
     >
       <div className="container mx-auto px-4">
         <motion.div
@@ -43,7 +45,7 @@ export const About = () => {
           viewport={{ once: true }}
           className="max-w-3xl mx-auto text-center mb-16"
         >
-          <h2 className="text-3xl font-bold text-primary mb-8 relative inline-block">
+          <h2 className="text-3xl font-bold text-primary mb-8 relative inline-block" id="about-heading">
             About Me
             <span className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent transform -translate-y-2"></span>
           </h2>
@@ -71,7 +73,7 @@ export const About = () => {
             >
               <Card className="h-full border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
                 <CardContent className="p-6">
-                  <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                     {feature.icon}
                   </div>
                   <h3 className="text-lg font-semibold mb-2 text-center">{feature.title}</h3>
