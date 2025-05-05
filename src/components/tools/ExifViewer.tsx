@@ -17,29 +17,26 @@ export const ExifViewer = () => {
   const [cleanedImage, setCleanedImage] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const handleFileSelected = (files: File[]) => {
-    if (files && files.length > 0) {
-      const file = files[0];
-      if (!file.type.startsWith("image/")) {
-        toast({
-          title: "Invalid file type",
-          description: "Please select an image file.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      setImage(file);
-      const reader = new FileReader();
-      
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        setImagePreview(dataUrl);
-        extractExifData(file);
-      };
-      
-      reader.readAsDataURL(file);
+  const handleFileSelected = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file.",
+        variant: "destructive",
+      });
+      return;
     }
+
+    setImage(file);
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      setImagePreview(dataUrl);
+      extractExifData(file);
+    };
+    
+    reader.readAsDataURL(file);
   };
 
   const extractExifData = async (file: File) => {
@@ -158,12 +155,10 @@ export const ExifViewer = () => {
         <Card>
           <CardContent className="pt-6">
             <FileUploader
-              onFilesSelected={handleFileSelected}
+              onUpload={handleFileSelected}
+              acceptedFileTypes={['.jpeg', '.jpg', '.png', '.gif', '.tiff']}
+              maxFileSizeMB={5}
               maxFiles={1}
-              maxSize={5 * 1024 * 1024} // 5MB
-              accept={{
-                'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.tiff']
-              }}
             />
           </CardContent>
         </Card>
