@@ -5,20 +5,6 @@ import { ExternalLink } from "lucide-react";
 
 const projects = [
   {
-    title: "Invoice Generator",
-    description: "A web application that allows users to create, customize, and download professional invoices. Features include dynamic form fields, tax calculation, automatic totaling, and PDF export functionality.",
-    link: "https://invoicegeneratorr.netlify.app/",
-    category: "Web Development",
-    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80"
-  },
-  {
-    title: "Compress-Go",
-    description: "An online file compression tool that reduces image sizes without compromising quality. Built with client-side processing for secure handling of user files and features batch processing capabilities.",
-    link: "https://compress-go.netlify.app/",
-    category: "Utility Tool",
-    image: "https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&w=1200&q=80"
-  },
-  {
     title: "Backlink Shop",
     description: "A web platform connecting backlink providers with buyers, featuring AI-powered personalized itineraries, tag-based filtering, and real-time notifications for enhanced user engagement.",
     link: "#",
@@ -101,16 +87,12 @@ export const Portfolio = () => {
                     >
                       {project.title}
                     </motion.span>
-                    <motion.a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <motion.div
                       whileHover={{ scale: 1.2, rotate: 45 }}
                       transition={{ duration: 0.2 }}
-                      aria-label={`Visit ${project.title} website`}
                     >
                       <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                    </motion.a>
+                    </motion.div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
