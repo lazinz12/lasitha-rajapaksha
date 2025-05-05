@@ -1,9 +1,9 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Upload } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
 const Header = () => {
@@ -47,6 +47,18 @@ const Header = () => {
                     Text Behind Image
                   </Link>
                 </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/tools/case-converter" className="flex items-center py-2">
+                    <FileText className="mr-2 h-4 w-4" />
+                    Case Converter
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/tools/exif-viewer" className="flex items-center py-2">
+                    <Upload className="mr-2 h-4 w-4" />
+                    EXIF Viewer
+                  </Link>
+                </SheetClose>
               </div>
             </SheetContent>
           </Sheet>
@@ -78,123 +90,11 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-popover/100 shadow-lg border-border">
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Text Tools</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="bg-popover/100">
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/case-converter">Case Converter</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/word-counter">Word Counter</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/lorem-ipsum">Lorem Ipsum Generator</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/string-encoder">String Encoder/Decoder</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/markdown-preview">Markdown Preview</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Developer Tools</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="bg-popover/100">
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/json-formatter">JSON Formatter</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/base64">Base64 Encoder/Decoder</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/url-encoder">URL Encoder/Decoder</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/html-entity">HTML Entity Encoder</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/regex-tester">RegEx Tester</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Math & Numbers</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="bg-popover/100">
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/unit-converter">Unit Converter</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/calculator">Calculator</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/base-converter">Number Base Converter</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/percentage-calc">Percentage Calculator</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/random-number">Random Number Generator</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-
-                <DropdownMenuSeparator />
-
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>SEO Tools</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="bg-popover/100">
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/backlink-checker">Backlink Checker</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/seo-checker">SEO Checker</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Image Tools</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="bg-popover/100">
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/text-behind-image">Text Behind Image</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/image-converter">Image Converter</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/image-compressor">Image Compressor</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/image-cropper">Image Cropper</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Color Tools</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent className="bg-popover/100">
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/color-converter">Color Converter</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/color-palette">Color Palette Generator</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/tools/gradient-maker">Gradient Maker</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-
-                <DropdownMenuSeparator />
-
                 <DropdownMenuItem asChild>
-                  <Link to="/tools/qr-generator">QR Code Generator</Link>
+                  <Link to="/tools/case-converter">Case Converter</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/tools/password-generator">Password Generator</Link>
+                  <Link to="/tools/exif-viewer">EXIF Viewer & Remover</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

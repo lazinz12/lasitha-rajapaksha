@@ -19,18 +19,18 @@ const projects = [
     image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80"
   },
   {
-    title: "Ad Publisher Network",
-    description: "Custom ad publisher network built with Supabase backend, providing automated ad management and monetization opportunities for publishers.",
-    link: "#",
+    title: "Invoice Generator",
+    description: "A comprehensive web application for creating professional invoices with customizable templates, client management, item tracking, and PDF export capabilities.",
+    link: "https://invoicegeneratorr.netlify.app/",
     category: "Web Development",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80"
   },
   {
-    title: "E-Commerce Analytics Dashboard",
-    description: "Django and React-based analytics dashboard for e-commerce platforms, featuring real-time tracking of sales, user behavior, and inventory management.",
-    link: "#",
-    category: "Analytics",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
+    title: "Compress-Go",
+    description: "An efficient online image compression tool that reduces file sizes while maintaining quality. Features batch processing, various compression algorithms, and format conversion options.",
+    link: "https://compress-go.netlify.app/",
+    category: "Web Tools",
+    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80"
   }
 ];
 
@@ -87,12 +87,16 @@ export const Portfolio = () => {
                     >
                       {project.title}
                     </motion.span>
-                    <motion.div
+                    <motion.a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit ${project.title} project`}
                       whileHover={{ scale: 1.2, rotate: 45 }}
                       transition={{ duration: 0.2 }}
                     >
                       <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                    </motion.div>
+                    </motion.a>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
