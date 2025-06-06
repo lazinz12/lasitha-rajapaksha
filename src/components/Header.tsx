@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Upload } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Shield } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -48,15 +48,9 @@ const Header = () => {
                   </Link>
                 </SheetClose>
                 <SheetClose asChild>
-                  <Link to="/tools/case-converter" className="flex items-center py-2">
-                    <FileText className="mr-2 h-4 w-4" />
-                    Case Converter
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link to="/tools/exif-viewer" className="flex items-center py-2">
-                    <Upload className="mr-2 h-4 w-4" />
-                    EXIF Viewer
+                  <Link to="/tools/metadata-remover" className="flex items-center py-2">
+                    <Shield className="mr-2 h-4 w-4" />
+                    Metadata Remover
                   </Link>
                 </SheetClose>
               </div>
@@ -91,10 +85,7 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-popover/100 shadow-lg border-border">
                 <DropdownMenuItem asChild>
-                  <Link to="/tools/case-converter">Case Converter</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/exif-viewer">EXIF Viewer & Remover</Link>
+                  <Link to="/tools/metadata-remover">Image Metadata Remover</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

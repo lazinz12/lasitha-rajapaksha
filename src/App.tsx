@@ -8,8 +8,7 @@ import Admin from "@/pages/Admin";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import EditedPhotos from "@/pages/EditedPhotos";
-import CaseConverter from "@/pages/CaseConverter";
-import ExifViewer from "@/pages/ExifViewer";
+import MetadataRemover from "@/pages/MetadataRemover";
 import TradingIdeas from "@/pages/TradingIdeas";
 import TradingIdeaCreate from "@/pages/TradingIdeaCreate";
 import TradingIdeaDetail from "@/pages/TradingIdeaDetail";
@@ -45,10 +44,7 @@ function App() {
             <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
             <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
             <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
-            
-            {/* Our two main tools */}
-            <Route path="/tools/case-converter" element={<CaseConverter />} />
-            <Route path="/tools/exif-viewer" element={<ExifViewer />} />
+            <Route path="/tools/metadata-remover" element={<MetadataRemover />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
