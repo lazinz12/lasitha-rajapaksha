@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const projects = [
   {
@@ -9,28 +10,32 @@ const projects = [
     description: "A web platform connecting backlink providers with buyers, featuring AI-powered personalized itineraries, tag-based filtering, and real-time notifications for enhanced user engagement.",
     link: "#",
     category: "Web Development",
-    image: "/lovable-uploads/a2b6e303-1967-404d-96fd-88120fe20bc3.png"
+    image: "/lovable-uploads/a2b6e303-1967-404d-96fd-88120fe20bc3.png",
+    isInternal: false
   },
   {
     title: "Auto-Trading Bots for MT5",
     description: "Advanced trading bots utilizing Telegram API signals and Azure OpenAI for predictive trading strategies. Features risk-reward optimization and automated entry/exit management.",
     link: "#",
     category: "Trading",
-    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80",
+    isInternal: false
   },
   {
     title: "Invoice Generator",
     description: "A comprehensive web application for creating professional invoices with customizable templates, client management, item tracking, and PDF export capabilities.",
     link: "https://invoicegeneratorr.netlify.app/",
     category: "Web Development",
-    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80",
+    isInternal: false
   },
   {
     title: "Compress-Go",
     description: "An efficient online image compression tool that reduces file sizes while maintaining quality. Features batch processing, various compression algorithms, and format conversion options.",
-    link: "https://compress-go.netlify.app/",
+    link: "/projects/compressgo",
     category: "Web Tools",
-    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80",
+    isInternal: true
   }
 ];
 
@@ -87,16 +92,30 @@ export const Portfolio = () => {
                     >
                       {project.title}
                     </motion.span>
-                    <motion.a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Visit ${project.title} project`}
-                      whileHover={{ scale: 1.2, rotate: 45 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                    </motion.a>
+                    {project.isInternal ? (
+                      <motion.div
+                        whileHover={{ scale: 1.2, rotate: 45 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <Link
+                          to={project.link}
+                          aria-label={`View ${project.title} project details`}
+                        >
+                          <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                        </Link>
+                      </motion.div>
+                    ) : (
+                      <motion.a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${project.title} project`}
+                        whileHover={{ scale: 1.2, rotate: 45 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                      </motion.a>
+                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
