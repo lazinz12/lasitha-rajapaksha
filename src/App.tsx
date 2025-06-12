@@ -31,31 +31,29 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <BrowserRouter>
-            <SeasonalEffects />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/edited-photos" element={<EditedPhotos />} />
-              <Route path="/trading-ideas" element={<TradingIdeas />} />
-              <Route path="/trading-ideas/new" element={<TradingIdeaCreate />} />
-              <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
-              <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
-              <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
-              <Route path="/tools/metadata-remover" element={<MetadataRemover />} />
-              <Route path="/founder" element={<FounderCEO />} />
-              <Route path="/projects/compressgo" element={<CompressGo />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <SeasonalEffects />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/edited-photos" element={<EditedPhotos />} />
+            <Route path="/trading-ideas" element={<TradingIdeas />} />
+            <Route path="/trading-ideas/new" element={<TradingIdeaCreate />} />
+            <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
+            <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
+            <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
+            <Route path="/tools/metadata-remover" element={<MetadataRemover />} />
+            <Route path="/founder" element={<FounderCEO />} />
+            <Route path="/projects/compressgo" element={<CompressGo />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 

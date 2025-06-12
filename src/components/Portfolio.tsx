@@ -67,60 +67,91 @@ export const Portfolio = () => {
               className="group"
             >
               <Card className="hover:shadow-xl transition-all duration-300 overflow-hidden bg-white/80 backdrop-blur-sm">
-                <div className="relative h-64 overflow-hidden">
-                  <motion.img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  <div className="absolute top-2 right-2">
-                    <motion.span 
-                      className="bg-primary text-white px-3 py-1 rounded-full text-sm"
-                      whileHover={{ backgroundColor: "#6E59A5" }}
-                    >
-                      {project.category}
-                    </motion.span>
-                  </div>
-                </div>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <motion.span
-                      whileHover={{ color: "#9b87f5" }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {project.title}
-                    </motion.span>
-                    {project.isInternal ? (
-                      <motion.div
-                        whileHover={{ scale: 1.2, rotate: 45 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Link
-                          to={project.link}
-                          aria-label={`View ${project.title} project details`}
+                {project.isInternal ? (
+                  <Link to={project.link} className="block">
+                    <div className="relative h-64 overflow-hidden">
+                      <motion.img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                      <div className="absolute top-2 right-2">
+                        <motion.span 
+                          className="bg-primary text-white px-3 py-1 rounded-full text-sm"
+                          whileHover={{ backgroundColor: "#6E59A5" }}
+                        >
+                          {project.category}
+                        </motion.span>
+                      </div>
+                    </div>
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between">
+                        <motion.span
+                          whileHover={{ color: "#9b87f5" }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {project.title}
+                        </motion.span>
+                        <motion.div
+                          whileHover={{ scale: 1.2, rotate: 45 }}
+                          transition={{ duration: 0.2 }}
                         >
                           <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                        </Link>
-                      </motion.div>
-                    ) : (
-                      <motion.a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Visit ${project.title} project`}
-                        whileHover={{ scale: 1.2, rotate: 45 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                      </motion.a>
-                    )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">{project.description}</p>
-                </CardContent>
+                        </motion.div>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">{project.description}</p>
+                    </CardContent>
+                  </Link>
+                ) : (
+                  <>
+                    <div className="relative h-64 overflow-hidden">
+                      <motion.img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                      <div className="absolute top-2 right-2">
+                        <motion.span 
+                          className="bg-primary text-white px-3 py-1 rounded-full text-sm"
+                          whileHover={{ backgroundColor: "#6E59A5" }}
+                        >
+                          {project.category}
+                        </motion.span>
+                      </div>
+                    </div>
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between">
+                        <motion.span
+                          whileHover={{ color: "#9b87f5" }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {project.title}
+                        </motion.span>
+                        {project.link !== "#" && (
+                          <motion.a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Visit ${project.title} project`}
+                            whileHover={{ scale: 1.2, rotate: 45 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                          </motion.a>
+                        )}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">{project.description}</p>
+                    </CardContent>
+                  </>
+                )}
               </Card>
             </motion.div>
           ))}
