@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
+import { StaggeredTransmission } from "@/components/animations/StaggeredTransmission";
+import { TransmissionAnimation } from "@/components/animations/TransmissionAnimation";
+import { TextTransmission } from "@/components/animations/TextTransmission";
 
 const projects = [
   {
@@ -42,121 +45,121 @@ const projects = [
 export const Portfolio = () => {
   return (
     <section id="portfolio" className="py-20 bg-gray-50 relative overflow-hidden">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
-        className="container mx-auto px-4"
-      >
-        <motion.div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-primary mb-4">Featured Projects</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Showcasing my expertise in trading automation, web development, and analytics
-          </p>
-        </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-              className="group"
-            >
-              <Card className="hover:shadow-xl transition-all duration-300 overflow-hidden bg-white/80 backdrop-blur-sm">
-                {project.isInternal ? (
-                  <Link to={project.link} className="block">
-                    <div className="relative h-64 overflow-hidden">
-                      <motion.img 
-                        src={project.image} 
-                        alt={project.title}
-                        className="w-full h-full object-cover"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                      <div className="absolute top-2 right-2">
-                        <motion.span 
-                          className="bg-primary text-white px-3 py-1 rounded-full text-sm"
-                          whileHover={{ backgroundColor: "#6E59A5" }}
-                        >
-                          {project.category}
-                        </motion.span>
-                      </div>
-                    </div>
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between">
-                        <motion.span
-                          whileHover={{ color: "#9b87f5" }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          {project.title}
-                        </motion.span>
-                        <motion.div
-                          whileHover={{ scale: 1.2, rotate: 45 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                        </motion.div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-600">{project.description}</p>
-                    </CardContent>
-                  </Link>
-                ) : (
-                  <>
-                    <div className="relative h-64 overflow-hidden">
-                      <motion.img 
-                        src={project.image} 
-                        alt={project.title}
-                        className="w-full h-full object-cover"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                      <div className="absolute top-2 right-2">
-                        <motion.span 
-                          className="bg-primary text-white px-3 py-1 rounded-full text-sm"
-                          whileHover={{ backgroundColor: "#6E59A5" }}
-                        >
-                          {project.category}
-                        </motion.span>
-                      </div>
-                    </div>
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between">
-                        <motion.span
-                          whileHover={{ color: "#9b87f5" }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          {project.title}
-                        </motion.span>
-                        {project.link !== "#" && (
-                          <motion.a
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`Visit ${project.title} project`}
-                            whileHover={{ scale: 1.2, rotate: 45 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
-                          </motion.a>
-                        )}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-600">{project.description}</p>
-                    </CardContent>
-                  </>
-                )}
-              </Card>
-            </motion.div>
-          ))}
+      <TransmissionAnimation direction="up" duration={0.8}>
+        <div className="container mx-auto px-4">
+          <motion.div className="text-center mb-12">
+            <TextTransmission 
+              text="Featured Projects" 
+              className="text-3xl font-bold text-primary mb-4"
+            />
+            <TransmissionAnimation direction="up" delay={0.3}>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Showcasing my expertise in trading automation, web development, and analytics
+              </p>
+            </TransmissionAnimation>
+          </motion.div>
+          
+          <StaggeredTransmission staggerDelay={0.2} direction="up">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {projects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  whileHover={{ scale: 1.02 }}
+                  className="group"
+                >
+                  <Card className="hover:shadow-xl transition-all duration-300 overflow-hidden bg-white/80 backdrop-blur-sm">
+                    {project.isInternal ? (
+                      <Link to={project.link} className="block">
+                        <div className="relative h-64 overflow-hidden">
+                          <motion.img 
+                            src={project.image} 
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.3 }}
+                          />
+                          <div className="absolute top-2 right-2">
+                            <motion.span 
+                              className="bg-primary text-white px-3 py-1 rounded-full text-sm"
+                              whileHover={{ backgroundColor: "#6E59A5" }}
+                            >
+                              {project.category}
+                            </motion.span>
+                          </div>
+                        </div>
+                        <CardHeader>
+                          <CardTitle className="flex items-center justify-between">
+                            <motion.span
+                              whileHover={{ color: "#9b87f5" }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              {project.title}
+                            </motion.span>
+                            <motion.div
+                              whileHover={{ scale: 1.2, rotate: 45 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                            </motion.div>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-gray-600">{project.description}</p>
+                        </CardContent>
+                      </Link>
+                    ) : (
+                      <>
+                        <div className="relative h-64 overflow-hidden">
+                          <motion.img 
+                            src={project.image} 
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.3 }}
+                          />
+                          <div className="absolute top-2 right-2">
+                            <motion.span 
+                              className="bg-primary text-white px-3 py-1 rounded-full text-sm"
+                              whileHover={{ backgroundColor: "#6E59A5" }}
+                            >
+                              {project.category}
+                            </motion.span>
+                          </div>
+                        </div>
+                        <CardHeader>
+                          <CardTitle className="flex items-center justify-between">
+                            <motion.span
+                              whileHover={{ color: "#9b87f5" }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              {project.title}
+                            </motion.span>
+                            {project.link !== "#" && (
+                              <motion.a
+                                href={project.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`Visit ${project.title} project`}
+                                whileHover={{ scale: 1.2, rotate: 45 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                              </motion.a>
+                            )}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-gray-600">{project.description}</p>
+                        </CardContent>
+                      </>
+                    )}
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </StaggeredTransmission>
         </div>
-      </motion.div>
+      </TransmissionAnimation>
     </section>
   );
 };

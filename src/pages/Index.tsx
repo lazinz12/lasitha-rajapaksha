@@ -16,6 +16,8 @@ import { SectionContainer } from "@/components/layout/SectionContainer";
 import { ScrollToTop } from "@/components/navigation/ScrollToTop";
 import { NavigationDots } from "@/components/navigation/NavigationDots";
 import { QuickActionButtons } from "@/components/navigation/QuickActionButtons";
+import { TransmissionAnimation } from "@/components/animations/TransmissionAnimation";
+import { PageTransmission } from "@/components/animations/PageTransmission";
 
 // Array of section IDs for navigation
 const SECTIONS = ["hero", "about", "skills", "experience", "portfolio", "certifications", "contact", "gallery"];
@@ -61,7 +63,7 @@ const Index = () => {
   };
   
   return (
-    <div className="min-h-screen relative">
+    <PageTransmission className="min-h-screen relative">
       <Header />
       {!isMobile && <CursorEffect />}
       
@@ -73,35 +75,51 @@ const Index = () => {
           className={`${isMobile ? 'space-y-12' : 'space-y-20'}`}
         >
           <SectionContainer id="hero">
-            <Hero onScrollDown={scrollToNextSection} />
+            <TransmissionAnimation direction="down" duration={0.8}>
+              <Hero onScrollDown={scrollToNextSection} />
+            </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="about">
-            <About />
+            <TransmissionAnimation direction="left" delay={0.2}>
+              <About />
+            </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="skills">
-            <Skills />
+            <TransmissionAnimation direction="right" delay={0.3}>
+              <Skills />
+            </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="experience">
-            <Experience />
+            <TransmissionAnimation direction="up" delay={0.4}>
+              <Experience />
+            </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="portfolio">
-            <Portfolio />
+            <TransmissionAnimation direction="left" delay={0.2}>
+              <Portfolio />
+            </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="certifications">
-            <Certifications />
+            <TransmissionAnimation direction="right" delay={0.3}>
+              <Certifications />
+            </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="contact">
-            <Contact />
+            <TransmissionAnimation direction="up" delay={0.4}>
+              <Contact />
+            </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="gallery">
-            <PhotoGallery />
+            <TransmissionAnimation direction="down" delay={0.5}>
+              <PhotoGallery />
+            </TransmissionAnimation>
           </SectionContainer>
         </motion.div>
       </AnimatePresence>
@@ -114,7 +132,7 @@ const Index = () => {
       
       {/* Quick action buttons */}
       <QuickActionButtons />
-    </div>
+    </PageTransmission>
   );
 };
 

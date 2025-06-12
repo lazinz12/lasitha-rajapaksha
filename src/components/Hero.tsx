@@ -4,6 +4,8 @@ import { ArrowDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TypeAnimation } from 'react-type-animation';
 import { Button } from "@/components/ui/button";
+import { TextTransmission } from "@/components/animations/TextTransmission";
+import { FloatingTransmission } from "@/components/animations/FloatingTransmission";
 
 interface HeroProps {
   onScrollDown?: () => void;
@@ -45,19 +47,21 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
           variants={itemVariants}
           className="mx-auto"
         >
-          <Avatar className="w-32 h-32 mx-auto mb-6 ring-4 ring-white/50 ring-offset-2 ring-offset-background shadow-lg">
-            <AvatarImage src="/lovable-uploads/a2b6e303-1967-404d-96fd-88120fe20bc3.png" alt="Lasitha Rajapaksha" />
-            <AvatarFallback>LR</AvatarFallback>
-          </Avatar>
+          <FloatingTransmission intensity="subtle" duration={4}>
+            <Avatar className="w-32 h-32 mx-auto mb-6 ring-4 ring-white/50 ring-offset-2 ring-offset-background shadow-lg">
+              <AvatarImage src="/lovable-uploads/a2b6e303-1967-404d-96fd-88120fe20bc3.png" alt="Lasitha Rajapaksha" />
+              <AvatarFallback>LR</AvatarFallback>
+            </Avatar>
+          </FloatingTransmission>
         </motion.div>
 
-        <motion.h1 
-          variants={itemVariants}
-          className="text-4xl md:text-6xl font-bold text-primary"
-          id="hero-heading"
-        >
-          Lasitha Rajapaksha
-        </motion.h1>
+        <motion.div variants={itemVariants}>
+          <TextTransmission 
+            text="Lasitha Rajapaksha" 
+            className="text-4xl md:text-6xl font-bold text-primary"
+            delay={0.5}
+          />
+        </motion.div>
 
         <motion.div 
           variants={itemVariants}
@@ -81,12 +85,13 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
           />
         </motion.div>
 
-        <motion.p 
-          variants={itemVariants}
-          className="text-lg text-gray-500"
-        >
-          Market Minds
-        </motion.p>
+        <motion.div variants={itemVariants}>
+          <TextTransmission 
+            text="Market Minds" 
+            className="text-lg text-gray-500"
+            delay={1.2}
+          />
+        </motion.div>
 
         <motion.div 
           variants={itemVariants}
@@ -109,17 +114,19 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
         </motion.div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2, duration: 1, repeat: Infinity, repeatType: "reverse" }}
-        className="absolute bottom-12 cursor-pointer"
-        onClick={onScrollDown}
-        aria-label="Scroll down"
-        role="button"
-      >
-        <ArrowDown className="w-8 h-8 text-gray-500" />
-      </motion.div>
+      <FloatingTransmission intensity="medium" duration={2}>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2, duration: 1, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute bottom-12 cursor-pointer"
+          onClick={onScrollDown}
+          aria-label="Scroll down"
+          role="button"
+        >
+          <ArrowDown className="w-8 h-8 text-gray-500" />
+        </motion.div>
+      </FloatingTransmission>
     </section>
   );
 };
