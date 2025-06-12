@@ -1,18 +1,23 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Shield } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Shield, User } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+
 const Header = () => {
   const isMobile = useIsMobile();
-  return <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between">
         <Link to="/" className="mr-6 flex items-center space-x-2">
           <span className="font-bold">Lasitha Rajapaksha</span>
         </Link>
         
-        {isMobile ? <Sheet>
+        {isMobile ? (
+          <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
@@ -24,6 +29,12 @@ const Header = () => {
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
               <div className="flex flex-col space-y-4">
+                <SheetClose asChild>
+                  <Link to="/founder" className="flex items-center py-2">
+                    <User className="mr-2 h-4 w-4" />
+                    Founder & CEO
+                  </Link>
+                </SheetClose>
                 <SheetClose asChild>
                   <Link to="/blog" className="flex items-center py-2">
                     <BookOpen className="mr-2 h-4 w-4" />
@@ -37,12 +48,6 @@ const Header = () => {
                   </Link>
                 </SheetClose>
                 <SheetClose asChild>
-                  <Link to="/tools/text-behind-image" className="flex items-center py-2">
-                    <ImagePlus className="mr-2 h-4 w-4" />
-                    Text Behind Image
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
                   <Link to="/tools/metadata-remover" className="flex items-center py-2">
                     <Shield className="mr-2 h-4 w-4" />
                     Metadata Remover
@@ -50,7 +55,15 @@ const Header = () => {
                 </SheetClose>
               </div>
             </SheetContent>
-          </Sheet> : <div className="flex space-x-4">
+          </Sheet>
+        ) : (
+          <div className="flex space-x-4">
+            <Link to="/founder">
+              <Button variant="ghost" className="flex items-center">
+                <User className="mr-2 h-4 w-4" />
+                Founder & CEO
+              </Button>
+            </Link>
             <Link to="/blog">
               <Button variant="ghost" className="flex items-center">
                 <BookOpen className="mr-2 h-4 w-4" />
@@ -62,9 +75,6 @@ const Header = () => {
                 <TrendingUp className="mr-2 h-4 w-4" />
                 Trading Ideas
               </Button>
-            </Link>
-            <Link to="/tools/text-behind-image">
-              
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -79,8 +89,11 @@ const Header = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>}
+          </div>
+        )}
       </div>
-    </header>;
+    </header>
+  );
 };
+
 export default Header;

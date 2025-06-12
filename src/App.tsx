@@ -14,6 +14,7 @@ import TradingIdeaCreate from "@/pages/TradingIdeaCreate";
 import TradingIdeaDetail from "@/pages/TradingIdeaDetail";
 import TradingIdeaEdit from "@/pages/TradingIdeaEdit";
 import TextBehindImage from "@/pages/TextBehindImage";
+import FounderCEO from "@/pages/FounderCEO";
 import { SeasonalEffects } from "@/components/SeasonalEffects";
 
 // Create a client
@@ -45,6 +46,7 @@ function App() {
             <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
             <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
             <Route path="/tools/metadata-remover" element={<MetadataRemover />} />
+            <Route path="/founder" element={<FounderCEO />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
