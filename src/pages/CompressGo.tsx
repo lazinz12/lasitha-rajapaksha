@@ -1,11 +1,9 @@
-
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Shield, Zap, Users, Globe, Code, Award } from "lucide-react";
 import Header from "@/components/Header";
-
 const CompressGo = () => {
   // Schema.org structured data for CompressGo
   const compressGoSchemaData = {
@@ -25,59 +23,43 @@ const CompressGo = () => {
       "@type": "Person",
       "name": "Lasitha Rajapaksha"
     },
-    "features": [
-      "Image Compression",
-      "Video Compression", 
-      "PDF Compression",
-      "Client-side Processing",
-      "Privacy Protection",
-      "Batch Processing"
-    ]
+    "features": ["Image Compression", "Video Compression", "PDF Compression", "Client-side Processing", "Privacy Protection", "Batch Processing"]
   };
-
-  const features = [
-    {
-      icon: Shield,
-      title: "Privacy First",
-      description: "All compression happens in your browser. Files never leave your device, ensuring complete privacy and security."
-    },
-    {
-      icon: Zap,
-      title: "Lightning Fast",
-      description: "Advanced compression algorithms optimized for speed without compromising quality."
-    },
-    {
-      icon: Users,
-      title: "User Friendly",
-      description: "Simple drag-and-drop interface that anyone can use without technical knowledge."
-    },
-    {
-      icon: Globe,
-      title: "No Downloads",
-      description: "Works entirely in your web browser - no software installation required."
-    }
-  ];
-
-  const stats = [
-    { number: "1M+", label: "Files Compressed" },
-    { number: "150+", label: "Countries Served" },
-    { number: "99.9%", label: "Uptime" },
-    { number: "0$", label: "Cost to Users" }
-  ];
-
-  const technologies = [
-    "React.js", "TypeScript", "Web Workers", "Canvas API", "File API",
-    "Compression Algorithms", "PWA", "Responsive Design"
-  ];
-
-  return (
-    <>
+  const features = [{
+    icon: Shield,
+    title: "Privacy First",
+    description: "All compression happens in your browser. Files never leave your device, ensuring complete privacy and security."
+  }, {
+    icon: Zap,
+    title: "Lightning Fast",
+    description: "Advanced compression algorithms optimized for speed without compromising quality."
+  }, {
+    icon: Users,
+    title: "User Friendly",
+    description: "Simple drag-and-drop interface that anyone can use without technical knowledge."
+  }, {
+    icon: Globe,
+    title: "No Downloads",
+    description: "Works entirely in your web browser - no software installation required."
+  }];
+  const stats = [{
+    number: "1M+",
+    label: "Files Compressed"
+  }, {
+    number: "150+",
+    label: "Countries Served"
+  }, {
+    number: "99.9%",
+    label: "Uptime"
+  }, {
+    number: "0$",
+    label: "Cost to Users"
+  }];
+  const technologies = ["React.js", "TypeScript", "Web Workers", "Canvas API", "File API", "Compression Algorithms", "PWA", "Responsive Design"];
+  return <>
       <Helmet>
         <title>CompressGo - Free Online File Compression Tool | Privacy-First Solution</title>
-        <meta
-          name="description"
-          content="CompressGo is a free online file compression platform that processes files entirely in your browser for maximum privacy. Compress images, videos, and PDFs without uploading to servers."
-        />
+        <meta name="description" content="CompressGo is a free online file compression platform that processes files entirely in your browser for maximum privacy. Compress images, videos, and PDFs without uploading to servers." />
         <meta name="keywords" content="compress go, compressgo, file compression, image compression, video compression, pdf compression, privacy, free tool, lasitha rajapaksha" />
         <script type="application/ld+json">
           {JSON.stringify(compressGoSchemaData)}
@@ -89,23 +71,23 @@ const CompressGo = () => {
         
         <main className="container py-12">
           {/* Hero Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8"
-            >
-              <img 
-                src="/lovable-uploads/a2b6e303-1967-404d-96fd-88120fe20bc3.png" 
-                alt="CompressGo Logo"
-                className="mx-auto h-32 w-auto"
-              />
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.6
+        }} className="text-center mb-16">
+            <motion.div initial={{
+            scale: 0.8
+          }} animate={{
+            scale: 1
+          }} transition={{
+            duration: 0.5
+          }} className="mb-8">
+              <img alt="CompressGo Logo" className="mx-auto h-32 w-auto" src="/lovable-uploads/d339ab65-d4fe-4906-b796-ce0335d12372.png" />
             </motion.div>
             
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -117,26 +99,20 @@ const CompressGo = () => {
             </p>
             
             <div className="flex flex-wrap gap-4 justify-center">
-              <motion.a
-                href="https://compress-go.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <motion.a href="https://compress-go.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors" whileHover={{
+              scale: 1.05
+            }} whileTap={{
+              scale: 0.95
+            }}>
                 Visit CompressGo
                 <ExternalLink className="ml-2 h-4 w-4" />
               </motion.a>
               
-              <motion.a
-                href="https://compress-go.com/founder"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <motion.a href="https://compress-go.com/founder" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-6 py-3 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors" whileHover={{
+              scale: 1.05
+            }} whileTap={{
+              scale: 0.95
+            }}>
                 Meet the Founder
                 <ExternalLink className="ml-2 h-4 w-4" />
               </motion.a>
@@ -144,44 +120,54 @@ const CompressGo = () => {
           </motion.div>
 
           {/* Stats Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16"
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center"
-              >
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+            {stats.map((stat, index) => <motion.div key={stat.label} initial={{
+            opacity: 0,
+            scale: 0.5
+          }} whileInView={{
+            opacity: 1,
+            scale: 1
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: index * 0.1
+          }} className="text-center">
                 <div className="text-3xl font-bold text-primary mb-2">{stat.number}</div>
                 <div className="text-muted-foreground">{stat.label}</div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </motion.div>
 
           {/* Features Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-16"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-12">Why Choose CompressGo?</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
+              {features.map((feature, index) => <motion.div key={feature.title} initial={{
+              opacity: 0,
+              y: 20
+            }} whileInView={{
+              opacity: 1,
+              y: 0
+            }} viewport={{
+              once: true
+            }} transition={{
+              delay: index * 0.1
+            }}>
                   <Card className="h-full hover:shadow-lg transition-shadow">
                     <CardHeader className="text-center">
                       <feature.icon className="h-12 w-12 text-primary mx-auto mb-4" />
@@ -191,18 +177,20 @@ const CompressGo = () => {
                       <p className="text-muted-foreground text-center">{feature.description}</p>
                     </CardContent>
                   </Card>
-                </motion.div>
-              ))}
+                </motion.div>)}
             </div>
           </motion.div>
 
           {/* About Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-16"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} className="mb-16">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl font-bold mb-6">About CompressGo</h2>
@@ -229,15 +217,10 @@ const CompressGo = () => {
                 </div>
               </div>
               <div className="relative">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="relative overflow-hidden rounded-lg"
-                >
-                  <img 
-                    src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=800&q=80"
-                    alt="Privacy and Security Concept"
-                    className="w-full h-64 object-cover"
-                  />
+                <motion.div whileHover={{
+                scale: 1.05
+              }} className="relative overflow-hidden rounded-lg">
+                  <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=800&q=80" alt="Privacy and Security Concept" className="w-full h-64 object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute bottom-4 left-4 text-white">
                     <div className="text-lg font-semibold">Privacy by Design</div>
@@ -249,12 +232,15 @@ const CompressGo = () => {
           </motion.div>
 
           {/* Technology Stack */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-16"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} className="mb-16">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
@@ -264,23 +250,24 @@ const CompressGo = () => {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {technologies.map((tech) => (
-                    <Badge key={tech} variant="secondary" className="text-sm">
+                  {technologies.map(tech => <Badge key={tech} variant="secondary" className="text-sm">
                       {tech}
-                    </Badge>
-                  ))}
+                    </Badge>)}
                 </div>
               </CardContent>
             </Card>
           </motion.div>
 
           {/* Achievements */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-16"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-12">Achievements & Recognition</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <Card className="text-center">
@@ -310,33 +297,31 @@ const CompressGo = () => {
           </motion.div>
 
           {/* Call to Action */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg p-12"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} className="text-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg p-12">
             <h2 className="text-3xl font-bold mb-4">Ready to Experience CompressGo?</h2>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Join millions of users who trust CompressGo for their file compression needs. 
               Fast, secure, and completely free.
             </p>
-            <motion.a
-              href="https://compress-go.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-8 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-lg font-semibold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <motion.a href="https://compress-go.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-8 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-lg font-semibold" whileHover={{
+            scale: 1.05
+          }} whileTap={{
+            scale: 0.95
+          }}>
               Start Compressing Now
               <ExternalLink className="ml-2 h-5 w-5" />
             </motion.a>
           </motion.div>
         </main>
       </div>
-    </>
-  );
+    </>;
 };
-
 export default CompressGo;
