@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Shield, User } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Shield, User, Type } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -53,6 +53,12 @@ const Header = () => {
                     Metadata Remover
                   </Link>
                 </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/tools/case-converter" className="flex items-center py-2">
+                    <Type className="mr-2 h-4 w-4" />
+                    Case Converter
+                  </Link>
+                </SheetClose>
               </div>
             </SheetContent>
           </Sheet>
@@ -86,6 +92,12 @@ const Header = () => {
               <DropdownMenuContent className="w-56 bg-popover/100 shadow-lg border-border">
                 <DropdownMenuItem asChild>
                   <Link to="/tools/metadata-remover">Image Metadata Remover</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/case-converter">Case Converter</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/seo-checker">SEO Checker</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
