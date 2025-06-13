@@ -48,15 +48,9 @@ const Header = () => {
                   </Link>
                 </SheetClose>
                 <SheetClose asChild>
-                  <Link to="/tools/metadata-remover" className="flex items-center py-2">
-                    <Shield className="mr-2 h-4 w-4" />
-                    Metadata Remover
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link to="/tools/case-converter" className="flex items-center py-2">
-                    <Type className="mr-2 h-4 w-4" />
-                    Case Converter
+                  <Link to="/tools" className="flex items-center py-2">
+                    <Wrench className="mr-2 h-4 w-4" />
+                    Tools
                   </Link>
                 </SheetClose>
               </div>
@@ -91,6 +85,9 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-popover/100 shadow-lg border-border">
                 <DropdownMenuItem asChild>
+                  <Link to="/tools">All Tools</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/tools/metadata-remover">Image Metadata Remover</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -98,6 +95,9 @@ const Header = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/tools/seo-checker">SEO Checker</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/backlink-checker">Backlink Checker</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

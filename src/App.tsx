@@ -19,6 +19,8 @@ import FounderCEO from "@/pages/FounderCEO";
 import CompressGo from "@/pages/CompressGo";
 import CaseConverter from "@/pages/CaseConverter";
 import SeoChecker from "@/pages/SeoChecker";
+import BacklinkChecker from "@/pages/BacklinkChecker";
+import Tools from "@/pages/Tools";
 import { SeasonalEffects } from "@/components/SeasonalEffects";
 
 // Create a client
@@ -48,10 +50,12 @@ function App() {
             <Route path="/trading-ideas/new" element={<TradingIdeaCreate />} />
             <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
             <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
+            <Route path="/tools" element={<Tools />} />
             <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
             <Route path="/tools/metadata-remover" element={<MetadataRemover />} />
             <Route path="/tools/case-converter" element={<CaseConverter />} />
             <Route path="/tools/seo-checker" element={<SeoChecker />} />
+            <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
             <Route path="/founder" element={<FounderCEO />} />
             <Route path="/projects/compressgo" element={<CompressGo />} />
           </Routes>
