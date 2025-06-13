@@ -75,7 +75,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
               2000,
               'Automation Specialist', 
               2000,
-              'Developer and Forex Trader',
+              'Founder & CEO',
               5000
             ]}
             wrapper="span"
