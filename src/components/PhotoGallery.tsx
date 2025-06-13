@@ -56,12 +56,20 @@ const fallbackPhotos: Photo[] = [
     image_url: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
     alt_text: "Person using MacBook Pro",
     display_order: 5
+  },
+  {
+    id: "6",
+    title: "Code Editor",
+    description: "Development environment with code on screen",
+    image_url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop",
+    alt_text: "Code editor showing programming",
+    display_order: 6
   }
 ];
 
 export const PhotoGallery = () => {
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [photos, setPhotos] = useState<Photo[]>(fallbackPhotos);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<null | Photo>(null);
   const [currentUrl, setCurrentUrl] = useState("");
@@ -73,6 +81,7 @@ export const PhotoGallery = () => {
 
   const fetchPhotos = async () => {
     try {
+      setLoading(true);
       console.log("Fetching photos from Supabase...");
       const { data, error } = await supabase
         .from("photo_gallery")
