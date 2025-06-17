@@ -1,9 +1,9 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Shield, User, Type } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, Camera, User, Search, Link as LinkIcon } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
 const Header = () => {
@@ -48,9 +48,15 @@ const Header = () => {
                   </Link>
                 </SheetClose>
                 <SheetClose asChild>
+                  <Link to="/photo-gallery" className="flex items-center py-2">
+                    <Camera className="mr-2 h-4 w-4" />
+                    Photo Gallery
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
                   <Link to="/tools" className="flex items-center py-2">
                     <Wrench className="mr-2 h-4 w-4" />
-                    Tools
+                    SEO Tools
                   </Link>
                 </SheetClose>
               </div>
@@ -76,28 +82,35 @@ const Header = () => {
                 Trading Ideas
               </Button>
             </Link>
+            <Link to="/photo-gallery">
+              <Button variant="ghost" className="flex items-center">
+                <Camera className="mr-2 h-4 w-4" />
+                Photo Gallery
+              </Button>
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center">
-                  <Wrench className="mr-2 h-4 w-4" />
-                  Tools
+                  <Search className="mr-2 h-4 w-4" />
+                  SEO Tools
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-popover/100 shadow-lg border-border">
                 <DropdownMenuItem asChild>
-                  <Link to="/tools">All Tools</Link>
+                  <Link to="/tools">All SEO Tools</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/seo-checker">SEO Checker</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/backlink-checker">Backlink Checker</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/tools/metadata-remover">Image Metadata Remover</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/tools/case-converter">Case Converter</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/seo-checker">SEO Checker</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/backlink-checker">Backlink Checker</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

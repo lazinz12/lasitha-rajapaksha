@@ -6,10 +6,10 @@ import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Shield, 
-  Type, 
   Search, 
   Link as LinkIcon,
+  Shield,
+  Type,
   Image,
   Palette,
   Calculator,
@@ -37,29 +37,14 @@ import {
   Layers,
   PaintBucket,
   Ruler,
-  Timer
+  Timer,
+  TrendingUp
 } from "lucide-react";
 
-const tools = [
-  {
-    title: "Image Metadata Remover",
-    description: "Remove EXIF data and metadata from your images to protect privacy and reduce file size.",
-    icon: Shield,
-    path: "/tools/metadata-remover",
-    category: "Privacy",
-    featured: true,
-  },
-  {
-    title: "Case Converter",
-    description: "Convert text between different cases: uppercase, lowercase, title case, camelCase, and more.",
-    icon: Type,
-    path: "/tools/case-converter",
-    category: "Text",
-    featured: true,
-  },
+const seoTools = [
   {
     title: "SEO Checker",
-    description: "Analyze your webpage's SEO performance and get insights to improve search rankings.",
+    description: "Comprehensive SEO analysis tool to check your webpage's optimization, meta tags, keywords, and get actionable insights to improve search rankings.",
     icon: Search,
     path: "/tools/seo-checker",
     category: "SEO",
@@ -67,19 +52,38 @@ const tools = [
   },
   {
     title: "Backlink Checker",
-    description: "Check and analyze website backlinks to understand your site's backlink profile.",
+    description: "Analyze your website's backlink profile and discover linking domains to understand your site's authority and improve link building strategy.",
     icon: LinkIcon,
     path: "/tools/backlink-checker",
     category: "SEO",
-    featured: false,
+    featured: true,
   },
+  {
+    title: "Image Metadata Remover",
+    description: "Remove EXIF data and metadata from images to protect privacy, reduce file size, and optimize images for better SEO performance.",
+    icon: Shield,
+    path: "/tools/metadata-remover",
+    category: "SEO",
+    featured: true,
+  },
+  {
+    title: "Case Converter",
+    description: "Convert text between different cases for SEO-optimized content: title case for headlines, sentence case for descriptions, and more.",
+    icon: Type,
+    path: "/tools/case-converter",
+    category: "SEO",
+    featured: true,
+  },
+];
+
+const otherTools = [
   {
     title: "Background Remover",
     description: "Remove backgrounds from images using AI technology with high precision.",
     icon: Image,
     path: "/tools/background-remover",
     category: "Image",
-    featured: true,
+    featured: false,
   },
   {
     title: "Color Converter",
@@ -103,7 +107,7 @@ const tools = [
     icon: QrCode,
     path: "/tools/qr-generator",
     category: "Utility",
-    featured: true,
+    featured: false,
   },
   {
     title: "Password Generator",
@@ -111,7 +115,7 @@ const tools = [
     icon: Lock,
     path: "/tools/password-generator",
     category: "Security",
-    featured: true,
+    featured: false,
   },
   {
     title: "Image Converter",
@@ -275,31 +279,30 @@ const tools = [
   },
 ];
 
-const categories = ["All", "Privacy", "Text", "SEO", "Image", "Design", "Utility", "Security", "Developer", "Calculator"];
+const categories = ["All", "SEO", "Image", "Design", "Utility", "Security", "Developer", "Text", "Calculator"];
 
 const Tools = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  const allTools = [...seoTools, ...otherTools];
   const filteredTools = selectedCategory === "All" 
-    ? tools 
-    : tools.filter(tool => tool.category === selectedCategory);
-
-  const featuredTools = tools.filter(tool => tool.featured);
+    ? allTools 
+    : allTools.filter(tool => tool.category === selectedCategory);
 
   return (
     <>
       <Helmet>
-        <title>Free Online Tools - Web Development & SEO Tools | Lasitha Rajapaksha</title>
+        <title>Free SEO Tools - Website Analysis & Optimization | Lasitha Rajapaksha</title>
         <meta 
           name="description" 
-          content="Access 29+ free online tools for web development, SEO analysis, image processing, text conversion, and more. Professional tools for developers and marketers." 
+          content="Access professional SEO tools for website analysis, backlink checking, image optimization, and content optimization. Free online tools to improve your search engine rankings." 
         />
         <meta 
           name="keywords" 
-          content="free online tools, web development tools, SEO tools, image tools, text converter, metadata remover, case converter, password generator, qr code generator" 
+          content="seo tools, website analysis, backlink checker, seo checker, metadata remover, search engine optimization, website optimization, free seo tools" 
         />
-        <meta property="og:title" content="Free Online Tools - Web Development & SEO Tools" />
-        <meta property="og:description" content="Access professional-grade online tools for web development, SEO, and content creation." />
+        <meta property="og:title" content="Free SEO Tools - Website Analysis & Optimization" />
+        <meta property="og:description" content="Professional SEO tools to analyze and optimize your website for better search engine rankings." />
         <meta property="og:type" content="website" />
       </Helmet>
       
@@ -310,26 +313,26 @@ const Tools = () => {
           {/* Hero Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-              Free Online Tools
+              Free SEO Tools
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-              Professional-grade tools for web development, SEO analysis, image processing, and content creation. 
+              Professional-grade SEO tools to analyze, optimize, and improve your website's search engine rankings. 
               All tools are free to use and work directly in your browser.
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <Zap className="h-4 w-4" />
-              <span>Fast • Secure • No Registration Required</span>
+              <TrendingUp className="h-4 w-4" />
+              <span>Boost Rankings • Increase Traffic • Optimize Content</span>
             </div>
           </div>
 
-          {/* Featured Tools */}
+          {/* SEO Tools Section */}
           <section className="mb-12">
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <Settings className="h-6 w-6" />
-              Featured Tools
+              <Search className="h-6 w-6" />
+              Essential SEO Tools
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredTools.map((tool) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {seoTools.map((tool) => (
                 <Link key={tool.path} to={tool.path} className="group">
                   <Card className="h-full transition-all duration-200 group-hover:shadow-lg group-hover:scale-105 border-2 border-primary/20">
                     <CardHeader>
@@ -337,7 +340,7 @@ const Tools = () => {
                         <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
                           <tool.icon className="h-6 w-6 text-primary" />
                         </div>
-                        <Badge variant="secondary">{tool.category}</Badge>
+                        <Badge variant="secondary" className="bg-primary/10 text-primary">SEO</Badge>
                       </div>
                       <CardTitle className="group-hover:text-primary transition-colors">
                         {tool.title}
@@ -373,7 +376,10 @@ const Tools = () => {
 
           {/* All Tools Grid */}
           <section>
-            <h2 className="text-2xl font-bold mb-6">All Tools ({filteredTools.length})</h2>
+            <h2 className="text-2xl font-bold mb-6">
+              {selectedCategory === "All" ? "All Tools" : `${selectedCategory} Tools`} 
+              ({filteredTools.length})
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredTools.map((tool) => (
                 <Link key={tool.path} to={tool.path} className="group">
@@ -383,7 +389,10 @@ const Tools = () => {
                         <div className="p-2 rounded-lg bg-muted group-hover:bg-primary/10 transition-colors">
                           <tool.icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                         </div>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge 
+                          variant={tool.category === "SEO" ? "default" : "outline"} 
+                          className={`text-xs ${tool.category === "SEO" ? "bg-primary text-primary-foreground" : ""}`}
+                        >
                           {tool.category}
                         </Badge>
                       </div>
@@ -404,14 +413,14 @@ const Tools = () => {
 
           {/* CTA Section */}
           <section className="mt-16 text-center bg-muted/30 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold mb-4">Need a Custom Tool?</h3>
+            <h3 className="text-2xl font-bold mb-4">Need Custom SEO Tools?</h3>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Can't find the tool you need? I'm always working on new tools to help developers and content creators. 
-              Feel free to reach out with your suggestions!
+              Looking for specific SEO analysis or custom optimization tools? I'm always developing new tools to help 
+              businesses improve their search engine rankings and online visibility.
             </p>
             <Link to="/founder">
               <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors">
-                Contact Me
+                Contact Me for Custom Tools
               </button>
             </Link>
           </section>
