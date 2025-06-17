@@ -63,8 +63,8 @@ function hello() {
       .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>')
       // Images
       .replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" />')
-      // Blockquotes
-      .replace(/^&gt; (.*$)/gim, '<blockquote>$1</blockquote>')
+      // Blockquotes - fixed the regex pattern
+      .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
       // Ordered lists
       .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
       // Unordered lists
@@ -250,7 +250,7 @@ ${markdownToHtml(markdown)}
                   <h4 className="font-semibold mb-2">Advanced:</h4>
                   <ul className="space-y-1 font-mono">
                     <li>```code block```</li>
-                    <li>> Blockquote</li>
+                    <li>{`>`} Blockquote</li>
                     <li>- List item</li>
                     <li>1. Numbered list</li>
                     <li>![Image](url)</li>
