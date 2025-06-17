@@ -20,6 +20,7 @@ import CompressGo from "@/pages/CompressGo";
 import CaseConverter from "@/pages/CaseConverter";
 import SeoChecker from "@/pages/SeoChecker";
 import BacklinkChecker from "@/pages/BacklinkChecker";
+import BackgroundRemover from "@/pages/BackgroundRemover";
 import Tools from "@/pages/Tools";
 import QrGenerator from "@/pages/QrGenerator";
 import PasswordGenerator from "@/pages/PasswordGenerator";
