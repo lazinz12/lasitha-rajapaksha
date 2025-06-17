@@ -21,6 +21,30 @@ import CaseConverter from "@/pages/CaseConverter";
 import SeoChecker from "@/pages/SeoChecker";
 import BacklinkChecker from "@/pages/BacklinkChecker";
 import Tools from "@/pages/Tools";
+import QrGenerator from "@/pages/QrGenerator";
+import PasswordGenerator from "@/pages/PasswordGenerator";
+import ColorConverter from "@/pages/ColorConverter";
+import ImageConverter from "@/pages/ImageConverter";
+import ImageCropper from "@/pages/ImageCropper";
+import Base64Tool from "@/pages/Base64Tool";
+import UrlEncoder from "@/pages/UrlEncoder";
+import JsonFormatter from "@/pages/JsonFormatter";
+import RegexTester from "@/pages/RegexTester";
+import LoremIpsum from "@/pages/LoremIpsum";
+import WordCounter from "@/pages/WordCounter";
+import PercentageCalc from "@/pages/PercentageCalc";
+import UnitConverter from "@/pages/UnitConverter";
+import RandomNumber from "@/pages/RandomNumber";
+import ColorPalette from "@/pages/ColorPalette";
+import GradientMaker from "@/pages/GradientMaker";
+import ExifViewer from "@/pages/ExifViewer";
+import ImageCompressor from "@/pages/ImageCompressor";
+import HtmlEntity from "@/pages/HtmlEntity";
+import MarkdownPreview from "@/pages/MarkdownPreview";
+import BaseConverter from "@/pages/BaseConverter";
+import StringEncoder from "@/pages/StringEncoder";
+import Calculator from "@/pages/Calculator";
+import HashGenerator from "@/pages/HashGenerator";
 import { SeasonalEffects } from "@/components/SeasonalEffects";
 
 // Create a client
@@ -56,6 +80,30 @@ function App() {
             <Route path="/tools/case-converter" element={<CaseConverter />} />
             <Route path="/tools/seo-checker" element={<SeoChecker />} />
             <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
+            <Route path="/tools/qr-generator" element={<QrGenerator />} />
+            <Route path="/tools/password-generator" element={<PasswordGenerator />} />
+            <Route path="/tools/color-converter" element={<ColorConverter />} />
+            <Route path="/tools/image-converter" element={<ImageConverter />} />
+            <Route path="/tools/image-cropper" element={<ImageCropper />} />
+            <Route path="/tools/base64" element={<Base64Tool />} />
+            <Route path="/tools/url-encoder" element={<UrlEncoder />} />
+            <Route path="/tools/json-formatter" element={<JsonFormatter />} />
+            <Route path="/tools/regex-tester" element={<RegexTester />} />
+            <Route path="/tools/hash-generator" element={<HashGenerator />} />
+            <Route path="/tools/lorem-ipsum" element={<LoremIpsum />} />
+            <Route path="/tools/word-counter" element={<WordCounter />} />
+            <Route path="/tools/percentage-calculator" element={<PercentageCalc />} />
+            <Route path="/tools/unit-converter" element={<UnitConverter />} />
+            <Route path="/tools/random-number" element={<RandomNumber />} />
+            <Route path="/tools/color-palette" element={<ColorPalette />} />
+            <Route path="/tools/gradient-maker" element={<GradientMaker />} />
+            <Route path="/tools/exif-viewer" element={<ExifViewer />} />
+            <Route path="/tools/image-compressor" element={<ImageCompressor />} />
+            <Route path="/tools/html-entity" element={<HtmlEntity />} />
+            <Route path="/tools/markdown-preview" element={<MarkdownPreview />} />
+            <Route path="/tools/base-converter" element={<BaseConverter />} />
+            <Route path="/tools/string-encoder" element={<StringEncoder />} />
+            <Route path="/tools/calculator" element={<Calculator />} />
             <Route path="/founder" element={<FounderCEO />} />
             <Route path="/projects/compressgo" element={<CompressGo />} />
           </Routes>

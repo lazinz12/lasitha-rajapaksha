@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
@@ -19,7 +20,24 @@ import {
   Download,
   Upload,
   Zap,
-  Settings
+  Settings,
+  QrCode,
+  Lock,
+  Crop,
+  Shuffle,
+  Binary,
+  Percent,
+  AlignLeft,
+  Globe,
+  FileImage,
+  Regex,
+  Braces,
+  RotateCcw,
+  Eye,
+  Layers,
+  PaintBucket,
+  Ruler,
+  Timer
 } from "lucide-react";
 
 const tools = [
@@ -79,9 +97,185 @@ const tools = [
     category: "Design",
     featured: false,
   },
+  {
+    title: "QR Code Generator",
+    description: "Generate QR codes for URLs, text, or any content with customizable options.",
+    icon: QrCode,
+    path: "/tools/qr-generator",
+    category: "Utility",
+    featured: true,
+  },
+  {
+    title: "Password Generator",
+    description: "Create secure passwords with customizable length and character types.",
+    icon: Lock,
+    path: "/tools/password-generator",
+    category: "Security",
+    featured: true,
+  },
+  {
+    title: "Image Converter",
+    description: "Convert images between different formats: JPG, PNG, WebP, GIF, and more.",
+    icon: FileImage,
+    path: "/tools/image-converter",
+    category: "Image",
+    featured: false,
+  },
+  {
+    title: "Image Cropper",
+    description: "Crop and resize images with precision for perfect dimensions.",
+    icon: Crop,
+    path: "/tools/image-cropper",
+    category: "Image",
+    featured: false,
+  },
+  {
+    title: "Base64 Encoder/Decoder",
+    description: "Encode and decode text or files to/from Base64 format.",
+    icon: Binary,
+    path: "/tools/base64",
+    category: "Developer",
+    featured: false,
+  },
+  {
+    title: "URL Encoder/Decoder",
+    description: "Encode and decode URLs for web-safe transmission.",
+    icon: Globe,
+    path: "/tools/url-encoder",
+    category: "Developer",
+    featured: false,
+  },
+  {
+    title: "JSON Formatter",
+    description: "Format, validate, and beautify JSON data with syntax highlighting.",
+    icon: Braces,
+    path: "/tools/json-formatter",
+    category: "Developer",
+    featured: false,
+  },
+  {
+    title: "RegEx Tester",
+    description: "Test and debug regular expressions with real-time matching.",
+    icon: Regex,
+    path: "/tools/regex-tester",
+    category: "Developer",
+    featured: false,
+  },
+  {
+    title: "Hash Generator",
+    description: "Generate MD5, SHA1, SHA256, and other hash values for text or files.",
+    icon: Hash,
+    path: "/tools/hash-generator",
+    category: "Security",
+    featured: false,
+  },
+  {
+    title: "Lorem Ipsum Generator",
+    description: "Generate placeholder text for your designs and mockups.",
+    icon: FileText,
+    path: "/tools/lorem-ipsum",
+    category: "Text",
+    featured: false,
+  },
+  {
+    title: "Word Counter",
+    description: "Count words, characters, paragraphs, and reading time for any text.",
+    icon: AlignLeft,
+    path: "/tools/word-counter",
+    category: "Text",
+    featured: false,
+  },
+  {
+    title: "Percentage Calculator",
+    description: "Calculate percentages, percentage change, and percentage of a number.",
+    icon: Percent,
+    path: "/tools/percentage-calculator",
+    category: "Calculator",
+    featured: false,
+  },
+  {
+    title: "Unit Converter",
+    description: "Convert between different units: length, weight, temperature, and more.",
+    icon: Ruler,
+    path: "/tools/unit-converter",
+    category: "Calculator",
+    featured: false,
+  },
+  {
+    title: "Random Number Generator",
+    description: "Generate random numbers within specified ranges for various purposes.",
+    icon: Shuffle,
+    path: "/tools/random-number",
+    category: "Utility",
+    featured: false,
+  },
+  {
+    title: "Color Palette Generator",
+    description: "Generate beautiful color palettes for your design projects.",
+    icon: PaintBucket,
+    path: "/tools/color-palette",
+    category: "Design",
+    featured: false,
+  },
+  {
+    title: "Gradient Maker",
+    description: "Create CSS gradients with live preview and copy-paste code.",
+    icon: Layers,
+    path: "/tools/gradient-maker",
+    category: "Design",
+    featured: false,
+  },
+  {
+    title: "EXIF Viewer",
+    description: "View and analyze EXIF metadata from your digital photos.",
+    icon: Eye,
+    path: "/tools/exif-viewer",
+    category: "Image",
+    featured: false,
+  },
+  {
+    title: "Image Compressor",
+    description: "Compress images to reduce file size while maintaining quality.",
+    icon: Download,
+    path: "/tools/image-compressor",
+    category: "Image",
+    featured: false,
+  },
+  {
+    title: "HTML Entity Encoder",
+    description: "Encode and decode HTML entities for safe web content display.",
+    icon: Code,
+    path: "/tools/html-entity",
+    category: "Developer",
+    featured: false,
+  },
+  {
+    title: "Markdown Preview",
+    description: "Preview Markdown content with live rendering and syntax highlighting.",
+    icon: FileText,
+    path: "/tools/markdown-preview",
+    category: "Developer",
+    featured: false,
+  },
+  {
+    title: "Number Base Converter",
+    description: "Convert numbers between binary, decimal, hexadecimal, and octal.",
+    icon: Calculator,
+    path: "/tools/base-converter",
+    category: "Calculator",
+    featured: false,
+  },
+  {
+    title: "String Encoder",
+    description: "Encode and decode strings using various encoding methods.",
+    icon: Type,
+    path: "/tools/string-encoder",
+    category: "Developer",
+    featured: false,
+  },
 ];
 
-const categories = ["All", "Privacy", "Text", "SEO", "Image", "Design"];
+const categories = ["All", "Privacy", "Text", "SEO", "Image", "Design", "Utility", "Security", "Developer", "Calculator"];
 
 const Tools = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -98,11 +292,11 @@ const Tools = () => {
         <title>Free Online Tools - Web Development & SEO Tools | Lasitha Rajapaksha</title>
         <meta 
           name="description" 
-          content="Access free online tools for web development, SEO analysis, image processing, text conversion, and more. Professional tools for developers and marketers." 
+          content="Access 29+ free online tools for web development, SEO analysis, image processing, text conversion, and more. Professional tools for developers and marketers." 
         />
         <meta 
           name="keywords" 
-          content="free online tools, web development tools, SEO tools, image tools, text converter, metadata remover, case converter" 
+          content="free online tools, web development tools, SEO tools, image tools, text converter, metadata remover, case converter, password generator, qr code generator" 
         />
         <meta property="og:title" content="Free Online Tools - Web Development & SEO Tools" />
         <meta property="og:description" content="Access professional-grade online tools for web development, SEO, and content creation." />
@@ -179,7 +373,7 @@ const Tools = () => {
 
           {/* All Tools Grid */}
           <section>
-            <h2 className="text-2xl font-bold mb-6">All Tools</h2>
+            <h2 className="text-2xl font-bold mb-6">All Tools ({filteredTools.length})</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredTools.map((tool) => (
                 <Link key={tool.path} to={tool.path} className="group">
