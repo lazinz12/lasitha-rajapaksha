@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Download, Compress } from "lucide-react";
+import { Upload, Download, Minimize2 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/Header";
 
@@ -131,7 +131,7 @@ const ImageCompressor = () => {
         <Header />
         <main className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-6 flex items-center gap-2">
-            <Compress className="h-8 w-8" />
+            <Minimize2 className="h-8 w-8" />
             Image Compressor
           </h1>
           

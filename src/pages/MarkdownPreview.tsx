@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -65,7 +64,7 @@ function hello() {
       // Images
       .replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<img src="$2" alt="$1" style="max-width: 100%; height: auto;" />')
       // Blockquotes
-      .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+      .replace(/^&gt; (.*$)/gim, '<blockquote>$1</blockquote>')
       // Ordered lists
       .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
       // Unordered lists
