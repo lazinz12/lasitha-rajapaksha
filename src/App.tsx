@@ -80,6 +80,7 @@ function App() {
             <Route path="/tools/case-converter" element={<CaseConverter />} />
             <Route path="/tools/seo-checker" element={<SeoChecker />} />
             <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
+            <Route path="/tools/background-remover" element={<BackgroundRemover />} />
             <Route path="/tools/qr-generator" element={<QrGenerator />} />
             <Route path="/tools/password-generator" element={<PasswordGenerator />} />
             <Route path="/tools/color-converter" element={<ColorConverter />} />
