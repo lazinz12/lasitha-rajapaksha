@@ -71,6 +71,7 @@ function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/edited-photos" element={<EditedPhotos />} />
+            <Route path="/photo-gallery" element={<PhotoGallery />} />
             <Route path="/trading-ideas" element={<TradingIdeas />} />
             <Route path="/trading-ideas/new" element={<TradingIdeaCreate />} />
             <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
