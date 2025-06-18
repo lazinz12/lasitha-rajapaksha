@@ -9,6 +9,7 @@ import Admin from "@/pages/Admin";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import EditedPhotos from "@/pages/EditedPhotos";
+import PhotoGallery from "@/pages/PhotoGallery";
 import MetadataRemover from "@/pages/MetadataRemover";
 import TradingIdeas from "@/pages/TradingIdeas";
 import TradingIdeaCreate from "@/pages/TradingIdeaCreate";
@@ -71,6 +72,7 @@ function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/edited-photos" element={<EditedPhotos />} />
+            <Route path="/photo-gallery" element={<PhotoGallery />} />
             <Route path="/trading-ideas" element={<TradingIdeas />} />
             <Route path="/trading-ideas/new" element={<TradingIdeaCreate />} />
             <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />

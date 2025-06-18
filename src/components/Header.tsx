@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, FileText, Shield, User, Type } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, User, Camera } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -48,6 +48,12 @@ const Header = () => {
                   </Link>
                 </SheetClose>
                 <SheetClose asChild>
+                  <Link to="/photo-gallery" className="flex items-center py-2">
+                    <Camera className="mr-2 h-4 w-4" />
+                    Photo Gallery
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
                   <Link to="/tools" className="flex items-center py-2">
                     <Wrench className="mr-2 h-4 w-4" />
                     Tools
@@ -74,6 +80,12 @@ const Header = () => {
               <Button variant="ghost" className="flex items-center">
                 <TrendingUp className="mr-2 h-4 w-4" />
                 Trading Ideas
+              </Button>
+            </Link>
+            <Link to="/photo-gallery">
+              <Button variant="ghost" className="flex items-center">
+                <Camera className="mr-2 h-4 w-4" />
+                Photo Gallery
               </Button>
             </Link>
             <DropdownMenu>
