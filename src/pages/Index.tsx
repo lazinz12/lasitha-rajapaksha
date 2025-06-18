@@ -8,6 +8,7 @@ import { Experience } from "@/components/Experience";
 import { Portfolio } from "@/components/Portfolio";
 import { Certifications } from "@/components/Certifications";
 import { Contact } from "@/components/Contact";
+import { PhotoGallery } from "@/components/PhotoGallery";
 import { CursorEffect } from "@/components/CursorEffect";
 import Header from "@/components/Header";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -19,7 +20,7 @@ import { TransmissionAnimation } from "@/components/animations/TransmissionAnima
 import { PageTransmission } from "@/components/animations/PageTransmission";
 
 // Array of section IDs for navigation
-const SECTIONS = ["hero", "about", "skills", "experience", "portfolio", "certifications", "contact"];
+const SECTIONS = ["hero", "about", "skills", "experience", "portfolio", "certifications", "contact", "gallery"];
 
 const Index = () => {
   const isMobile = useIsMobile();
@@ -112,6 +113,12 @@ const Index = () => {
           <SectionContainer id="contact">
             <TransmissionAnimation direction="up" delay={0.4}>
               <Contact />
+            </TransmissionAnimation>
+          </SectionContainer>
+          
+          <SectionContainer id="gallery">
+            <TransmissionAnimation direction="down" delay={0.5}>
+              <PhotoGallery />
             </TransmissionAnimation>
           </SectionContainer>
         </motion.div>
