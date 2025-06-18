@@ -71,47 +71,65 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className={`${isMobile ? 'space-y-12' : 'space-y-20'}`}
+          className={`${isMobile ? 'space-y-16' : 'space-y-32'}`}
         >
           <SectionContainer id="hero">
-            <TransmissionAnimation direction="down" duration={0.8}>
+            <TransmissionAnimation direction="down" duration={1.0}>
               <Hero onScrollDown={scrollToNextSection} />
             </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="about">
             <TransmissionAnimation direction="left" delay={0.2}>
-              <About />
+              <GlitchTransmission intensity="low">
+                <MatrixTransmission lines={4}>
+                  <About />
+                </MatrixTransmission>
+              </GlitchTransmission>
             </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="skills">
             <TransmissionAnimation direction="right" delay={0.3}>
-              <Skills />
+              <CyberTransmission>
+                <Skills />
+              </CyberTransmission>
             </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="experience">
             <TransmissionAnimation direction="up" delay={0.4}>
-              <Experience />
+              <NeonTransmission color="purple">
+                <Experience />
+              </NeonTransmission>
             </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="portfolio">
             <TransmissionAnimation direction="left" delay={0.2}>
-              <Portfolio />
+              <MatrixTransmission lines={6}>
+                <GlitchTransmission intensity="medium">
+                  <Portfolio />
+                </GlitchTransmission>
+              </MatrixTransmission>
             </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="certifications">
             <TransmissionAnimation direction="right" delay={0.3}>
-              <Certifications />
+              <CyberTransmission>
+                <NeonTransmission color="green">
+                  <Certifications />
+                </NeonTransmission>
+              </CyberTransmission>
             </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="contact">
             <TransmissionAnimation direction="up" delay={0.4}>
-              <Contact />
+              <GlitchTransmission intensity="low">
+                <Contact />
+              </GlitchTransmission>
             </TransmissionAnimation>
           </SectionContainer>
         </motion.div>
