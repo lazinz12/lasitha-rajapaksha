@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Hero } from "@/components/Hero";
@@ -65,7 +66,52 @@ const Index = () => {
   };
   
   return (
-    <PageTransmission className="min-h-screen relative">
+    <PageTransmission className="min-h-screen relative overflow-hidden">
+      {/* Futuristic Background Elements */}
+      <div className="fixed inset-0 z-[-2]">
+        {/* Animated Matrix Background */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="cyber-grid" />
+        </div>
+        
+        {/* Floating Geometric Shapes */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className={`absolute w-4 h-4 border border-cyan-400/20 ${
+              i % 2 === 0 ? 'rotate-45' : 'rounded-full'
+            }`}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -100, 0],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 10 + i * 2,
+              repeat: Infinity,
+              delay: i * 0.5,
+            }}
+          />
+        ))}
+        
+        {/* Scanning Lines */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/5 to-transparent h-20"
+          animate={{
+            y: ['-100vh', '100vh'],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      </div>
+      
       <Header />
       {!isMobile && <CursorEffect />}
       
@@ -74,64 +120,82 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className={`${isMobile ? 'space-y-16' : 'space-y-32'}`}
+          className={`relative z-10 ${isMobile ? 'space-y-20' : 'space-y-40'}`}
         >
           <SectionContainer id="hero">
-            <TransmissionAnimation direction="down" duration={1.0}>
-              <Hero onScrollDown={scrollToNextSection} />
-            </TransmissionAnimation>
-          </SectionContainer>
-          
-          <SectionContainer id="about">
-            <TransmissionAnimation direction="left" delay={0.2}>
-              <GlitchTransmission intensity="low">
-                <MatrixTransmission lines={4}>
-                  <About />
+            <TransmissionAnimation direction="down" duration={1.2}>
+              <NeonTransmission color="cyan">
+                <MatrixTransmission lines={6}>
+                  <Hero onScrollDown={scrollToNextSection} />
                 </MatrixTransmission>
-              </GlitchTransmission>
-            </TransmissionAnimation>
-          </SectionContainer>
-          
-          <SectionContainer id="skills">
-            <TransmissionAnimation direction="right" delay={0.3}>
-              <CyberTransmission>
-                <Skills />
-              </CyberTransmission>
-            </TransmissionAnimation>
-          </SectionContainer>
-          
-          <SectionContainer id="experience">
-            <TransmissionAnimation direction="up" delay={0.4}>
-              <NeonTransmission color="purple">
-                <Experience />
               </NeonTransmission>
             </TransmissionAnimation>
           </SectionContainer>
           
-          <SectionContainer id="portfolio">
-            <TransmissionAnimation direction="left" delay={0.2}>
-              <MatrixTransmission lines={6}>
+          <SectionContainer id="about">
+            <TransmissionAnimation direction="left" delay={0.3}>
+              <CyberTransmission>
                 <GlitchTransmission intensity="medium">
-                  <Portfolio />
+                  <div className="relative">
+                    <About />
+                  </div>
                 </GlitchTransmission>
+              </CyberTransmission>
+            </TransmissionAnimation>
+          </SectionContainer>
+          
+          <SectionContainer id="skills">
+            <TransmissionAnimation direction="right" delay={0.4}>
+              <MatrixTransmission lines={8}>
+                <NeonTransmission color="green">
+                  <Skills />
+                </NeonTransmission>
               </MatrixTransmission>
             </TransmissionAnimation>
           </SectionContainer>
           
+          <SectionContainer id="experience">
+            <TransmissionAnimation direction="up" delay={0.5}>
+              <CyberTransmission>
+                <GlitchTransmission intensity="low">
+                  <NeonTransmission color="purple">
+                    <Experience />
+                  </NeonTransmission>
+                </GlitchTransmission>
+              </CyberTransmission>
+            </TransmissionAnimation>
+          </SectionContainer>
+          
+          <SectionContainer id="portfolio">
+            <TransmissionAnimation direction="left" delay={0.3}>
+              <NeonTransmission color="pink">
+                <MatrixTransmission lines={10}>
+                  <GlitchTransmission intensity="high">
+                    <Portfolio />
+                  </GlitchTransmission>
+                </MatrixTransmission>
+              </NeonTransmission>
+            </TransmissionAnimation>
+          </SectionContainer>
+          
           <SectionContainer id="certifications">
-            <TransmissionAnimation direction="right" delay={0.3}>
+            <TransmissionAnimation direction="right" delay={0.4}>
               <CyberTransmission>
                 <NeonTransmission color="green">
-                  <Certifications />
+                  <MatrixTransmission lines={5}>
+                    <Certifications />
+                  </MatrixTransmission>
                 </NeonTransmission>
               </CyberTransmission>
             </TransmissionAnimation>
           </SectionContainer>
           
           <SectionContainer id="contact">
-            <TransmissionAnimation direction="up" delay={0.4}>
-              <GlitchTransmission intensity="low">
-                <Contact />
+            <TransmissionAnimation direction="up" delay={0.5}>
+              <GlitchTransmission intensity="medium">
+                <NeonTransmission color="cyan">
+                  <Contact />
+                </NeonTransmission>
               </GlitchTransmission>
             </TransmissionAnimation>
           </SectionContainer>
@@ -139,13 +203,21 @@ const Index = () => {
       </AnimatePresence>
       
       {/* Navigation dots for desktop */}
-      {!isMobile && <NavigationDots sections={SECTIONS} activeSection={activeSection} />}
+      {!isMobile && (
+        <NeonTransmission color="cyan">
+          <NavigationDots sections={SECTIONS} activeSection={activeSection} />
+        </NeonTransmission>
+      )}
       
       {/* Scroll to top button */}
-      <ScrollToTop showScrollButton={showScrollButton} />
+      <NeonTransmission color="purple">
+        <ScrollToTop showScrollButton={showScrollButton} />
+      </NeonTransmission>
       
       {/* Quick action buttons */}
-      <QuickActionButtons />
+      <CyberTransmission>
+        <QuickActionButtons />
+      </CyberTransmission>
     </PageTransmission>
   );
 };
