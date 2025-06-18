@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Hero } from "@/components/Hero";
@@ -17,6 +16,10 @@ import { NavigationDots } from "@/components/navigation/NavigationDots";
 import { QuickActionButtons } from "@/components/navigation/QuickActionButtons";
 import { TransmissionAnimation } from "@/components/animations/TransmissionAnimation";
 import { PageTransmission } from "@/components/animations/PageTransmission";
+import { GlitchTransmission } from "@/components/animations/GlitchTransmission";
+import { NeonTransmission } from "@/components/animations/NeonTransmission";
+import { MatrixTransmission } from "@/components/animations/MatrixTransmission";
+import { CyberTransmission } from "@/components/animations/CyberTransmission";
 
 // Array of section IDs for navigation
 const SECTIONS = ["hero", "about", "skills", "experience", "portfolio", "certifications", "contact"];
