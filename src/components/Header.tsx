@@ -1,9 +1,9 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp, User, Camera } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, Camera, User, Search, Link as LinkIcon } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
 const Header = () => {
@@ -91,7 +91,7 @@ const Header = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center">
-                  <Wrench className="mr-2 h-4 w-4" />
+                  <Search className="mr-2 h-4 w-4" />
                   SEO Tools
                 </Button>
               </DropdownMenuTrigger>
@@ -99,17 +99,18 @@ const Header = () => {
                 <DropdownMenuItem asChild>
                   <Link to="/tools">All SEO Tools</Link>
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/tools/seo-checker">SEO Analyzer</Link>
+                  <Link to="/tools/seo-checker">SEO Checker</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/tools/backlink-checker">Backlink Checker</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/tools/metadata-remover">Image SEO Optimizer</Link>
+                  <Link to="/tools/metadata-remover">Image Metadata Remover</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/tools/case-converter">Text SEO Optimizer</Link>
+                  <Link to="/tools/case-converter">Case Converter</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
