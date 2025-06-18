@@ -9,6 +9,7 @@ import Admin from "@/pages/Admin";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import EditedPhotos from "@/pages/EditedPhotos";
+import PhotoGallery from "@/pages/PhotoGallery";
 import MetadataRemover from "@/pages/MetadataRemover";
 import TradingIdeas from "@/pages/TradingIdeas";
 import TradingIdeaCreate from "@/pages/TradingIdeaCreate";
