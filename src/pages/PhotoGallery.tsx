@@ -7,22 +7,18 @@ const PhotoGallery = () => {
   return (
     <>
       <Helmet>
-        <title>Photo Gallery - Lasitha Rajapaksha | Professional Photography Portfolio</title>
+        <title>Photo Gallery - Lasitha Rajapaksha | Professional Portfolio Photos</title>
         <meta 
           name="description" 
-          content="Browse Lasitha Rajapaksha's professional photo gallery showcasing technology, workspace, and career moments. High-quality images from a successful entrepreneur and developer." 
+          content="Browse through Lasitha Rajapaksha's professional photo gallery showcasing career highlights, workspace setups, and technology focus. High-quality portfolio images." 
         />
         <meta 
           name="keywords" 
-          content="Lasitha Rajapaksha photos, professional photography, entrepreneur photos, developer workspace, technology photos, business photography, portfolio gallery" 
+          content="Lasitha Rajapaksha photos, professional portfolio, career gallery, workspace photos, technology images, developer photos, forex trader images" 
         />
-        <meta property="og:title" content="Photo Gallery - Lasitha Rajapaksha | Professional Photography Portfolio" />
-        <meta property="og:description" content="Browse professional photos showcasing technology, workspace, and career moments from entrepreneur Lasitha Rajapaksha." />
+        <meta property="og:title" content="Photo Gallery - Lasitha Rajapaksha Professional Portfolio" />
+        <meta property="og:description" content="Browse through professional photos showcasing Lasitha Rajapaksha's career highlights and workspace." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://lasitharajapaksha.netlify.app/photo-gallery" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Photo Gallery - Lasitha Rajapaksha" />
-        <meta name="twitter:description" content="Professional photo gallery showcasing technology and career moments." />
         <link rel="canonical" href="https://lasitharajapaksha.netlify.app/photo-gallery" />
       </Helmet>
       
@@ -30,9 +26,12 @@ const PhotoGallery = () => {
         <Header />
         <main className="container mx-auto px-4 py-8">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4">Photo Gallery</h1>
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+              Professional Photo Gallery
+            </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explore my professional journey through images showcasing technology, workspace, and career milestones.
+              Explore my professional journey through this curated collection of photos showcasing 
+              my workspace, technology focus, and career highlights.
             </p>
           </div>
           <PhotoGalleryComponent />
