@@ -91,93 +91,59 @@
 
   body {
     @apply bg-background text-foreground;
-    background: #ffffff;
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
     min-height: 100vh;
-    overflow-x: hidden;
   }
 
-  /* Advanced Futuristic scrollbar */
+  /* Futuristic scrollbar */
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar-track {
     background: rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #00ffff, #ff00ff, #00ff00);
-    border-radius: 6px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #00cccc, #cc00cc, #00cc00);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+    background: linear-gradient(45deg, #00cccc, #cc00cc);
   }
 }
 
 @layer utilities {
-  /* Advanced Cyber grid animation */
+  /* Cyber grid animation */
   .cyber-grid {
     background-image: 
-      linear-gradient(rgba(0, 255, 255, 0.2) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 255, 0.2) 1px, transparent 1px),
-      linear-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px, 50px 50px, 20px 20px, 20px 20px;
-    animation: cyber-grid-move 30s linear infinite, cyber-grid-pulse 10s ease-in-out infinite;
+      linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: cyber-grid-move 20s linear infinite;
   }
 
   @keyframes cyber-grid-move {
-    0% { background-position: 0 0, 0 0, 0 0, 0 0; }
-    100% { background-position: 50px 50px, 50px 50px, 20px 20px, 20px 20px; }
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 20px; }
   }
 
-  @keyframes cyber-grid-pulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
-  }
-
-  /* Enhanced Neon glow text */
+  /* Neon glow text */
   .neon-text {
     text-shadow: 
       0 0 5px currentColor,
       0 0 10px currentColor,
-      0 0 20px currentColor,
-      0 0 40px currentColor,
-      0 0 80px currentColor;
-    animation: neon-flicker 3s ease-in-out infinite alternate;
+      0 0 15px currentColor,
+      0 0 20px currentColor;
   }
 
-  @keyframes neon-flicker {
-    0%, 100% { 
-      text-shadow: 
-        0 0 5px currentColor,
-        0 0 10px currentColor,
-        0 0 20px currentColor,
-        0 0 40px currentColor;
-    }
-    50% { 
-      text-shadow: 
-        0 0 2px currentColor,
-        0 0 5px currentColor,
-        0 0 10px currentColor,
-        0 0 20px currentColor,
-        0 0 40px currentColor,
-        0 0 80px currentColor;
-    }
-  }
-
-  /* Advanced Futuristic border */
+  /* Futuristic border */
   .cyber-border {
     position: relative;
     border: 1px solid transparent;
-    background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(255,0,255,0.1), rgba(0,255,0,0.1));
+    background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(255,0,255,0.1));
     background-clip: padding-box;
-    border-radius: 8px;
   }
 
   .cyber-border::before {
@@ -190,22 +156,12 @@
     z-index: -1;
     margin: -1px;
     border-radius: inherit;
-    background: linear-gradient(45deg, #00ffff, #ff00ff, #00ff00, #ffff00);
-    animation: border-rotate 4s linear infinite;
+    background: linear-gradient(135deg, #00ffff, #ff00ff);
   }
 
-  @keyframes border-rotate {
-    0% { background: linear-gradient(45deg, #00ffff, #ff00ff, #00ff00, #ffff00); }
-    25% { background: linear-gradient(45deg, #ff00ff, #00ff00, #ffff00, #00ffff); }
-    50% { background: linear-gradient(45deg, #00ff00, #ffff00, #00ffff, #ff00ff); }
-    75% { background: linear-gradient(45deg, #ffff00, #00ffff, #ff00ff, #00ff00); }
-    100% { background: linear-gradient(45deg, #00ffff, #ff00ff, #00ff00, #ffff00); }
-  }
-
-  /* Enhanced Glitch effect */
+  /* Glitch effect */
   .glitch {
     position: relative;
-    animation: glitch-base 2s ease-in-out infinite;
   }
 
   .glitch::before,
@@ -216,54 +172,39 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: inherit;
   }
 
   .glitch::before {
     animation: glitch-1 0.5s infinite linear alternate-reverse;
     color: #ff0040;
     z-index: -1;
-    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
   }
 
   .glitch::after {
     animation: glitch-2 0.5s infinite linear alternate-reverse;
     color: #00ffff;
     z-index: -2;
-    clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
-  }
-
-  @keyframes glitch-base {
-    0%, 90%, 100% { transform: translate(0); }
-    10% { transform: translate(-2px, -1px); }
-    20% { transform: translate(2px, 1px); }
-    30% { transform: translate(-1px, 2px); }
-    40% { transform: translate(1px, -1px); }
-    50% { transform: translate(-2px, 2px); }
-    60% { transform: translate(2px, -2px); }
-    70% { transform: translate(-1px, -1px); }
-    80% { transform: translate(1px, 1px); }
   }
 
   @keyframes glitch-1 {
     0% { transform: translateX(0); }
-    20% { transform: translateX(-3px); }
-    40% { transform: translateX(-3px); }
-    60% { transform: translateX(3px); }
-    80% { transform: translateX(3px); }
+    20% { transform: translateX(-2px); }
+    40% { transform: translateX(-2px); }
+    60% { transform: translateX(2px); }
+    80% { transform: translateX(2px); }
     100% { transform: translateX(0); }
   }
 
   @keyframes glitch-2 {
     0% { transform: translateX(0); }
-    20% { transform: translateX(3px); }
-    40% { transform: translateX(3px); }
-    60% { transform: translateX(-3px); }
-    80% { transform: translateX(-3px); }
+    20% { transform: translateX(2px); }
+    40% { transform: translateX(2px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(-2px); }
     100% { transform: translateX(0); }
   }
 
-  /* Enhanced Holographic effect */
+  /* Holographic effect */
   .holographic {
     background: linear-gradient(
       45deg,
@@ -271,86 +212,18 @@
       #ff8c00,
       #40e0d0,
       #ee82ee,
-      #98fb98,
-      #ffd700,
-      #ff69b4
+      #98fb98
     );
-    background-size: 400% 400%;
-    animation: holographic 4s ease infinite;
+    background-size: 300% 300%;
+    animation: holographic 3s ease infinite;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
   }
 
   @keyframes holographic {
     0% { background-position: 0% 50%; }
-    25% { background-position: 100% 50%; }
-    50% { background-position: 100% 100%; }
-    75% { background-position: 0% 100%; }
+    50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-  }
-
-  /* Scan line effect */
-  .scan-lines {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .scan-lines::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #00ffff, transparent);
-    animation: scan 3s linear infinite;
-    z-index: 10;
-  }
-
-  @keyframes scan {
-    0% { top: 0; opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { top: 100%; opacity: 1; }
-  }
-
-  /* Data stream effect */
-  .data-stream {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .data-stream::after {
-    content: '01001001 01101110 01101110 01101111 01110110 01100001 01110100 01101001 01101111 01101110';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    color: #00ff00;
-    font-family: 'Courier New', monospace;
-    font-size: 0.8rem;
-    opacity: 0.3;
-    white-space: nowrap;
-    animation: data-flow 10s linear infinite;
-  }
-
-  @keyframes data-flow {
-    0% { left: -100%; }
-    100% { left: 100%; }
-  }
-
-  /* Circuit pattern */
-  .circuit-pattern {
-    background-image: 
-      radial-gradient(circle at 20% 50%, transparent 20%, rgba(0, 255, 255, 0.1) 21%, rgba(0, 255, 255, 0.1) 34%, transparent 35%, transparent),
-      linear-gradient(0deg, rgba(0, 255, 255, 0.05) 50%, transparent 50%),
-      linear-gradient(90deg, rgba(255, 0, 255, 0.05) 50%, transparent 50%);
-    background-size: 40px 40px, 20px 20px, 20px 20px;
-    animation: circuit-flow 8s ease-in-out infinite;
-  }
-
-  @keyframes circuit-flow {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 0.8; }
   }
 }
