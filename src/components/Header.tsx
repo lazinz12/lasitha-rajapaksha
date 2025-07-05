@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Menu, TrendingUp, User, Camera } from "lucide-react";
+import { BookOpen, Wrench, Menu, TrendingUp, ImagePlus, User, Camera } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -56,7 +56,7 @@ const Header = () => {
                 <SheetClose asChild>
                   <Link to="/tools" className="flex items-center py-2">
                     <Wrench className="mr-2 h-4 w-4" />
-                    SEO Tools
+                    Tools
                   </Link>
                 </SheetClose>
               </div>
@@ -92,24 +92,24 @@ const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center">
                   <Wrench className="mr-2 h-4 w-4" />
-                  SEO Tools
+                  Tools
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-popover/100 shadow-lg border-border">
                 <DropdownMenuItem asChild>
-                  <Link to="/tools">All SEO Tools</Link>
+                  <Link to="/tools">All Tools</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/tools/seo-checker">SEO Analyzer</Link>
+                  <Link to="/tools/metadata-remover">Image Metadata Remover</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/case-converter">Case Converter</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/tools/seo-checker">SEO Checker</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/tools/backlink-checker">Backlink Checker</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/metadata-remover">Image SEO Optimizer</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/tools/case-converter">Text SEO Optimizer</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
