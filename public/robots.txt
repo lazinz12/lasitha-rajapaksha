@@ -4,6 +4,9 @@ Allow: /
 Allow: /blog/
 Allow: /trading-ideas/
 Allow: /tools/
+Allow: /photo-gallery/
+Allow: /founder/
 Allow: /lovable-uploads/
 
 Sitemap: https://lasitharajapaksha.netlify.app/sitemap.xml
+Sitemap: https://lasitharajapaksha.netlify.app/sitemap-images.xml

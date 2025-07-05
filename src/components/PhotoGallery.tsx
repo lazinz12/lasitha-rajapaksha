@@ -122,11 +122,24 @@ export const PhotoGallery = () => {
       "name": photo.title,
       "description": photo.description,
       "caption": photo.alt_text,
+      "encodingFormat": "image/jpeg",
+      "width": "800",
+      "height": "600",
+      "thumbnailUrl": photo.image_url,
       "author": {
+        "@type": "Person",
+        "name": "Lasitha Rajapaksha",
+        "url": "https://lasitharajapaksha.netlify.app"
+      },
+      "copyrightHolder": {
         "@type": "Person",
         "name": "Lasitha Rajapaksha"
       },
-      "datePublished": "2024-01-01"
+      "datePublished": "2024-01-01",
+      "dateModified": "2025-01-07",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "acquireLicensePage": "https://lasitharajapaksha.netlify.app/photo-gallery",
+      "keywords": ["professional", "technology", "workspace", "developer", "entrepreneur"]
     };
   };
 
@@ -139,7 +152,24 @@ export const PhotoGallery = () => {
             "@type": "ImageGallery",
             "name": "Lasitha Rajapaksha Photo Gallery",
             "description": "A collection of professional photos showcasing Lasitha Rajapaksha's career and activities",
-            "image": photos.map((photo, index) => getImageSchema(photo, index))
+            "url": currentUrl,
+            "author": {
+              "@type": "Person",
+              "name": "Lasitha Rajapaksha",
+              "url": "https://lasitharajapaksha.netlify.app"
+            },
+            "datePublished": "2024-01-01",
+            "dateModified": "2025-01-07",
+            "numberOfItems": photos.length,
+            "image": photos.map((photo, index) => getImageSchema(photo, index)),
+            "mainEntity": {
+              "@type": "ItemList",
+              "itemListElement": photos.map((photo, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": getImageSchema(photo, index)
+              }))
+            }
           })}
         </script>
       </Helmet>
@@ -173,22 +203,28 @@ export const PhotoGallery = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   onClick={() => setSelectedPhoto(photo)}
                 >
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                  <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer" itemScope itemType="https://schema.org/ImageObject">
                     <CardContent className="p-0">
                       <img
                         src={photo.image_url}
                         alt={photo.alt_text}
                         title={photo.title}
-                        loading="lazy"
+                        loading={index < 3 ? "eager" : "lazy"}
+                        fetchPriority={index < 3 ? "high" : "auto"}
+                        width="800"
+                        height="600"
                         className="w-full h-80 object-cover hover:scale-105 transition-transform duration-300"
+                        itemProp="contentUrl"
                         onError={(e) => {
                           console.error("Image failed to load:", photo.image_url);
-                          // You could set a fallback image here if needed
                         }}
                       />
                       <div className="p-4">
-                        <h3 className="text-lg font-semibold">{photo.title}</h3>
-                        <p className="text-sm text-gray-600">{photo.description}</p>
+                        <h3 className="text-lg font-semibold" itemProp="name">{photo.title}</h3>
+                        <p className="text-sm text-gray-600" itemProp="description">{photo.description}</p>
+                        <meta itemProp="author" content="Lasitha Rajapaksha" />
+                        <meta itemProp="datePublished" content="2024-01-01" />
+                        <meta itemProp="encodingFormat" content="image/jpeg" />
                       </div>
                     </CardContent>
                   </Card>
