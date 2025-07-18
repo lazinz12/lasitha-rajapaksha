@@ -48,7 +48,9 @@ import BaseConverter from "@/pages/BaseConverter";
 import StringEncoder from "@/pages/StringEncoder";
 import Calculator from "@/pages/Calculator";
 import HashGenerator from "@/pages/HashGenerator";
+import Services from "@/pages/Services";
 import { SeasonalEffects } from "@/components/SeasonalEffects";
+import { LiveChatWidget } from "@/components/LiveChatWidget";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -116,8 +118,10 @@ function App() {
               <Route path="/tools/string-encoder" element={<StringEncoder />} />
               <Route path="/tools/calculator" element={<Calculator />} />
               <Route path="/founder" element={<FounderCEO />} />
+              <Route path="/services" element={<Services />} />
               <Route path="/projects/compressgo" element={<CompressGo />} />
             </Routes>
+            <LiveChatWidget />
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>

@@ -19,6 +19,8 @@ import { TransmissionAnimation } from "@/components/animations/TransmissionAnima
 import { PageTransmission } from "@/components/animations/PageTransmission";
 import { StatsSection } from "@/components/StatsSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { CaseStudiesSection } from "@/components/CaseStudiesSection";
+import { NewsletterSection } from "@/components/NewsletterSection";
 
 // Array of section IDs for navigation
 const SECTIONS = ["hero", "about", "skills", "experience", "portfolio", "certifications", "contact"];
@@ -114,8 +116,14 @@ const Index = () => {
             </TransmissionAnimation>
           </SectionContainer>
           
+          {/* Add Case Studies Section */}
+          <CaseStudiesSection />
+          
           {/* Add Testimonials Section */}
           <TestimonialsSection />
+          
+          {/* Add Newsletter Section */}
+          <NewsletterSection />
           
           <SectionContainer id="contact">
             <TransmissionAnimation direction="up" delay={0.4}>
