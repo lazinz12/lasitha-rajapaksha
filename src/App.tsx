@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "next-themes";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Admin from "@/pages/Admin";
@@ -62,57 +63,64 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <BrowserRouter>
-          <SeasonalEffects />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/edited-photos" element={<EditedPhotos />} />
-            <Route path="/photo-gallery" element={<PhotoGallery />} />
-            <Route path="/trading-ideas" element={<TradingIdeas />} />
-            <Route path="/trading-ideas/new" element={<TradingIdeaCreate />} />
-            <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
-            <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
-            <Route path="/tools" element={<Tools />} />
-            <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
-            <Route path="/tools/metadata-remover" element={<MetadataRemover />} />
-            <Route path="/tools/case-converter" element={<CaseConverter />} />
-            <Route path="/tools/seo-checker" element={<SeoChecker />} />
-            <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
-            <Route path="/tools/background-remover" element={<BackgroundRemover />} />
-            <Route path="/tools/qr-generator" element={<QrGenerator />} />
-            <Route path="/tools/password-generator" element={<PasswordGenerator />} />
-            <Route path="/tools/color-converter" element={<ColorConverter />} />
-            <Route path="/tools/image-converter" element={<ImageConverter />} />
-            <Route path="/tools/image-cropper" element={<ImageCropper />} />
-            <Route path="/tools/base64" element={<Base64Tool />} />
-            <Route path="/tools/url-encoder" element={<UrlEncoder />} />
-            <Route path="/tools/json-formatter" element={<JsonFormatter />} />
-            <Route path="/tools/regex-tester" element={<RegexTester />} />
-            <Route path="/tools/hash-generator" element={<HashGenerator />} />
-            <Route path="/tools/lorem-ipsum" element={<LoremIpsum />} />
-            <Route path="/tools/word-counter" element={<WordCounter />} />
-            <Route path="/tools/percentage-calculator" element={<PercentageCalc />} />
-            <Route path="/tools/unit-converter" element={<UnitConverter />} />
-            <Route path="/tools/random-number" element={<RandomNumber />} />
-            <Route path="/tools/color-palette" element={<ColorPalette />} />
-            <Route path="/tools/gradient-maker" element={<GradientMaker />} />
-            <Route path="/tools/exif-viewer" element={<ExifViewer />} />
-            <Route path="/tools/image-compressor" element={<ImageCompressor />} />
-            <Route path="/tools/html-entity" element={<HtmlEntity />} />
-            <Route path="/tools/markdown-preview" element={<MarkdownPreview />} />
-            <Route path="/tools/base-converter" element={<BaseConverter />} />
-            <Route path="/tools/string-encoder" element={<StringEncoder />} />
-            <Route path="/tools/calculator" element={<Calculator />} />
-            <Route path="/founder" element={<FounderCEO />} />
-            <Route path="/projects/compressgo" element={<CompressGo />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <TooltipProvider>
+          <BrowserRouter>
+            <SeasonalEffects />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/edited-photos" element={<EditedPhotos />} />
+              <Route path="/photo-gallery" element={<PhotoGallery />} />
+              <Route path="/trading-ideas" element={<TradingIdeas />} />
+              <Route path="/trading-ideas/new" element={<TradingIdeaCreate />} />
+              <Route path="/trading-ideas/:slug" element={<TradingIdeaDetail />} />
+              <Route path="/trading-ideas/edit/:slug" element={<TradingIdeaEdit />} />
+              <Route path="/tools" element={<Tools />} />
+              <Route path="/tools/text-behind-image" element={<TextBehindImage />} />
+              <Route path="/tools/metadata-remover" element={<MetadataRemover />} />
+              <Route path="/tools/case-converter" element={<CaseConverter />} />
+              <Route path="/tools/seo-checker" element={<SeoChecker />} />
+              <Route path="/tools/backlink-checker" element={<BacklinkChecker />} />
+              <Route path="/tools/background-remover" element={<BackgroundRemover />} />
+              <Route path="/tools/qr-generator" element={<QrGenerator />} />
+              <Route path="/tools/password-generator" element={<PasswordGenerator />} />
+              <Route path="/tools/color-converter" element={<ColorConverter />} />
+              <Route path="/tools/image-converter" element={<ImageConverter />} />
+              <Route path="/tools/image-cropper" element={<ImageCropper />} />
+              <Route path="/tools/base64" element={<Base64Tool />} />
+              <Route path="/tools/url-encoder" element={<UrlEncoder />} />
+              <Route path="/tools/json-formatter" element={<JsonFormatter />} />
+              <Route path="/tools/regex-tester" element={<RegexTester />} />
+              <Route path="/tools/hash-generator" element={<HashGenerator />} />
+              <Route path="/tools/lorem-ipsum" element={<LoremIpsum />} />
+              <Route path="/tools/word-counter" element={<WordCounter />} />
+              <Route path="/tools/percentage-calculator" element={<PercentageCalc />} />
+              <Route path="/tools/unit-converter" element={<UnitConverter />} />
+              <Route path="/tools/random-number" element={<RandomNumber />} />
+              <Route path="/tools/color-palette" element={<ColorPalette />} />
+              <Route path="/tools/gradient-maker" element={<GradientMaker />} />
+              <Route path="/tools/exif-viewer" element={<ExifViewer />} />
+              <Route path="/tools/image-compressor" element={<ImageCompressor />} />
+              <Route path="/tools/html-entity" element={<HtmlEntity />} />
+              <Route path="/tools/markdown-preview" element={<MarkdownPreview />} />
+              <Route path="/tools/base-converter" element={<BaseConverter />} />
+              <Route path="/tools/string-encoder" element={<StringEncoder />} />
+              <Route path="/tools/calculator" element={<Calculator />} />
+              <Route path="/founder" element={<FounderCEO />} />
+              <Route path="/projects/compressgo" element={<CompressGo />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

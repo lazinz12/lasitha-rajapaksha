@@ -1,4 +1,3 @@
-
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Briefcase, MapPin, Calendar, ExternalLink, Linkedin, Twitter, Facebook } from "lucide-react";
 import Header from "@/components/Header";
+import { StatsSection } from "@/components/StatsSection";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { CTASection } from "@/components/CTASection";
 
 const FounderCEOPage = () => {
   // Schema.org structured data for the founder
@@ -90,77 +92,91 @@ const FounderCEOPage = () => {
       <div className="min-h-screen bg-background">
         <Header />
         
-        <main className="container py-12">
-          {/* Hero Section */}
+        <main>
+          {/* Enhanced Hero Section */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
+            className="relative overflow-hidden bg-gradient-to-br from-background via-background to-primary/5 py-20"
           >
-            <div className="max-w-4xl mx-auto">
-              <motion.img
-                src="https://video.compress-go.com/ceo.jpeg"
-                alt="Lasitha Rajapaksha - Founder & CEO of CompressGo"
-                className="w-32 h-32 rounded-full mx-auto mb-6 object-cover shadow-lg"
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2 }}
-              />
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                Lasitha Rajapaksha
-              </h1>
-              <h2 className="text-xl md:text-2xl text-muted-foreground mb-6">
-                Founder & CEO of CompressGo | Full Stack Developer
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
-                Passionate full-stack web developer and software engineer with expertise in building modern, 
-                efficient web applications. Founder of CompressGo, a privacy-focused file compression platform 
-                serving thousands of users worldwide.
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-4 mb-8">
-                {socialLinks.map((social) => (
-                  <Button key={social.platform} variant="outline" asChild>
-                    <a href={social.url} target="_blank" rel="noopener noreferrer">
-                      <social.icon className="h-4 w-4 mr-2" />
-                      {social.platform}
-                      <ExternalLink className="h-3 w-3 ml-2" />
-                    </a>
-                  </Button>
-                ))}
+            <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:60px_60px]" />
+            <div className="container relative">
+              <div className="max-w-4xl mx-auto text-center">
+                <motion.img
+                  src="https://video.compress-go.com/ceo.jpeg"
+                  alt="Lasitha Rajapaksha - Founder & CEO of CompressGo"
+                  className="w-40 h-40 rounded-full mx-auto mb-8 object-cover shadow-2xl ring-4 ring-white/10"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                    Lasitha Rajapaksha
+                  </h1>
+                  <h2 className="text-2xl md:text-3xl text-muted-foreground mb-8 font-medium">
+                    Founder & CEO of CompressGo | Full Stack Developer
+                  </h2>
+                  <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-10 leading-relaxed">
+                    Passionate full-stack web developer and software engineer with expertise in building modern, 
+                    efficient web applications. Founder of CompressGo, a privacy-focused file compression platform 
+                    serving thousands of users worldwide.
+                  </p>
+                  
+                  <div className="flex flex-wrap justify-center gap-4">
+                    {socialLinks.map((social) => (
+                      <Button key={social.platform} size="lg" variant="outline" asChild className="group">
+                        <a href={social.url} target="_blank" rel="noopener noreferrer">
+                          <social.icon className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
+                          {social.platform}
+                          <ExternalLink className="h-4 w-4 ml-2 opacity-50" />
+                        </a>
+                      </Button>
+                    ))}
+                  </div>
+                </motion.div>
               </div>
             </div>
           </motion.section>
+
+          {/* Stats Section */}
+          <StatsSection />
 
           {/* About Section */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-16"
+            className="py-16"
           >
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">About Lasitha Nimesh Rajapaksha</CardTitle>
-              </CardHeader>
-              <CardContent className="prose dark:prose-invert max-w-none">
-                <p>
-                  Lasitha Rajapaksha is a visionary entrepreneur and accomplished full-stack developer who has made 
-                  significant contributions to the web development industry. As the Founder and CEO of CompressGo, 
-                  he has revolutionized online file compression by prioritizing user privacy and implementing 
-                  client-side processing technologies.
-                </p>
-                <p>
-                  With expertise spanning across modern web technologies including React.js, TypeScript, Node.js, 
-                  and Tailwind CSS, Lasitha has built scalable applications that serve users globally. His commitment 
-                  to creating privacy-focused tools has set new standards in the industry.
-                </p>
-                <p>
-                  Beyond CompressGo, Lasitha continues to innovate with projects like Invoice Generator and his 
-                  development consultancy, Lasins Raj Dev, helping businesses build efficient, user-centric web solutions.
-                </p>
-              </CardContent>
-            </Card>
+            <div className="container">
+              <Card className="max-w-4xl mx-auto">
+                <CardHeader>
+                  <CardTitle className="text-3xl text-center">About Lasitha Nimesh Rajapaksha</CardTitle>
+                </CardHeader>
+                <CardContent className="prose dark:prose-invert max-w-none text-lg leading-relaxed">
+                  <p>
+                    Lasitha Rajapaksha is a visionary entrepreneur and accomplished full-stack developer who has made 
+                    significant contributions to the web development industry. As the Founder and CEO of CompressGo, 
+                    he has revolutionized online file compression by prioritizing user privacy and implementing 
+                    client-side processing technologies.
+                  </p>
+                  <p>
+                    With expertise spanning across modern web technologies including React.js, TypeScript, Node.js, 
+                    and Tailwind CSS, Lasitha has built scalable applications that serve users globally. His commitment 
+                    to creating privacy-focused tools has set new standards in the industry.
+                  </p>
+                  <p>
+                    Beyond CompressGo, Lasitha continues to innovate with projects like Invoice Generator and his 
+                    development consultancy, Lasins Raj Dev, helping businesses build efficient, user-centric web solutions.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </motion.section>
 
           {/* Experience Section */}
@@ -168,48 +184,50 @@ const FounderCEOPage = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-16"
+            className="py-16 bg-muted/30"
           >
-            <h2 className="text-3xl font-bold mb-8 text-center">Professional Experience</h2>
-            <div className="space-y-6">
-              {experiences.map((exp, index) => (
-                <motion.div
-                  key={exp.company}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="flex items-center gap-2">
-                            <Briefcase className="h-5 w-5" />
-                            {exp.position}
-                          </CardTitle>
-                          <p className="text-lg font-semibold text-primary">{exp.company}</p>
-                          <p className="text-sm text-muted-foreground flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            {exp.period}
-                          </p>
+            <div className="container">
+              <h2 className="text-4xl font-bold mb-12 text-center">Professional Experience</h2>
+              <div className="space-y-8 max-w-4xl mx-auto">
+                {experiences.map((exp, index) => (
+                  <motion.div
+                    key={exp.company}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Card className="hover:shadow-lg transition-shadow">
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="flex items-center gap-3 text-xl">
+                              <Briefcase className="h-6 w-6 text-primary" />
+                              {exp.position}
+                            </CardTitle>
+                            <p className="text-lg font-semibold text-primary mt-1">{exp.company}</p>
+                            <p className="text-muted-foreground flex items-center gap-2 mt-1">
+                              <Calendar className="h-4 w-4" />
+                              {exp.period}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-4">{exp.description}</p>
-                      <div>
-                        <h4 className="font-semibold mb-2">Key Achievements:</h4>
-                        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                          {exp.achievements.map((achievement, i) => (
-                            <li key={i}>{achievement}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground mb-6 text-base">{exp.description}</p>
+                        <div>
+                          <h4 className="font-semibold mb-3 text-lg">Key Achievements:</h4>
+                          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                            {exp.achievements.map((achievement, i) => (
+                              <li key={i} className="leading-relaxed">{achievement}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.section>
 
@@ -218,50 +236,29 @@ const FounderCEOPage = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-16"
+            className="py-16"
           >
-            <h2 className="text-3xl font-bold mb-8 text-center">Technical Expertise</h2>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((skill) => (
-                    <Badge key={skill} variant="secondary" className="text-sm py-1 px-3">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="container">
+              <h2 className="text-4xl font-bold mb-12 text-center">Technical Expertise</h2>
+              <Card className="max-w-4xl mx-auto">
+                <CardContent className="pt-8">
+                  <div className="flex flex-wrap gap-3 justify-center">
+                    {skills.map((skill) => (
+                      <Badge key={skill} variant="secondary" className="text-base py-2 px-4 hover:bg-primary/10 transition-colors">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </motion.section>
 
-          {/* Contact Section */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl text-center">Get in Touch</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-muted-foreground mb-6">
-                  Interested in collaborating or learning more about my work? 
-                  Feel free to connect with me on social media or explore my projects.
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  {socialLinks.map((social) => (
-                    <Button key={social.platform} variant="default" asChild>
-                      <a href={social.url} target="_blank" rel="noopener noreferrer">
-                        <social.icon className="h-4 w-4 mr-2" />
-                        Connect on {social.platform}
-                      </a>
-                    </Button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.section>
+          {/* Testimonials Section */}
+          <TestimonialsSection />
+
+          {/* CTA Section */}
+          <CTASection />
         </main>
       </div>
     </>

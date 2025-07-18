@@ -17,6 +17,8 @@ import { NavigationDots } from "@/components/navigation/NavigationDots";
 import { QuickActionButtons } from "@/components/navigation/QuickActionButtons";
 import { TransmissionAnimation } from "@/components/animations/TransmissionAnimation";
 import { PageTransmission } from "@/components/animations/PageTransmission";
+import { StatsSection } from "@/components/StatsSection";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 // Array of section IDs for navigation
 const SECTIONS = ["hero", "about", "skills", "experience", "portfolio", "certifications", "contact"];
@@ -79,6 +81,9 @@ const Index = () => {
             </TransmissionAnimation>
           </SectionContainer>
           
+          {/* Add Stats Section after Hero */}
+          <StatsSection />
+          
           <SectionContainer id="about">
             <TransmissionAnimation direction="left" delay={0.2}>
               <About />
@@ -108,6 +113,9 @@ const Index = () => {
               <Certifications />
             </TransmissionAnimation>
           </SectionContainer>
+          
+          {/* Add Testimonials Section */}
+          <TestimonialsSection />
           
           <SectionContainer id="contact">
             <TransmissionAnimation direction="up" delay={0.4}>
