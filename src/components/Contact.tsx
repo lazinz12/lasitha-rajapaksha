@@ -43,7 +43,7 @@ export const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 bg-gray-50">
+    <section id="contact" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -68,11 +68,11 @@ export const Contact = () => {
                     rel="noopener noreferrer"
                     className="block"
                   >
-                    <Card className={`p-8 transition-all duration-300 ${link.color}`}>
+                    <Card className={`p-8 transition-all duration-300 hover:shadow-lg hover:scale-105`}>
                       <div className="flex flex-col items-center space-y-4">
                         <Icon className="w-12 h-12" />
                         <h3 className="font-semibold text-xl">{link.platform}</h3>
-                        <p className="text-base text-gray-600">{link.username}</p>
+                        <p className="text-base text-muted-foreground">{link.username}</p>
                       </div>
                     </Card>
                   </a>

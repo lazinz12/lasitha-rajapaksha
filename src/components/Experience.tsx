@@ -43,7 +43,7 @@ const experiences = [
 
 export const Experience = () => {
   return (
-    <section id="experience" className="py-20 bg-gray-50">
+    <section id="experience" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -69,15 +69,15 @@ export const Experience = () => {
                     <Briefcase className="h-6 w-6" />
                     <div>
                       <h3 className="text-xl font-bold">{exp.title}</h3>
-                      <p className="text-sm text-gray-600">{exp.company}</p>
-                      <p className="text-sm text-gray-600">{exp.role} | {exp.duration}</p>
+                      <p className="text-sm text-muted-foreground">{exp.company}</p>
+                      <p className="text-sm text-muted-foreground">{exp.role} | {exp.duration}</p>
                     </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="list-disc list-inside space-y-2">
                     {exp.responsibilities.map((resp, i) => (
-                      <li key={i} className="text-gray-600">{resp}</li>
+                      <li key={i} className="text-muted-foreground">{resp}</li>
                     ))}
                   </ul>
                 </CardContent>

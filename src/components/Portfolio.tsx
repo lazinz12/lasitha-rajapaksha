@@ -44,7 +44,7 @@ const projects = [
 
 export const Portfolio = () => {
   return (
-    <section id="portfolio" className="py-20 bg-gray-50 relative overflow-hidden">
+    <section id="portfolio" className="py-20 bg-muted/30 relative overflow-hidden">
       <TransmissionAnimation direction="up" duration={0.8}>
         <div className="container mx-auto px-4">
           <motion.div className="text-center mb-12">
@@ -53,7 +53,7 @@ export const Portfolio = () => {
               className="text-3xl font-bold text-primary mb-4"
             />
             <TransmissionAnimation direction="up" delay={0.3}>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 Showcasing my expertise in trading automation, web development, and analytics
               </p>
             </TransmissionAnimation>
@@ -67,7 +67,7 @@ export const Portfolio = () => {
                   whileHover={{ scale: 1.02 }}
                   className="group"
                 >
-                  <Card className="hover:shadow-xl transition-all duration-300 overflow-hidden bg-white/80 backdrop-blur-sm">
+                  <Card className="hover:shadow-xl transition-all duration-300 overflow-hidden bg-card/80 backdrop-blur-sm">
                     {project.isInternal ? (
                       <Link to={project.link} className="block">
                         <div className="relative h-64 overflow-hidden">
@@ -99,12 +99,12 @@ export const Portfolio = () => {
                               whileHover={{ scale: 1.2, rotate: 45 }}
                               transition={{ duration: 0.2 }}
                             >
-                              <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                              <ExternalLink className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                             </motion.div>
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-gray-600">{project.description}</p>
+                          <p className="text-muted-foreground">{project.description}</p>
                         </CardContent>
                       </Link>
                     ) : (
@@ -143,13 +143,13 @@ export const Portfolio = () => {
                                 whileHover={{ scale: 1.2, rotate: 45 }}
                                 transition={{ duration: 0.2 }}
                               >
-                                <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-primary transition-colors" />
+                                <ExternalLink className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                               </motion.a>
                             )}
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-gray-600">{project.description}</p>
+                          <p className="text-muted-foreground">{project.description}</p>
                         </CardContent>
                       </>
                     )}

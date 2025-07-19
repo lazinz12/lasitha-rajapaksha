@@ -45,7 +45,7 @@ const certifications = [
 
 export const Certifications = () => {
   return (
-    <section id="certifications" className="py-20 bg-white">
+    <section id="certifications" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -73,8 +73,8 @@ export const Certifications = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{cert.issuer}</p>
-                  <p className="text-gray-500 text-sm">{cert.date}</p>
+                  <p className="text-muted-foreground">{cert.issuer}</p>
+                  <p className="text-muted-foreground text-sm">{cert.date}</p>
                   {cert.skills && (
                     <div className="mt-2">
                       <p className="text-sm font-semibold">Skills:</p>
@@ -82,7 +82,7 @@ export const Certifications = () => {
                         {cert.skills.map((skill) => (
                           <span
                             key={skill}
-                            className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
+                            className="bg-primary/10 text-primary text-xs px-2 py-1 rounded"
                           >
                             {skill}
                           </span>

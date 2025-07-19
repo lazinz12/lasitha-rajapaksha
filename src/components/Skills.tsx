@@ -47,7 +47,7 @@ const skillsData = [
 
 export const Skills = () => {
   return (
-    <section id="skills" className="py-20 bg-white">
+    <section id="skills" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -79,7 +79,7 @@ export const Skills = () => {
                   <CardContent>
                     <ul className="list-disc list-inside space-y-2">
                       {category.skills.map((skill) => (
-                        <li key={skill} className="text-gray-600">{skill}</li>
+                        <li key={skill} className="text-muted-foreground">{skill}</li>
                       ))}
                     </ul>
                   </CardContent>
