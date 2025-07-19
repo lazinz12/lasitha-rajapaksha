@@ -33,7 +33,7 @@ export const About = () => {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="py-20 bg-gradient-to-b from-gray-50 to-white"
+      className="py-20 bg-gradient-to-b from-muted/30 to-background"
       id="about-section"
       aria-labelledby="about-heading"
     >
@@ -50,12 +50,12 @@ export const About = () => {
             <span className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent transform -translate-y-2"></span>
           </h2>
           
-          <p className="text-lg text-gray-600 leading-relaxed mb-6">
+          <p className="text-lg text-muted-foreground leading-relaxed mb-6">
             A passionate professional with extensive expertise in programming, trading automation, and web development. 
             Proven track record in building robust solutions, automated systems, trading bots, and web applications.
           </p>
           
-          <p className="text-lg text-gray-600 leading-relaxed">
+          <p className="text-lg text-muted-foreground leading-relaxed">
             My approach integrates modern development practices with deep market understanding, 
             allowing me to deliver both technical excellence and trading insights.
           </p>
@@ -71,13 +71,13 @@ export const About = () => {
               viewport={{ once: true }}
               whileHover={{ y: -5 }}
             >
-              <Card className="h-full border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+              <Card className="h-full border border-border shadow-sm hover:shadow-md transition-all duration-300">
                 <CardContent className="p-6">
-                  <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
+                  <div className="bg-muted w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                     {feature.icon}
                   </div>
                   <h3 className="text-lg font-semibold mb-2 text-center">{feature.title}</h3>
-                  <p className="text-gray-600 text-center">{feature.description}</p>
+                  <p className="text-muted-foreground text-center">{feature.description}</p>
                 </CardContent>
               </Card>
             </motion.div>

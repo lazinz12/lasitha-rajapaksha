@@ -144,7 +144,7 @@ export const PhotoGallery = () => {
   };
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-background">
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify({
@@ -221,7 +221,7 @@ export const PhotoGallery = () => {
                       />
                       <div className="p-4">
                         <h3 className="text-lg font-semibold" itemProp="name">{photo.title}</h3>
-                        <p className="text-sm text-gray-600" itemProp="description">{photo.description}</p>
+                        <p className="text-sm text-muted-foreground" itemProp="description">{photo.description}</p>
                         <meta itemProp="author" content="Lasitha Rajapaksha" />
                         <meta itemProp="datePublished" content="2024-01-01" />
                         <meta itemProp="encodingFormat" content="image/jpeg" />

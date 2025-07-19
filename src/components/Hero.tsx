@@ -65,7 +65,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
 
         <motion.div 
           variants={itemVariants}
-          className="text-xl md:text-2xl text-gray-600 h-12"
+          className="text-xl md:text-2xl text-muted-foreground h-12"
         >
           <TypeAnimation
             sequence={[
@@ -88,7 +88,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
         <motion.div variants={itemVariants}>
           <TextTransmission 
             text="Market Minds" 
-            className="text-lg text-gray-500"
+            className="text-lg text-muted-foreground"
             delay={1.2}
           />
         </motion.div>
@@ -107,7 +107,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
           <Button 
             asChild
             variant="outline"
-            className="bg-white text-primary border-primary hover:bg-primary/10 font-medium px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105"
+            className="bg-background text-primary border-primary hover:bg-primary/10 font-medium px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105"
           >
             <a href="/tools/background-remover" aria-label="Try Tools">Try Tools</a>
           </Button>
@@ -124,7 +124,7 @@ export const Hero = ({ onScrollDown }: HeroProps) => {
           aria-label="Scroll down"
           role="button"
         >
-          <ArrowDown className="w-8 h-8 text-gray-500" />
+          <ArrowDown className="w-8 h-8 text-muted-foreground" />
         </motion.div>
       </FloatingTransmission>
     </section>
