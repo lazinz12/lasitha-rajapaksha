@@ -68,8 +68,8 @@ const fallbackPhotos: Photo[] = [
 ];
 
 export const PhotoGallery = () => {
-  const [photos, setPhotos] = useState<Photo[]>(fallbackPhotos);
-  const [loading, setLoading] = useState(false);
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<null | Photo>(null);
   const [currentUrl, setCurrentUrl] = useState("");
@@ -80,34 +80,92 @@ export const PhotoGallery = () => {
   }, []);
 
   const fetchPhotos = async () => {
+    setLoading(true);
+    setError(null);
+
+    const toTitle = (name: string) =>
+      name
+        .replace(/\.[^/.]+$/, '')
+        .replace(/[-_]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+
     try {
-      setLoading(true);
-      console.log("Fetching photos from Supabase...");
+      console.log("Fetching photos from Supabase table photo_gallery...");
       const { data, error } = await supabase
         .from("photo_gallery")
         .select("*")
         .order("display_order", { ascending: true });
 
-      if (error) {
-        console.error("Error fetching photos:", error);
-        console.log("Using fallback photos instead");
-        setPhotos(fallbackPhotos);
-        setError(null);
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        console.log("Photos fetched from table:", data.length);
+        setPhotos(data);
         return;
       }
 
-      if (data && data.length > 0) {
-        console.log("Photos fetched successfully:", data.length);
-        setPhotos(data);
-      } else {
-        console.log("No photos found in database, using fallback photos");
-        setPhotos(fallbackPhotos);
+      console.log("No rows in photo_gallery, listing storage bucket 'gallery'...");
+      const { data: files, error: listError } = await supabase.storage
+        .from("gallery")
+        .list("", { limit: 1000, sortBy: { column: "name", order: "asc" } });
+
+      if (listError) throw listError;
+
+      if (files && files.length > 0) {
+        const photosFromStorage: Photo[] = files
+          .filter((f) => f.name && /\.(jpg|jpeg|png|gif|webp|avif)$/i.test(f.name))
+          .map((f, idx) => {
+            const { data: pub } = supabase.storage.from("gallery").getPublicUrl(f.name);
+            const title = toTitle(f.name);
+            return {
+              id: f.name,
+              title,
+              description: null,
+              image_url: pub.publicUrl,
+              alt_text: title,
+              display_order: idx + 1,
+            } as Photo;
+          });
+        console.log("Photos built from storage files:", photosFromStorage.length);
+        setPhotos(photosFromStorage);
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching photos:", error);
-      console.log("Using fallback photos due to error");
-      setPhotos(fallbackPhotos);
-      setError(null);
+
+      console.log("No files found in storage bucket 'gallery'.");
+      setPhotos([]);
+    } catch (err) {
+      console.error("Error loading gallery:", err);
+      try {
+        console.log("Attempting to list storage bucket 'gallery' after error...");
+        const { data: files } = await supabase.storage
+          .from("gallery")
+          .list("", { limit: 1000, sortBy: { column: "name", order: "asc" } });
+
+        if (files && files.length > 0) {
+          const photosFromStorage: Photo[] = files
+            .filter((f) => f.name && /\.(jpg|jpeg|png|gif|webp|avif)$/i.test(f.name))
+            .map((f, idx) => {
+              const { data: pub } = supabase.storage.from("gallery").getPublicUrl(f.name);
+              const title = toTitle(f.name);
+              return {
+                id: f.name,
+                title,
+                description: null,
+                image_url: pub.publicUrl,
+                alt_text: title,
+                display_order: idx + 1,
+              } as Photo;
+            });
+          setPhotos(photosFromStorage);
+          return;
+        }
+      } catch (e) {
+        console.error("Also failed to list storage bucket:", e);
+      }
+      setError("Unable to load gallery");
+      setPhotos([]);
     } finally {
       setLoading(false);
     }
