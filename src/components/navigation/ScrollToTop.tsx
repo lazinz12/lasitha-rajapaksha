@@ -19,7 +19,7 @@ export const ScrollToTop = ({ showScrollButton }: ScrollToTopProps) => {
     <AnimatePresence>
       {showScrollButton && (
         <motion.div
-          className="fixed bottom-8 right-8 z-50"
+          className="fixed right-4 bottom-20 sm:right-6 sm:bottom-8 z-50"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}

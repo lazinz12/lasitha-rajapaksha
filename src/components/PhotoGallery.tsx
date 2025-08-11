@@ -2,9 +2,11 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { supabase } from "@/integrations/supabase/client";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Photo = {
   id: string;
@@ -71,13 +73,16 @@ export const PhotoGallery = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedPhoto, setSelectedPhoto] = useState<null | Photo>(null);
-  const [currentUrl, setCurrentUrl] = useState("");
+const [selectedPhoto, setSelectedPhoto] = useState<null | Photo>(null);
+const [currentUrl, setCurrentUrl] = useState("");
+const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+const [touchStartX, setTouchStartX] = useState<number | null>(null);
+const [touchEndX, setTouchEndX] = useState<number | null>(null);
 
-  useEffect(() => {
-    setCurrentUrl(window.location.href);
-    fetchPhotos();
-  }, []);
+useEffect(() => {
+  setCurrentUrl(window.location.href);
+  fetchPhotos();
+}, []);
 
   const fetchPhotos = async () => {
     setLoading(true);
@@ -171,6 +176,70 @@ export const PhotoGallery = () => {
     }
   };
 
+  // Navigation and modal helpers
+  const openPhoto = (index: number) => {
+    setCurrentIndex(index);
+    setSelectedPhoto(photos[index]);
+  };
+  const closePhoto = () => {
+    setSelectedPhoto(null);
+    setCurrentIndex(null);
+  };
+
+  const goNext = () => {
+    if (photos.length && currentIndex !== null) {
+      const next = (currentIndex + 1) % photos.length;
+      setCurrentIndex(next);
+      setSelectedPhoto(photos[next]);
+    }
+  };
+
+  const goPrev = () => {
+    if (photos.length && currentIndex !== null) {
+      const prev = (currentIndex - 1 + photos.length) % photos.length;
+      setCurrentIndex(prev);
+      setSelectedPhoto(photos[prev]);
+    }
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (!selectedPhoto) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") goNext();
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "Escape") closePhoto();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedPhoto, currentIndex, photos]);
+
+  // Prevent background scroll while modal is open
+  useEffect(() => {
+    if (selectedPhoto) {
+      const original = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = original;
+      };
+    }
+  }, [selectedPhoto]);
+
+  // Touch handlers for swipe
+  const onTouchStart = (e: React.TouchEvent) => setTouchStartX(e.touches[0].clientX);
+  const onTouchMove = (e: React.TouchEvent) => setTouchEndX(e.touches[0].clientX);
+  const onTouchEnd = () => {
+    if (touchStartX !== null && touchEndX !== null) {
+      const delta = touchStartX - touchEndX;
+      if (Math.abs(delta) > 50) {
+        if (delta > 0) goNext();
+        else goPrev();
+      }
+    }
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
+
   const getImageSchema = (photo: Photo, index: number) => {
     return {
       "@context": "https://schema.org",
@@ -241,9 +310,20 @@ export const PhotoGallery = () => {
           <h2 className="text-3xl font-bold text-center mb-12 text-primary">Photo Gallery</h2>
           
           {loading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4">Loading gallery...</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Card key={i} className="overflow-hidden">
+                  <CardContent className="p-0">
+                    <AspectRatio ratio={4/3}>
+                      <Skeleton className="w-full h-full" />
+                    </AspectRatio>
+                    <div className="p-3 hidden md:block">
+                      <Skeleton className="h-4 w-3/4 mb-2" />
+                      <Skeleton className="h-3 w-1/2" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           ) : error ? (
             <div className="text-center py-8 text-red-600">
@@ -251,7 +331,7 @@ export const PhotoGallery = () => {
               <p className="text-sm text-muted-foreground mt-2">Showing sample photos instead</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {photos.map((photo, index) => (
                 <motion.div
                   key={photo.id}
@@ -259,25 +339,27 @@ export const PhotoGallery = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  onClick={() => setSelectedPhoto(photo)}
+                  onClick={() => openPhoto(index)}
                 >
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer" itemScope itemType="https://schema.org/ImageObject">
                     <CardContent className="p-0">
-                      <img
-                        src={photo.image_url}
-                        alt={photo.alt_text}
-                        title={photo.title}
-                        loading={index < 3 ? "eager" : "lazy"}
-                        fetchPriority={index < 3 ? "high" : "auto"}
-                        width="800"
-                        height="600"
-                        className="w-full h-80 object-cover hover:scale-105 transition-transform duration-300"
-                        itemProp="contentUrl"
-                        onError={(e) => {
-                          console.error("Image failed to load:", photo.image_url);
-                        }}
-                      />
-                      <div className="p-4">
+                      <AspectRatio ratio={4/3}>
+                        <img
+                          src={photo.image_url}
+                          alt={photo.alt_text}
+                          title={photo.title}
+                          loading={index < 3 ? "eager" : "lazy"}
+                          fetchPriority={index < 3 ? "high" : "auto"}
+                          decoding="async"
+                          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.03]"
+                          itemProp="contentUrl"
+                          onError={() => {
+                            console.error("Image failed to load:", photo.image_url);
+                          }}
+                        />
+                      </AspectRatio>
+                      <div className="p-4 hidden md:block">
                         <h3 className="text-lg font-semibold" itemProp="name">{photo.title}</h3>
                         <p className="text-sm text-muted-foreground" itemProp="description">{photo.description}</p>
                         <meta itemProp="author" content="Lasitha Rajapaksha" />
@@ -307,22 +389,45 @@ export const PhotoGallery = () => {
                 exit={{ scale: 0.5 }}
                 className="relative max-w-7xl w-full"
                 onClick={(e) => e.stopPropagation()}
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
               >
                 <button
-                  onClick={() => setSelectedPhoto(null)}
-                  className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+                  onClick={(e) => { e.stopPropagation(); closePhoto(); }}
+                  className="absolute top-4 right-4 z-10 inline-flex items-center justify-center h-11 w-11 rounded-full bg-background/80 text-foreground hover:bg-primary hover:text-primary-foreground transition"
+                  aria-label="Close"
                 >
-                  <X size={24} />
+                  <X className="h-5 w-5" />
                 </button>
+
+                <button
+                  onClick={(e) => { e.stopPropagation(); goPrev(); }}
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 inline-flex items-center justify-center h-11 w-11 rounded-full bg-background/70 text-foreground hover:bg-primary hover:text-primary-foreground transition"
+                  aria-label="Previous"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+
+                <button
+                  onClick={(e) => { e.stopPropagation(); goNext(); }}
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 inline-flex items-center justify-center h-11 w-11 rounded-full bg-background/70 text-foreground hover:bg-primary hover:text-primary-foreground transition"
+                  aria-label="Next"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+
                 <img
                   src={selectedPhoto.image_url}
                   alt={selectedPhoto.alt_text}
                   title={selectedPhoto.title}
-                  className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
+                  className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
                 />
-                <div className="text-white text-center mt-4">
-                  <h3 className="text-xl font-semibold mb-2">{selectedPhoto.title}</h3>
-                  <p className="text-gray-300">{selectedPhoto.description}</p>
+                <div className="text-white text-center mt-4 px-2">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-2">{selectedPhoto.title}</h3>
+                  {selectedPhoto.description && (
+                    <p className="text-gray-300 text-sm sm:text-base">{selectedPhoto.description}</p>
+                  )}
                 </div>
               </motion.div>
             </motion.div>

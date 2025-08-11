@@ -9,7 +9,7 @@ export const QuickActionButtons = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed bottom-6 right-6 z-40 flex flex-col gap-3"
+      className="hidden md:flex fixed bottom-6 right-6 z-40 flex-col gap-3"
     >
       <Link to="/tools/metadata-remover">
         <Button
