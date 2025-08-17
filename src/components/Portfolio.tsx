@@ -9,6 +9,54 @@ import { TextTransmission } from "@/components/animations/TextTransmission";
 
 const projects = [
   {
+    title: "Compress-Go Platform",
+    description: "A comprehensive suite of compression tools including the main platform, image compression service, and alias management system. Features advanced algorithms for optimal file size reduction.",
+    link: "http://compress-go.com/",
+    category: "Web Tools",
+    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80",
+    isInternal: false
+  },
+  {
+    title: "Image Compress-Go",
+    description: "Specialized image compression service offering high-quality compression with minimal quality loss. Supports multiple formats and batch processing for efficient workflow.",
+    link: "https://image.compress-go.com/",
+    category: "Web Tools",
+    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=1200&q=80",
+    isInternal: false
+  },
+  {
+    title: "Alias Compress-Go",
+    description: "Advanced alias management system for the Compress-Go ecosystem, providing streamlined URL management and redirection services with analytics tracking.",
+    link: "https://alias.compress-go.com/",
+    category: "Web Tools",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+    isInternal: false
+  },
+  {
+    title: "Resume BuildX",
+    description: "Professional resume builder application with modern templates, real-time preview, and export capabilities. Features customizable sections and industry-specific formats.",
+    link: "https://resumebuildx.netlify.app/",
+    category: "Web Development",
+    image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1200&q=80",
+    isInternal: false
+  },
+  {
+    title: "Dapanko",
+    description: "Modern web application built with cutting-edge technologies, featuring responsive design and intuitive user interface for enhanced user experience.",
+    link: "https://dapanko.netlify.app/",
+    category: "Web Development",
+    image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=1200&q=80",
+    isInternal: false
+  },
+  {
+    title: "Hurulu Horizon",
+    description: "Complete website creation and maintenance solution. Full-service web development project showcasing modern design principles and comprehensive digital presence management.",
+    link: "https://huruluhorizon.netlify.app/",
+    category: "Web Development",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+    isInternal: false
+  },
+  {
     title: "Backlink Shop",
     description: "A web platform connecting backlink providers with buyers, featuring AI-powered personalized itineraries, tag-based filtering, and real-time notifications for enhanced user engagement.",
     link: "#",
@@ -33,7 +81,7 @@ const projects = [
     isInternal: false
   },
   {
-    title: "Compress-Go",
+    title: "Compress-Go Internal",
     description: "An efficient online image compression tool that reduces file sizes while maintaining quality. Features batch processing, various compression algorithms, and format conversion options.",
     link: "/projects/compressgo",
     category: "Web Tools",
