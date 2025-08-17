@@ -38,21 +38,18 @@ export const TransmissionAnimation: React.FC<TransmissionAnimationProps> = ({
     <motion.div
       initial={{
         opacity: 0,
-        ...getInitialPosition(),
       }}
       whileInView={{
         opacity: 1,
-        x: 0,
-        y: 0,
       }}
       viewport={{
         once: true,
-        amount: 0.3,
+        amount: 0.2,
       }}
       transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        duration: 0.3,
+        delay: delay * 0.5,
+        ease: "easeOut",
       }}
       className={className}
     >

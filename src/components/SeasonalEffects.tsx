@@ -91,6 +91,11 @@ export const SeasonalEffects = () => {
   const [currentFestival, setCurrentFestival] = useState<string>("");
   
   useEffect(() => {
+    // Seasonal effects disabled by default for cleaner experience
+    // To enable, uncomment the checkFestival logic below
+    setCurrentFestival("");
+    
+    /*
     const checkFestival = () => {
       const now = new Date();
       const month = now.getMonth();
@@ -109,7 +114,6 @@ export const SeasonalEffects = () => {
       }
 
       // Check for Poya days (this is a simplified check - in reality, Poya dates vary)
-      // You might want to add specific Poya dates for accuracy
       if (date === 15 || date === 14) { // Simplified Poya check
         setCurrentFestival("poya");
         return;
@@ -125,9 +129,10 @@ export const SeasonalEffects = () => {
     };
     
     checkFestival();
-    const interval = setInterval(checkFestival, 1000 * 60 * 60); // Check every hour
+    const interval = setInterval(checkFestival, 1000 * 60 * 60);
     
     return () => clearInterval(interval);
+    */
   }, []);
   
   const renderFestiveEffects = () => {

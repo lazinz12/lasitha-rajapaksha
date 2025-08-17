@@ -25,7 +25,7 @@ export const CursorEffect = () => {
     <motion.div
       className="fixed top-0 left-0 w-full h-full pointer-events-none z-50"
       style={{
-        background: `radial-gradient(600px at ${cursorXSpring}px ${cursorYSpring}px, rgba(139, 92, 246, 0.05), transparent 80%)`,
+        background: `radial-gradient(400px at ${cursorXSpring}px ${cursorYSpring}px, rgba(139, 92, 246, 0.02), transparent 70%)`,
       }}
     />
   );

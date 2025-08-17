@@ -18,13 +18,13 @@ export const FloatingTransmission: React.FC<FloatingTransmissionProps> = ({
   const getFloatDistance = () => {
     switch (intensity) {
       case 'subtle':
-        return 5;
+        return 2;
       case 'medium':
-        return 10;
+        return 4;
       case 'strong':
-        return 20;
+        return 6;
       default:
-        return 10;
+        return 4;
     }
   };
 
